@@ -25,6 +25,7 @@
                 (ngModelChange)="this.onPageSizeChange($event)" [(ngModel)]="this.pageSizeModel"></p-dropdown>
         </div>
     </div>
+    
     <div class="main">
         <shop-products-filters (ngModelChange)="this.onFiltersChange($event)" class="main-filters"
             [(ngModel)]="this.filtersModel" [class.modal] = "this.filtersExpanded"></shop-products-filters>
