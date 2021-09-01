@@ -1,0 +1,64 @@
+@import "../../.././styling/all.scss";
+
+:host{
+    @include flex-fill-space;
+}
+
+.content{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding-bottom: min(5%, 50px);
+}
+
+.register{
+    margin-top: min(5%, 50px);
+    padding: 20px min(40px, 5vw) 20px min(40px, 5vw);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 5px;
+    font-size: $font-size4;
+    text-align: center;
+    width: min(100%, 500px);
+    background-color: $surface-color;
+    box-shadow: 0 0 5px 0 #8d8d8d;
+    
+    &__sector{
+        width: 100%;
+    }
+
+    &__validation-message{
+        color: rgb(221, 45, 45);
+        font-size: $font-size3;
+        text-align: center;
+        margin-top: 2px;
+    }
+
+    &__input{
+        width: 100%;
+        border-width: 1.5px;
+        margin-top: 6px;
+    }
+
+    &__sector{
+        margin-top: min(20px, 4%);
+    }
+
+    &__button{
+        margin-top: min(10px, 1vw);
+    }
+
+    &__regulations{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & p-checkbox{
+            margin-right: 5px;
+        }
+    }
+
+}

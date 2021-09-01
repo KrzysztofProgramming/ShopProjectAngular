@@ -1,0 +1,49 @@
+<nav>
+    <div class="top-nav">
+        <p-menubar [model] = "this.navItems" *ngIf = "this.refreshFlag" class="top-nav__menu" [autoDisplay]="false"></p-menubar>
+        
+        <div class="top-nav__expand" (click) = "this.expand()">
+            <i class="pi pi-align-justify"></i>
+        </div>
+        <div class="top-nav__right">
+            <div class="top-nav__login top-nav__icon" shopNavButton routerLink="login" *ngIf = "!this.isLogin">
+                <i class="pi pi-user"></i>
+                <div>Logowanie</div>
+            </div>
+            <div class="top-nav__register top-nav__icon" shopNavButton routerLink="register" *ngIf = "!this.isLogin">
+                <i class="pi pi-user-plus"></i>
+                <div>Rejestracja</div>
+            </div>
+            <div class="top-nav__icon" *ngIf = "this.isLogin" shopNavButton routerLink = "profile">
+                <i class="pi pi-user-edit"></i>
+                <div>Profil</div>
+            </div>
+            <div class="top-nav__icon" (click) = "this.logout()" shopNavButton *ngIf = "this.isLogin">
+                <i class="pi pi-sign-out"></i>
+                <div>Wyloguj</div>
+            </div>
+        </div>
+    </div>
+    <p-sidebar class="sidebar" [(visible)] = "this.isExpanded">
+        <p-panelMenu [model] = "this.navItems" *ngIf = "this.refreshFlag"></p-panelMenu>
+    </p-sidebar>
+</nav>
+
+<div class="router">
+    <router-outlet></router-outlet>
+</div>
+
+<footer class="footer">
+    <div class="footer-column">
+        <h2 class="footer__address-header">Adres:</h2>
+        <div class="footer__address-data">
+            <p> 38 ul. Książkowa </p>
+            <p> Kraków 25-639 </p>
+        </div>
+    </div>
+    <div class="footer-column">
+        <h2 class="footer__contact-header">Kontakt:</h2>
+        <div class="footer__contact-data">Numer telefonu: <p>+48 127 857 104</p> </div>
+        <div class="footer__contact-data">Email: <p>help@books.pl</p></div>
+    </div>
+</footer>

@@ -1,0 +1,19 @@
+<ng-container [formGroup] = "this.formGroup">
+    <div class="p-input-icon-right search">
+        <input placeholder="wyszukiwanie" type="text" pInputText formControlName = "searchPhrase" (blur) = "this.triggerOnTouched()">
+        <i class="pi pi-search"></i>
+    </div>
+    <h3>Cena:</h3>
+    <div class="prices">
+        <p-inputNumber class="prices__price" [useGrouping]="false" [min] = "0"
+        placeholder="min" mode="currency" currency="PLN" locale="pl-PL" formControlName = "minPrice"
+        (onBlur) = "this.triggerOnTouched()"></p-inputNumber>
+        <p>-</p>
+        <p-inputNumber class="prices__price" [useGrouping]="false" [min] = "0"
+        placeholder="max" mode="currency" currency="PLN" locale="pl-PL" formControlName = "maxPrice"
+        (onBlur) = "this.triggerOnTouched()"></p-inputNumber>
+    </div>
+    <h3>Typ:</h3>
+    <shop-editable-multi-select class="types" [editable] = "false" [initializeItems] = "filterOptions"
+    formControlName = "types" (blur) = "this.triggerOnTouched()" ></shop-editable-multi-select>
+ </ng-container>

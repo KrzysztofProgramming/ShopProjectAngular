@@ -1,0 +1,54 @@
+@mixin flex-fill-space{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+@mixin standard-input{
+    font-size: $font-size3;
+    min-width: 0;
+    max-width: unset;
+    outline: none;
+    border: none;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid black;
+    margin-bottom: 4px;
+    margin-top: 4px;
+    text-align: center;
+}
+
+
+@mixin standard-checkbox{
+    appearance: none;
+	background-color: #fafafa;
+	position: relative;
+    cursor: pointer;
+    padding: 0.55em;
+    border-radius: 0.2em;
+
+    &:checked{
+        background-color: $theme-color2;
+
+        &::after{
+            color: inherit;
+            content: '\2714';
+            font-size: inherit;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: -0.05em;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+}
+
+@mixin invalid-field{
+    box-shadow: 0 0 0 0.15rem #e77e7e !important;
+    border-color: #e77e7e !important;
+}

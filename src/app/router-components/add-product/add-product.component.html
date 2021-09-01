@@ -1,0 +1,43 @@
+<h1 class="header">
+    {{this.headerText}}
+</h1>
+<div class="content">
+    <div class="image">
+        <div class="image__img">
+            <div class="image__overlay" *ngIf = "this.waitingForImage">
+                <i class="pi pi-spin pi-spinner"></i>
+            </div>
+            <img [src]="this.imageUrl" (error)="this.onImageError()" (load)="this.onImageLoaded()">
+        </div>
+        <div class="buttons">
+            <input type="file" style="display: none;" (change) = "this.onFileChange(fileInput)"
+            accept="image/*" #fileInput>
+            <button class="buttons__button" shopButton (click) = "fileInput.click()">Wybierz obraz <i class="pi pi-image"></i></button>
+            <button class="buttons__button" [disabled] = "!hasImage()" shopButton (click) = "this.onImageRemove()" color="red">Usuń obraz <i class="pi pi-times"></i></button>
+        </div>
+    </div>
+    <div class="informations">
+        <h2 class="informations__header">Informacje: </h2>
+        <form [formGroup] = "this.formGroup" class="informations__form" (ngSubmit) = "this.onSubmit()">
+            <p>Nazwa:</p> <input class="informations__input" type="text" shopInputText formControlName="name" [invalid] = "this.nameControl.invalid && this.nameControl.touched"> 
+            <p>Cena:</p><p-inputNumber class="informations__input" [class.invalid-number]="this.priceControl.invalid && this.priceControl.touched"
+             [useGrouping]="false" [min] = "0" formControlName = "price" mode="currency" currency="PLN" locale="pl-PL"></p-inputNumber>
+            <p>Kategoria:</p><shop-editable-multi-select class="informations__input" [initializeItems] = "this.dropdownOptions"
+             formControlName="categories" [invalid] = "this.categoriesControl.invalid && this.categoriesControl.touched"></shop-editable-multi-select>
+            <h3>Opis:</h3>
+            <textarea class="informations__description informations__input" formControlName="description" shopInputText
+             [invalid] = "this.descriptionControl.invalid && this.descriptionControl.touched"></textarea>
+            <div class="buttons">
+                <button class="buttons__button" [disabled] = "this.formGroup.invalid || this.waitingForResponseMessage
+                 || this.unchangedAfterSend" shopButton type="submit">Prześlij <i class="pi-check-circle pi"></i></button>
+                <button class="buttons__button" type="button" [disabled] = "!this.currentProductId" shopButton color = "red" (click)="this.onProductRemove()">Usuń produkt <i class="pi pi-times"></i></button>
+            </div>
+        </form>
+    </div>
+    <p-toast [breakpoints]="{'600px': {width: '100%', right: '0', left: '0'}}"></p-toast>
+</div>
+<div class="overlay" *ngIf = "this.waitingForResponseMessage.length !== 0">
+    <p>{{this.waitingForResponseMessage}}</p>
+    <i class="pi pi-spinner pi-spin"></i>
+</div>
+<p-confirmDialog [breakpoints]="{'600px': {width: '100%', right: '0', left: '0'}}"></p-confirmDialog>

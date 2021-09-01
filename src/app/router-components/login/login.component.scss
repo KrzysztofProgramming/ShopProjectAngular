@@ -1,0 +1,63 @@
+@import "../../.././styling/all.scss";
+:host{
+    @include flex-fill-space;
+}
+
+label{
+    display: block;
+}
+
+.content{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.login{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: min(5%, 50px);
+    margin-bottom: min(5%, 50px);
+    border-radius: 5px;
+    background-color: $surface-color;
+    box-shadow: 0 0 5px 0 #8d8d8d;
+    font-size: $font-size4;
+
+    &__element{
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    &__password{
+        margin-top: 6px;
+    }
+
+    &__sector{
+        width: 100%;
+    }
+    
+    &__input{
+        width: 100%;
+    }
+
+    &__button{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    &__result-message{
+        color: rgb(221, 45, 45);
+        font-size: 17px;
+        text-align: center;
+        margin: 5px 0 5px 0;
+    }
+}
+
+.invisible{
+    visibility: hidden;
+}
+

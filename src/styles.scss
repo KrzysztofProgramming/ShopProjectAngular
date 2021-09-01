@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+@import "styling/directives.scss";
+
+html{
+    font-family: $family;
+    font-size: 18px;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100%;
+    color: $text-color;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+p{
+    margin: 0;
+}
+
+.global-valid{
+    box-shadow: 0 0 0 0.15rem #a6d5fa !important;
+    border-color: $theme-color !important;
+}
+
+.global-invalid{
+    @include invalid-field;
+}

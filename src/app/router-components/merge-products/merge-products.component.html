@@ -1,0 +1,42 @@
+<div class="content">
+    <div class="top-bar">
+        <div class="top-bar__part1">
+            <div class="top-bar__filters-switcher" (click) = "this.filtersExpanded = true">
+                <p>Filtry</p>
+                <i class="pi pi-book"></i>
+            </div>
+            <div class="page-select">
+                <p>Strona:</p>
+                <p-inputNumber class="page-select__input" [useGrouping]="false" [max]="this.httpResponse.totalPages"
+                    [min]="1" [step]="1" [showButtons]="true" buttonLayout="horizontal"
+                    incrementButtonClass="p-button-secondary" decrementButtonClass="p-button-secondary"
+                    incrementButtonIcon="pi pi-chevron-right" decrementButtonIcon="pi pi-chevron-left"
+                    [(ngModel)]="this.pageNumberModel" (ngModelChange)="this.onPageNumberChange($event)">
+                </p-inputNumber>
+                <p>/</p>
+                <p class="page-select__total-pages">
+                    {{ this.httpResponse.totalPages }}
+                </p>
+            </div>
+        </div>
+        <div class="page-count">
+            <p>Produkty na stronie:</p>
+            <p-dropdown class="page-count__dropdown" [options]="this.pageOptions"
+                (ngModelChange)="this.onPageSizeChange($event)" [(ngModel)]="this.pageSizeModel"></p-dropdown>
+        </div>
+    </div>
+    <div class="main">
+        <shop-products-filters (ngModelChange)="this.onFiltersChange($event)" class="main-filters"
+            [(ngModel)]="this.filtersModel" [class.modal] = "this.filtersExpanded"></shop-products-filters>
+        <div class="main-tiles">
+            <ng-container *ngIf="this.httpResponse">
+                <ng-container *ngFor="let product of this.httpResponse.products">
+                    <shop-product-tile class="main-tiles__tile" [product]="product"></shop-product-tile>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+    
+    <div class="overlay" *ngIf = "this.filtersExpanded"></div>
+    
+</div>

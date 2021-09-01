@@ -1,0 +1,16 @@
+
+
+.d-nav-button{
+    cursor: pointer;
+    background-color: $surface-color;
+    padding: 0.4em;
+    transition-duration: 150ms;
+
+    &:hover{
+        background-color: $surface-hover;
+    }
+
+    &-clicked{
+        box-shadow: $box-shadow;
+    }
+}

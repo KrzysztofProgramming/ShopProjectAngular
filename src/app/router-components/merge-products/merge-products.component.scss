@@ -1,0 +1,226 @@
+@import "../../../styling/all.scss";
+
+:host{
+    @include flex-fill-space;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.main{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    &-filters{
+        width: 260px;
+        background-color: $surface-color-3;
+        margin: 4px;
+        border-radius: 4px;
+        box-shadow: 0 0 2px 0 $box-shadow-color;
+        padding: 5px;
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    &-tiles{
+        width: calc(100% - 268px);
+        flex: 3;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        height: 100%;
+        padding: 5px 2% 5px 1%;
+
+        &__tile{
+            height: 300px;
+            width: 25%;
+        }
+    }
+}
+
+.top-bar{
+    width: 100%;
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    // justify-content: flex-end;
+    background-color: $surface-color-3;
+    box-shadow: 0 0 2px 0 $box-shadow-color;
+    margin: 4px 0 4px 0;
+
+    &__part1{
+        display: flex;
+        flex: 1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    &__filters-switcher{
+        // justify-self: flex-end;
+        flex-direction: row;
+        align-items: center;
+        margin-left: 5px;
+        padding: 8px;
+        cursor: pointer;
+        box-shadow: inset 0 0 2px 0 $box-shadow-color;
+        border-radius: 2px;
+        display: none;
+        flex-wrap: nowrap !important;
+
+        & .pi{
+            margin-left: 3px;
+        }
+    }
+}
+
+.page-count{
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &__dropdown{
+        padding: 5px;
+    }
+}
+
+.page-select{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: $font-size4;
+    margin: 0 15px 0 5px;
+
+    &__input{
+        margin-right: 5px;
+    }
+
+    &__total-pages{
+        margin-left: 5px;
+    }
+}
+
+.overlay{
+    z-index: 2000;
+    background-color: rgba(black, 0.5);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    height: 100vh;
+}
+
+.modal{
+    position: absolute;
+    width: min(400px, 100%);
+    top: 10%;
+    margin-left: auto;
+    display: block !important;
+    z-index: 2001;
+}
+
+:host ::ng-deep{
+
+    & .p-inputnumber{
+        width: unset !important;
+
+        &-input{
+            width: 40px;
+            margin: 0px;
+            padding: 5px;
+            text-align: center;
+            box-shadow: unset !important;
+        }
+
+        &-button{
+            padding: 0;
+            width: unset;
+        }
+    }
+}
+
+@media only screen and (max-width: 1150px){
+    .main{
+        &-tiles{
+            &__tile{
+                width: 33.3333333%;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 900px){
+    .main{
+        &-tiles{
+            &__tile{
+                width: 50%;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 760px){
+
+    .top-bar{
+        &__filters-switcher{
+            display: flex;
+        }
+
+        &__part1{
+            justify-content: space-between;
+        }
+    }
+
+
+    .main{
+        &-filters{
+            display: none;
+        }
+        &-tiles{
+
+            &__tile{
+                width: 50%;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 555px){
+
+    .top-bar{
+        flex-direction: column;
+        &__filters-switcher{
+            display: flex;
+            margin-right: 5px;
+        }
+
+        &__part1{
+            // width: 100%;
+        }
+    }
+}
+@media only screen and (max-width: 270px){
+
+    .top-bar{
+        flex-direction: column;
+        &__filters-switcher{
+            display: flex;
+            margin-right: 5px;
+        }
+
+        &__part1{
+            // width: 100%;
+            flex-direction: column;
+        }
+    }
+
+    .page-select{
+        margin: 10px 0 0 0 !important;
+    }
+}

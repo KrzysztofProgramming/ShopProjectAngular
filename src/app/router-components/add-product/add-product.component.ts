@@ -1,0 +1,295 @@
+
+import { catchError, finalize, switchMap, mapTo, tap } from 'rxjs/operators';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ShopProduct, productsTypes } from './../../models/models';
+import { notEmptyListValidator } from './../../models/shop-validators';
+import { AbstractControl, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { ProductsService } from 'src/app/services/products.service';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Subscription, Observable, of, throwError, EMPTY, empty } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
+
+
+@Component({
+  selector: 'shop-add-product',
+  templateUrl: './add-product.component.html',
+  styleUrls: ['./add-product.component.scss'],
+  providers: [{
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: AddProductComponent,
+    multi: true
+  }, MessageService, ConfirmationService],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class AddProductComponent implements OnInit, ControlValueAccessor, OnDestroy {
+  
+  constructor(private cd: ChangeDetectorRef, private fb: FormBuilder, private messageService: MessageService,
+    private activatedRoute: ActivatedRoute, private router: Router, private productsService: ProductsService,
+    private sanitizer: DomSanitizer, private confirmationService: ConfirmationService) { }
+
+
+  writeValue(obj: ShopProduct): void {
+    this.currentProductId = obj.id;
+    this.nameControl.setValue(obj.name);
+    this.priceControl.setValue(obj.price);
+    this.descriptionControl.setValue(obj.description);
+    this.categoriesControl.setValue(obj.types);
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChangeFunction = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    //ignore
+  }
+
+  public readonly EMPTY_IMAGE: string = "../../../assets/img/empty-image.png";
+  public imageUrl: string = this.EMPTY_IMAGE;
+  public selectedFile?: Blob;
+  public currentProductId?: string | null;
+  private onChangeFunction: any = () => {};
+  public notRealod: boolean = false;
+  public headerText = "Stwórz nowy produkt";
+  public subscriptions: Subscription[] = [];
+  public unchangedAfterSend: boolean = false; 
+  public waitingForImage = false;
+  public waitingForResponseMessage: string = "";
+
+
+  get isWaitingForResponse(): boolean{
+    return this.waitingForResponseMessage.length!==0;
+  };
+
+  get currentProduct(): ShopProduct{
+    return {
+      id: this.currentProductId,
+      name: this.nameControl.value,
+      price: this.priceControl.value,
+      description: this.descriptionControl.value,
+      types: this.categoriesControl.value
+    }
+  }
+
+  public formGroup: FormGroup = this.fb.group({
+    name: ['', [Validators.required]],
+    price: [0, [Validators.required, Validators.min(0)]],
+    categories: [[], notEmptyListValidator],
+    description: ['', Validators.required]
+  })
+
+  public dropdownOptions: string[] = [];
+
+  get categoriesControl(): AbstractControl{
+    return this.formGroup.get("categories") as AbstractControl;
+  }
+
+  get nameControl(): AbstractControl{
+    return this.formGroup.get("name") as AbstractControl;
+  }
+
+  get priceControl(): AbstractControl{
+    return this.formGroup.get("price") as AbstractControl;
+  }
+
+  get descriptionControl(): AbstractControl{
+    return this.formGroup.get("description") as AbstractControl;
+  }
+
+  ngOnInit(): void {
+    this.dropdownOptions = productsTypes;
+    this.subscriptions.push(this.formGroup.valueChanges.subscribe(()=>this.unchangedAfterSend = false));
+    this.subscriptions.push(this.formGroup.valueChanges.subscribe(()=>this.onChangeFunction(this.currentProduct)));
+    this.subscriptions.push(this.activatedRoute.paramMap.subscribe((paramMap: ParamMap) =>{
+      if(this.notRealod){
+        this.notRealod = false;
+        return;
+      }
+
+      let id = paramMap.get("id"); 
+      if(id==null || id.length === 0){
+        this.navigateToNewProductUrl();
+         return;
+      }
+
+      if(id.toLowerCase() === "new"){
+          this.imageUrl = this.EMPTY_IMAGE;
+          this.selectedFile = undefined;
+          this.currentProductId = null;
+          this.formGroup.reset();
+          this.headerText = "Stwórz nowy produkt";
+          this.unchangedAfterSend = false;
+          this.writeValue({name: "", price: 0, id: "", description: "", types: []});
+          return;
+      }
+
+      this.waitingForImage = true;
+      this.productsService.getProduct(id).subscribe(product=>{
+        this.headerText = "Edytuj produkt";
+        this.writeValue(product);
+        this.unchangedAfterSend = true;
+        this.imageUrl = this.productsService.getProductImageUrl(product.id!);
+        this.cd.markForCheck();
+      }, _error =>{
+        this.navigateToNewProductUrl();
+      })
+    }))
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions = [];
+  }
+
+  public navigateToNewProductUrl(){
+    this.router.navigateByUrl("product/new");
+  }
+
+  public onFileChange(fileInput: HTMLInputElement){
+    if(fileInput.files == null || fileInput.files.length === 0) return;
+    this.unchangedAfterSend = false;
+    let file: File = fileInput.files[0]
+    if(!file.type.startsWith("image/")){
+      this.messageService.add({severity: "error", summary:"Zły plik", detail: "Zły format pliku"});
+      return;
+    }
+    this.selectedFile = file.slice();
+    fileInput.value = '';
+    this.imageUrl = this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(file)) as string;
+  }
+
+  public isCreatingNewProduct(){
+    return this.currentProductId == null || this.currentProductId.length === 0 ;
+  }
+
+  public onSubmit(){
+    if(this.isCreatingNewProduct()){
+      this.createNewProduct();
+      return;
+    }
+    this.updateProduct();
+  } 
+
+  private resetResponseMessage(): void{
+    this.waitingForResponseMessage = "";
+    this.cd.markForCheck();
+  }
+
+
+  private doRequest(fn: (product: ShopProduct)=>Observable<ShopProduct>){
+    fn(this.currentProduct).pipe(
+      catchError(productError=>{
+        this.messageService.add({severity: "error", summary: "Błąd", detail: "Operacja nie udana"});
+        return throwError(productError);
+      }),
+      switchMap(product=>{
+        if(!this.hasImage()){
+          return this.productsService.deleteProductImage(product.id!).pipe(
+            catchError(deleteFileError=>{
+              this.messageService.add({severity: "warn", summary: "Uwaga", detail: "Nie udało się usunąć obrazu"});
+              this.navigateToProduct(product.id!);
+              return throwError(deleteFileError);
+            }),
+            tap(_deleteFileSuccess=>{
+              this.selectedFile = undefined;
+              this.cd.markForCheck();
+            }),
+            mapTo(product)
+          )
+        }
+        if(this.selectedFile == null){
+          return of(product);
+        }
+        this.unchangedAfterSend = true;
+        this.waitingForResponseMessage = "Dodawanie obrazu";
+        this.cd.markForCheck();
+
+        return this.sendFile(product.id!).pipe(
+          catchError(fileError=>{
+            this.messageService.add({severity: "warn", summary: "Uwaga", detail: "Nie udało się dodać obrazu"});
+            this.navigateToProduct(product.id!);
+            return throwError(fileError);
+          }),
+          tap(_fileSuccess=>{
+            this.selectedFile = undefined;
+            this.imageUrl = this.productsService.getProductImageUrl(product.id!);
+            this.cd.markForCheck();
+          }),
+          mapTo(product)
+        )
+      }),
+      finalize(()=>this.resetResponseMessage())
+    ).subscribe(product=>{
+      this.showSuccessMessage();
+      this.navigateToProduct(product.id!);
+    }, anyError =>{
+    })
+  }
+
+
+  private createNewProduct(): void{
+    this.waitingForResponseMessage = "Dodawanie produktu";
+    this.doRequest(this.productsService.addProduct.bind(this.productsService));
+  }
+
+  private updateProduct(): void{
+    this.waitingForResponseMessage = "Modyfikowanie produktu";
+    this.doRequest(this.productsService.updateProduct.bind(this.productsService));
+  }
+
+  public onImageError(){
+    this.resetFile();
+  }
+
+  private resetFile(){
+    this.setImageUrlEmpty();
+    this.selectedFile = undefined;
+    this.cd.markForCheck();
+  }
+
+  private setImageUrlEmpty(){
+    this.imageUrl = this.EMPTY_IMAGE;
+  }
+
+  public onImageLoaded(){
+    this.waitingForImage = false;
+  }
+
+  private navigateToProduct(id: string){
+    this.router.navigateByUrl(`product/${id!}`);
+  }
+
+  private sendFile(id: string): Observable<Object>{
+     return this.productsService.uploadProductImage(id, this.selectedFile!)
+  }
+
+  private showSuccessMessage(): void{
+    this.messageService.add({severity: "success", summary: "Sukces", detail: "Operacja wykonana pomyślnie"});
+  }
+
+  public hasImage(): boolean{
+    return this.imageUrl !== this.EMPTY_IMAGE;
+  }
+
+  public onImageRemove(): void{
+    this.resetFile();
+    this.unchangedAfterSend = false;
+  }
+
+  public onProductRemove(): void{
+    this.confirmationService.confirm({
+      header: "Potwierdź",
+      message: "Czy na pewno chcesz usunąć ten produkt? Ta operacja jest nieodwracalna",
+      accept: ()=>{
+        if(this.currentProductId == null) return;
+        this.productsService.deleteProduct(this.currentProductId).subscribe(val =>{
+            this.router.navigateByUrl("/");
+          }
+        );
+      }
+    })
+  }
+
+}

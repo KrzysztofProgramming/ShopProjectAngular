@@ -1,0 +1,17 @@
+<div class="image">
+        <img [src] = "this.imageUrl" (error) = "this.onImageError()">
+</div>
+<div class="informations">
+    <p class="informations__name"> {{this.product.name}} </p>
+    <p class="informations__price">
+        Cena:
+        <ng-container *ngIf = "this.product.price === 0">Bezpłatny</ng-container>
+        <ng-container *ngIf = "this.product.price !== 0">{{this.product.price}} zł</ng-container>
+    </p>
+    <p class="informations__types">
+      <span class=informations__types-name>Typ:</span> {{product.types.join(", ")}}
+    </p>
+    <p class="informations__description" #description>
+        {{this.product.description}}
+    </p>
+</div>

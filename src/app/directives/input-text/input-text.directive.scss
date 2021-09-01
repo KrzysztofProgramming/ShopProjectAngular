@@ -1,0 +1,17 @@
+.d-input-text{
+    transition: box-shadow 0.2s;
+    font-size: 1rem;
+    border-radius: 3px;
+    border: 1px solid #ced4da;
+    padding: 0.5em;
+    outline: none;
+
+    &:focus{
+        box-shadow: 0 0 0 0.15rem #a6d5fa;
+        border-color: $theme-color;
+    }
+
+    &--invalid{
+        @include invalid-field;
+    }
+}

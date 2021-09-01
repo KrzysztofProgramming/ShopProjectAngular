@@ -1,0 +1,36 @@
+.d-button{
+    border-radius: 3px !important;
+    border: none;
+    font-size: $font-size5;
+   // padding: max(10px, 3%) max(30px, 8%) max(10px, 3%) max(30px, 8%);
+    padding: 0.5em 1em 0.5em 1em;
+    background-color: $theme-color;
+    cursor: pointer;
+    transition-duration: 150ms;
+    text-align: center;
+
+    &--blue{
+
+        &:hover{
+            background-color: $theme-color-hover;
+        }
+
+        &:disabled{
+            cursor: unset;
+            background-color: $theme-color;
+        }
+    }
+
+    &--red{
+        background-color: $theme-color2;
+
+        &:hover{
+            background-color: $theme-color2-hover;
+        }
+
+        &:disabled{
+            cursor: unset;
+            background-color: $theme-color2;
+        }
+    }
+}
