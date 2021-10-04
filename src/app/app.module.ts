@@ -1,10 +1,7 @@
-import { StoreModule } from '@ngrx/store';
-import { AuthService } from './services/auth/auth.service';
 import { NavButtonDirective } from './directives/nav-button/nav-button.directive';
 import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/editable-multi-select/editable-multi-select.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './router-components/nav/nav.component';
@@ -38,6 +35,10 @@ import { ProductTileComponent } from './utils-components/product-tile/product-ti
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ProductsFiltersComponent } from './utils-components/products-filters/products-filters.component';
 import {ButtonModule} from 'primeng/button';
+import { ProductDetailsComponent } from './router-components/product-details/product-details.component';
+import { ProductImageComponent } from './utils-components/product-image/product-image.component';
+import { ProfileSettingsComponent } from './router-components/profile/profile-settings/profile-settings.component';
+import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
 
 
 @NgModule({
@@ -57,7 +58,11 @@ import {ButtonModule} from 'primeng/button';
     AuthImgPipe,
     MergeProductsComponent,
     ProductTileComponent,
-    ProductsFiltersComponent
+    ProductsFiltersComponent,
+    ProductDetailsComponent,
+    ProductImageComponent,
+    ProfileSettingsComponent,
+    ProfileOrdersComponent
   ],
   imports: [
     BrowserModule,
