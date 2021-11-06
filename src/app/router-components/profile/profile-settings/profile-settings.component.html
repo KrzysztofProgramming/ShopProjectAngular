@@ -1,0 +1,18 @@
+<div class="content">
+    <h2>Twoje dane:</h2>
+    <p class="content__element content__login">Login: {{this.profileInfo?.username}}</p>
+    <div class="email content__element">
+        <p class="email__header">Email:</p>
+        <div class="email-wrapper">
+            <input class="email-wrapper__input" shopInputText type = "email"
+            [formControl] = "this.emailControl">
+            <button class="email-wrapper__button" shopButton (click) = "this.openEmailDialog()">Zmień</button>
+            <button shopButton color="red" *ngIf = "">Anuluj</button>
+        </div>
+    </div>
+    <button shopButton class="content__element" (click)="this.openPasswordDialog()">Zmień hasło</button>
+</div>
+<shop-busy-overlay *ngIf = "this.profileInfo == null || this.waitingForResponse"></shop-busy-overlay>
+<shop-change-email [(visibility)] = this.emailDialogVisibility (emailSelected)="this.emailChangeConfirmed($event)">
+</shop-change-email>
+<shop-change-password [(visibility)] = "this.passwordDialogVisibility" (passwordConfirmed)="this.passwordChangeConfirmed($event)"></shop-change-password>

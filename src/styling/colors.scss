@@ -1,9 +1,14 @@
 $theme-white: white;
+$color-blue: #007bff;
+
 $theme-color: var(--primary-color);//#228fff;
 $theme-color-hover: #65baff;
 $theme-color-light: #8eccff;
 $theme-color2: #f44336;
+$theme-color3: #607d8b;
+$theme-color3-hover: #527080; 
 $theme-color2-hover: #f55e53;
+
 $theme-border: rgb(207, 207, 207);
 $surface-color: var(--surface-b);
 $surface-color-darken: #e1e6e9;
@@ -12,8 +17,12 @@ $surface-color-dark: var(--surface-800);
 $box-shadow-color: #777777;
 $surface-color-2: var(--surface-d);
 $surface-color-3: var(--surface-c);
+$surface-color-4: #d2d4d6;
+$surface-color-5 : #cacaca;
+$surface-color-6 : #bdbdbd;
 $box-shadow: inset 0 0 0 0.15rem $box-shadow-color;
 $text-color: black;
 $text-color-light: white;
+
 
 $invalid-color: #ce1e1e;

@@ -1,0 +1,32 @@
+
+<div class="container" *ngIf="this.product">
+    <h2 class="title">{{this.product.name}}</h2>
+    <div class="content">
+        <shop-product-image class="content__image" imageResolution="original" [productId]="this.product.id"></shop-product-image>
+        <div class="content__info">
+            <div class="content__info-top">
+                <p class="content__price">Cena: {{this.product.price | number: '1.2-2'}} zł</p>
+                <p class="content__available content__available--true" *ngIf="this.product.inStock > 0">
+                    Dostępna ilość: {{this.product.inStock}}
+                </p>
+                <p  class="content__available--false" *ngIf="this.product.inStock <=0">
+                    Tymczasowo niedostępny
+                </p>
+                <p class="content__deliver-time">Sugerowany czas dostawy: 2 dni robocze</p>
+            </div>
+            <p class="content__price-calc">Łącznie: +{{(this.selectedCount * this.product.price) | number: '1.2-2'}} zł</p>
+            <div class="content__buy">
+                <p-inputNumber [(ngModel)]="this.selectedCount" class="content__buy-count" [min]="1" [showButtons]="true"></p-inputNumber>
+                <button shopButton class="content__buy-button" [disabled]="this.product.inStock <=0"><i class="pi pi-shopping-cart"></i> Dodaj do koszyka</button>
+            </div>
+        </div>
+    </div>
+    <div class="description">
+        <h3 class="description__title">Opis produktu: </h3>
+        <p class="description__info">{{this.product.description}}</p>
+    </div>
+</div>
+<div class="overlay" *ngIf="!this.product">
+    <i class="pi pi-spinner pi-spin"></i>
+</div>
+

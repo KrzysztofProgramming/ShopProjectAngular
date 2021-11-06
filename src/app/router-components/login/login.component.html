@@ -3,14 +3,16 @@
         <h2 class="login__element">Login:</h2>
         <div class="login__sector login__username">
             <label for="username" class="login__element login__text">Nazwa użytkownia lub email:</label>
-            <input id="username" pTooltip [pTooltip]="this.getErrorsMessage(this.usernameControl)" shopInputText class="login__element login__input" formControlName = "username" placeholder="username or email"
+            <input id="username" pTooltip [pTooltip]="this.getErrorsMessage(this.usernameControl)" shopInputText class="login__element login__input"
+             formControlName = "username" placeholder="nazwa użytkownika lub email"
             [invalid] = "usernameControl.invalid && usernameControl.touched">
         </div>
 
         <div class="login__sector login__password">
             <label for="password" class="login__element login__text">Hasło:</label>
-            <input id="password" pTooltip [pTooltip]="this.getErrorsMessage(this.passwordControl)" shopInputText class="login__element login__input" formControlName = "password" placeholder="password"
-             [invalid] = "passwordControl.invalid && passwordControl.touched" type="password">
+            <shop-password-input id="password" pTooltip [pTooltip]="this.getErrorsMessage(this.passwordControl)" class="login__element login__input"
+             formControlName = "password" placeholder="hasło"
+             [invalid] = "passwordControl.invalid && passwordControl.touched" type="password"></shop-password-input>
         </div>
 
         <input type="submit" shopButton value="Login" class="login__button login__element" [disabled] = "form.invalid || this.waitingForLogin || this.unchangedAfterError">
@@ -19,5 +21,5 @@
            Nie masz konta? Zarejestruj się <a href="../register"> tutaj!</a>
         </div>
     </form>
-    <p-toast [breakpoints]="{'600px': {width: '100%', right: '0', left: '0'}}"></p-toast>
+    <!-- <p-toast [breakpoints]="{'600px': {width: '100%', right: '0', left: '0'}}"></p-toast> -->
 </div>

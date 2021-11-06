@@ -1,84 +1,65 @@
 @import "../../../styling/all.scss";
 
-:host{
-    // box-sizing: content-box;
-    display: flex !important;
-    padding: 10px;
-    // margin: 5px;
-    flex-direction: column;
-    border-radius: 4px;
-    transition-duration: 200ms;
-    position: relative;
-    cursor: pointer;
-    // overflow: hidden;
+:host {
+  display: flex !important;
+  padding: 10px;
+  flex-direction: column;
+  border-radius: 4px;
+  transition-duration: 200ms;
+  position: relative;
+  cursor: pointer;
 
-    &:hover{
-        box-shadow: 0 0 4px 0px $box-shadow-color;
-    }
+  &:hover {
+    box-shadow: 0 0 4px 0px $box-shadow-color;
+  }
 }
 
-.image{
-    position: relative;
-    width: 100%;
-    // height: 100%;
-    flex: 1;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0,0,0,0);
-
-    & img{
-        position: absolute;
-
-        border: 1px solid black;
-        max-width: 100%;
-        max-height: 100%;
-    }
+.image {
+  width: 100%;
+  flex: 1;
 }
 
-.informations{
-    font-size: $font-size3;
-    margin-top: 5px;
-    border-top: 1.5px solid $box-shadow-color;
-    padding-top: 5px;
+.informations {
+  font-size: $font-size3;
+  margin-top: 5px;
+  border-top: 1.5px solid $box-shadow-color;
+  padding-top: 5px;
 
-   &__name{
-       white-space: nowrap;
-       overflow: hidden;
-       text-overflow: ellipsis;
-       text-align: center;
-       margin: 4px 0 4px 0;
-       font-weight: 600;
-       font-size: $font-size4;
-   }
+  &__name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    margin: 4px 0 4px 0;
+    font-weight: 600;
+    font-size: $font-size4;
+  }
 
-   &__price{
-       margin-bottom: 5px;
-   }
+  &__price {
+    margin-bottom: 5px;
+  }
 
-   &__description{
+  &__description {
+    // display: -webkit-box;
+    // -webkit-box-orient: vertical;
+    font-size: $font-size2;
+    color: #444444;
+    // display: block;
+    text-overflow: ellipsis;
+    // word-wrap: break-word;
+    overflow: hidden;
+    // -webkit-line-clamp: 3;
+  }
 
-        // display: -webkit-box;
-        // -webkit-box-orient: vertical;
-        font-size: $font-size2;
-        color: #444444;
-        // display: block;
-        text-overflow: ellipsis;
-        // word-wrap: break-word;
-        overflow: hidden;
-        // -webkit-line-clamp: 3;
-   }
+  &__types {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 6px;
+    font-size: $font-size2;
 
-   &__types{
-       white-space: nowrap;
-       overflow: hidden;
-       text-overflow: ellipsis;
-       margin-bottom: 6px;
-       font-size: $font-size2;
-
-       &-name{
-           font-size: $font-size3;
-       }
-   }
+    &-name {
+      font-size: $font-size3;
+    }
+  }
 }

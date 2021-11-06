@@ -5,27 +5,37 @@ import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy
   selector: 'shop-dialog',
   template: `
     <ng-container *ngIf = "this.visibility">
-      <div class="wrapper">
+      <div class="wrapper" @scaleEnter>
         <div class="dialog">
           <div class="dialog__top">
-            <p class="title">{{this.title}}</p>
+            <p class="title">{{this.dialogTitle}}</p>
             <i class="pi pi-times" *ngIf="this.exitButton" (click)="this.hideDialog()"></i>
           </div>
           <div class="dialog__content">
             <ng-content></ng-content>
           </div>
           <div *ngIf = "this.acceptPhrase || this.cancelPhrase || this.denyPhrase" class="dialog__bottom">
-            <button shop-button></button>
+            <button *ngIf="this.cancelPhrase" shopButton [disabled] = "this.cancelDisabled" padding="medium" color="gray"
+             class="dialog__button dialog__button--cancel" (click) = "this.hideDialog()">{{cancelPhrase}}</button>
+            <button *ngIf="this.denyPhrase" shopButton [disabled] = "this.denyDisabled" padding="medium" color="red"
+             class="dialog__button dialog__button--deny" (click) = "this.onDeny()">{{denyPhrase}}</button>
+            <button *ngIf="this.acceptPhrase" shopButton [disabled] = "this.acceptDisabled" padding="medium" color="green"
+             class="dialog__button dialog__button--accept" (click) = "this.onAccept()">{{acceptPhrase}}</button>
           </div>
         </div>
       </div>
-      <div class="overlay"></div>
+      <div class="overlay" @smoothOpacity></div>
     </ng-container>
   `,
   animations:[
     trigger("scaleEnter", [
       state("*", style("*")),
       state("void", style({transform: 'scale(0)'})),
+      transition("void <=> *", animate("200ms ease"))
+    ]),
+    trigger("smoothOpacity", [
+      state("void", style({opacity: 0})),
+      state("*", style("*")),
       transition("void <=> *", animate("200ms ease"))
     ])
   ],
@@ -35,22 +45,42 @@ import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy
 export class DialogComponent implements OnInit {
 
   @Input() acceptPhrase?: string;
+  @Input() acceptDisabled: boolean = false;
   @Input() denyPhrase?: string;
+  @Input() denyDisabled: boolean = false;
   @Input() cancelPhrase?: string;
+  @Input() cancelDisabled: boolean = false;
   @Input() exitButton: boolean = true;
-  @Input() title: string = "zajebiście długi tytuł";
+  @Input() dialogTitle?: string;
   @Input() visibility: boolean = true;
   @Output() visibilityChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() accept: EventEmitter<void> = new EventEmitter<void>();
+  @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
+  @Output() deny: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(public cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
   }
 
+  public onDeny(): void{
+    this.deny.emit();
+  }
+
+  public onAccept(): void{
+    this.accept.emit();
+  }
+
+  // public onCancelled(): void{
+  //   this.cancel.emit();
+  // }
+
   public hideDialog(): void{
+    this.cancel.emit();
     this.visibility = false;
     this.visibilityChange.emit(this.visibility);
     this.cd.markForCheck();
   }
+
 
 }

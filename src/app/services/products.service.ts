@@ -1,5 +1,5 @@
 import { ShopProductRequest } from './../models/requests';
-import { ShopProduct } from './../models/models';
+import { ShopProduct, ShopProductWithId } from './../models/models';
 import { catchError } from 'rxjs/operators';
 import { mapTo } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
@@ -21,17 +21,17 @@ export class ProductsService {
     return this.http.get<GetProductsResponse>(`${this.url}getAll`, {params: queryParams});
   }
 
-  public getProduct(id: string): Observable<ShopProduct>{
-    return this.http.get<ShopProduct>(`${this.url}byId/${id}`);
+  public getProduct(id: string): Observable<ShopProductWithId>{
+    return this.http.get<ShopProductWithId>(`${this.url}byId/${id}`);
   }
 
-  public addProduct(product: ShopProductRequest): Observable<ShopProduct>{
-   return this.http.post<ShopProduct>(this.url + "addNewProduct", product);
+  public addProduct(product: ShopProductRequest): Observable<ShopProductWithId>{
+   return this.http.post<ShopProductWithId>(this.url + "addNewProduct", product);
   }
 
-  public updateProduct(product: ShopProduct): Observable<ShopProduct>{
+  public updateProduct(product: ShopProductWithId): Observable<ShopProductWithId>{
     if(product.id == null) throw(`Product: ${product} has no id`);
-    return this.http.put<ShopProduct>(`${this.url}updateProduct/${product.id}`, product, {headers: {}});
+    return this.http.put<ShopProductWithId>(`${this.url}updateProduct/${product.id}`, product, {headers: {}});
   }
 
   public deleteProduct(id: string){
@@ -44,12 +44,20 @@ export class ProductsService {
     return this.http.put(`${this.url}uploadProductImage/${id}`, formData);
   }
 
-  public downloadProductImage(id: string): Observable<Blob>{
-    return this.http.get(this.getProductImageUrl(id), {responseType: 'blob'});
+  public downloadProductOriginalImage(id: string): Observable<Blob>{
+    return this.http.get(this.getProductOriginalImageUrl(id), {responseType: 'blob'});
   }
 
-  public getProductImageUrl(id: string): string{
-      return `${this.url}downloadProductImage/${id}`;
+  public getProductOriginalImageUrl(id: string): string{
+      return `${this.url}downloadProductOriginalImage/${id}`;
+  }
+
+  public downloadProductSmallImage(id: string): Observable<Blob>{
+    return this.http.get(this.getProductSmallImageUrl(id), {responseType: 'blob'});
+  }
+
+  public getProductSmallImageUrl(id: string): string{
+      return `${this.url}downloadProductSmallImage/${id}`;
   }
 
   public deleteProductImage(id: string){

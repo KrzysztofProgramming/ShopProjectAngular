@@ -3,6 +3,7 @@
         <input placeholder="wyszukiwanie" type="text" pInputText formControlName = "searchPhrase" (blur) = "this.triggerOnTouched()">
         <i class="pi pi-search"></i>
     </div>
+    <h2 class="header">Filtry:</h2>
     <h3>Cena:</h3>
     <div class="prices">
         <p-inputNumber class="prices__price" [useGrouping]="false" [min] = "0"
@@ -13,7 +14,17 @@
         placeholder="max" mode="currency" currency="PLN" locale="pl-PL" formControlName = "maxPrice"
         (onBlur) = "this.triggerOnTouched()"></p-inputNumber>
     </div>
-    <h3>Typ:</h3>
-    <shop-editable-multi-select class="types" [editable] = "false" [initializeItems] = "filterOptions"
-    formControlName = "types" (blur) = "this.triggerOnTouched()" ></shop-editable-multi-select>
+    <h3>Ilość w magazynie:</h3>
+    <div class="prices">
+        <p-inputNumber class="prices__price" [useGrouping]="false" [min] = "0"
+        placeholder="min" formControlName = "minInStock"
+        (onBlur) = "this.triggerOnTouched()"></p-inputNumber>
+        <p>-</p>
+        <p-inputNumber class="prices__price" [useGrouping]="false" [min] = "0"
+        placeholder="max" formControlName = "maxInStock"
+        (onBlur) = "this.triggerOnTouched()"></p-inputNumber>
+    </div>
+    <!-- <h3>Typ:</h3> -->
+    <shop-selectable-list class="types" [items] = "filterOptions"
+    formControlName = "types" (blur) = "this.triggerOnTouched()" listTitle = "Typy:"></shop-selectable-list>
  </ng-container>

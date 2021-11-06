@@ -7,7 +7,7 @@ export interface LoginResponse{
 }
 
 export interface ErrorResponse{
-    error: string;
+    info: string;
 }
 
 export interface GetProductsResponse{

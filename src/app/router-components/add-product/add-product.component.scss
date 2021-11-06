@@ -6,12 +6,34 @@
 }
 
 .header{
+    display: flex;
+    flex-direction: row;
     background-color: $surface-color;
     box-shadow: 0 0 3px 0 $box-shadow-color;
-    text-align: center;
+    align-items: center;
     margin: 8px 0 6px 0;
     padding: 10px 0 10px 0;
-    letter-spacing: 2px;
+
+    & .pi{
+        font-size: 22px;
+        padding: 5px;
+        margin: 0 5px 0 5px;
+        cursor: pointer;
+        // transform: scaleX(-1);
+        // color: red;
+    }
+
+    &__button-new{
+        margin: 0 5px 0 5px;
+    }
+
+    &__text{
+        flex: 1;
+        margin: 0;
+        text-align: center;
+
+        letter-spacing: 2px;
+    }
 }
 
 .overlay{
@@ -63,7 +85,6 @@
         background-color: white;
         border-radius: 3px;
         width: 100%;
-        height: 100px;
         box-shadow: 0 0 4px 0 $box-shadow-color;
         display: flex;
         align-items: center;
@@ -153,8 +174,7 @@
         align-self: center;
 
         & p{
-            margin: 8px;
-            margin-top: 12px;
+            margin: 15px 8px 10px 8px;
         }
     }
 
@@ -172,10 +192,40 @@
         border-right: none;
     }
 
+    &__group{
+        display: flex;
+        flex-direction: row;
+    }
+
+    &__subgroup{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        // align-items: center;
+        text-align: center;
+        margin-left: 10px;
+
+        &:first-child{
+            margin-left: 0;
+        }
+    }
+
     &__description{
         resize: none;
         min-height: 20vh;
         flex: 1;
+    }
+}
+
+@media only screen and (max-width: 400px){
+    .informations{
+        &__group{
+            flex-direction: column;
+        }
+
+        &__subgroup{
+            margin-left: 0;
+        }
     }
 }
 
@@ -195,6 +245,7 @@
     & .p-inputnumber-input{
         max-width: unset;
         min-width: 0;
+        width: 100%;
     }
     
     & .p-inputnumber{

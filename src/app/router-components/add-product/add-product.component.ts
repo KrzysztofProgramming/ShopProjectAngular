@@ -1,15 +1,17 @@
+import { ToastMessageService } from './../../services/toast-message.service';
 
 import { catchError, finalize, switchMap, mapTo, tap } from 'rxjs/operators';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ShopProduct, productsTypes } from './../../models/models';
+import { ConfirmationService } from 'primeng/api';
+import { ShopProduct, productsTypes, EMPTY_PRODUCT, ShopProductWithId } from './../../models/models';
 import { notEmptyListValidator } from './../../models/shop-validators';
 import { AbstractControl, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ProductsService } from 'src/app/services/products.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Subscription, Observable, of, throwError, EMPTY, empty } from 'rxjs';
+import { Subscription, Observable, of, throwError } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -20,14 +22,15 @@ import { DomSanitizer } from '@angular/platform-browser';
     provide: NG_VALUE_ACCESSOR,
     useExisting: AddProductComponent,
     multi: true
-  }, MessageService, ConfirmationService],
+  }, ConfirmationService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddProductComponent implements OnInit, ControlValueAccessor, OnDestroy {
   
-  constructor(private cd: ChangeDetectorRef, private fb: FormBuilder, private messageService: MessageService,
+  constructor(private cd: ChangeDetectorRef, private fb: FormBuilder, private messageService: ToastMessageService,
     private activatedRoute: ActivatedRoute, private router: Router, private productsService: ProductsService,
-    private sanitizer: DomSanitizer, private confirmationService: ConfirmationService) { }
+    private sanitizer: DomSanitizer, private confirmationService: ConfirmationService,
+    public location: Location) { }
 
 
   writeValue(obj: ShopProduct): void {
@@ -36,6 +39,7 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
     this.priceControl.setValue(obj.price);
     this.descriptionControl.setValue(obj.description);
     this.categoriesControl.setValue(obj.types);
+    this.inStockControl.setValue(obj.inStock)
   }
 
   registerOnChange(fn: any): void {
@@ -69,7 +73,8 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
       name: this.nameControl.value,
       price: this.priceControl.value,
       description: this.descriptionControl.value,
-      types: this.categoriesControl.value
+      types: this.categoriesControl.value,
+      inStock: this.inStockControl.value
     }
   }
 
@@ -77,25 +82,30 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
     name: ['', [Validators.required]],
     price: [0, [Validators.required, Validators.min(0)]],
     categories: [[], notEmptyListValidator],
-    description: ['', Validators.required]
+    description: ['', Validators.required],
+    inStock: [0, [Validators.required, Validators.min(0)]]
   })
 
   public dropdownOptions: string[] = [];
 
+  get inStockControl(): AbstractControl{
+    return this.formGroup.get("inStock")!;
+  }
+
   get categoriesControl(): AbstractControl{
-    return this.formGroup.get("categories") as AbstractControl;
+    return this.formGroup.get("categories")!
   }
 
   get nameControl(): AbstractControl{
-    return this.formGroup.get("name") as AbstractControl;
+    return this.formGroup.get("name")!
   }
 
   get priceControl(): AbstractControl{
-    return this.formGroup.get("price") as AbstractControl;
+    return this.formGroup.get("price")!
   }
 
   get descriptionControl(): AbstractControl{
-    return this.formGroup.get("description") as AbstractControl;
+    return this.formGroup.get("description")!;
   }
 
   ngOnInit(): void {
@@ -121,7 +131,7 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
           this.formGroup.reset();
           this.headerText = "Stwórz nowy produkt";
           this.unchangedAfterSend = false;
-          this.writeValue({name: "", price: 0, id: "", description: "", types: []});
+          this.writeValue(EMPTY_PRODUCT);
           return;
       }
 
@@ -130,12 +140,18 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
         this.headerText = "Edytuj produkt";
         this.writeValue(product);
         this.unchangedAfterSend = true;
-        this.imageUrl = this.productsService.getProductImageUrl(product.id!);
+        this.loadImage();
         this.cd.markForCheck();
       }, _error =>{
         this.navigateToNewProductUrl();
       })
     }))
+  }
+
+  public loadImage(){
+    if(!this.currentProductId) return;
+    this.imageUrl = this.productsService.getProductOriginalImageUrl(this.currentProductId);
+    this.cd.markForCheck();
   }
 
   ngOnDestroy(): void {
@@ -144,7 +160,7 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
   }
 
   public navigateToNewProductUrl(){
-    this.router.navigateByUrl("product/new");
+    this.router.navigateByUrl("manageProduct/new");
   }
 
   public onFileChange(fileInput: HTMLInputElement){
@@ -152,7 +168,7 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
     this.unchangedAfterSend = false;
     let file: File = fileInput.files[0]
     if(!file.type.startsWith("image/")){
-      this.messageService.add({severity: "error", summary:"Zły plik", detail: "Zły format pliku"});
+      this.messageService.showMessage({severity: "error", summary:"Zły plik", detail: "Zły format pliku"});
       return;
     }
     this.selectedFile = file.slice();
@@ -178,18 +194,19 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
   }
 
 
-  private doRequest(fn: (product: ShopProduct)=>Observable<ShopProduct>){
-    fn(this.currentProduct).pipe(
+  private doRequest(fn: ((product: ShopProduct)=>Observable<ShopProduct>) | ((product: ShopProductWithId)=>Observable<ShopProduct>)){
+    fn(this.currentProduct as ShopProductWithId).pipe(
       catchError(productError=>{
-        this.messageService.add({severity: "error", summary: "Błąd", detail: "Operacja nie udana"});
+        this.messageService.showMessage({severity: "error", summary: "Błąd", detail: "Operacja nie udana"});
         return throwError(productError);
       }),
       switchMap(product=>{
         if(!this.hasImage()){
           return this.productsService.deleteProductImage(product.id!).pipe(
             catchError(deleteFileError=>{
-              this.messageService.add({severity: "warn", summary: "Uwaga", detail: "Nie udało się usunąć obrazu"});
+              this.messageService.showMessage({severity: "warn", summary: "Uwaga", detail: "Nie udało się usunąć obrazu"});
               this.navigateToProduct(product.id!);
+              this.loadImage();
               return throwError(deleteFileError);
             }),
             tap(_deleteFileSuccess=>{
@@ -208,13 +225,14 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
 
         return this.sendFile(product.id!).pipe(
           catchError(fileError=>{
-            this.messageService.add({severity: "warn", summary: "Uwaga", detail: "Nie udało się dodać obrazu"});
+            this.messageService.showMessage({severity: "warn", summary: "Uwaga", detail: "Nie udało się dodać obrazu"});
             this.navigateToProduct(product.id!);
+            this.loadImage();
             return throwError(fileError);
           }),
           tap(_fileSuccess=>{
             this.selectedFile = undefined;
-            this.imageUrl = this.productsService.getProductImageUrl(product.id!);
+            this.imageUrl = this.productsService.getProductOriginalImageUrl(product.id!);
             this.cd.markForCheck();
           }),
           mapTo(product)
@@ -258,7 +276,7 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
   }
 
   private navigateToProduct(id: string){
-    this.router.navigateByUrl(`product/${id!}`);
+    this.router.navigateByUrl(`manageProduct/${id!}`);
   }
 
   private sendFile(id: string): Observable<Object>{
@@ -266,7 +284,7 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
   }
 
   private showSuccessMessage(): void{
-    this.messageService.add({severity: "success", summary: "Sukces", detail: "Operacja wykonana pomyślnie"});
+    this.messageService.showMessage({severity: "success", summary: "Sukces", detail: "Operacja wykonana pomyślnie"});
   }
 
   public hasImage(): boolean{

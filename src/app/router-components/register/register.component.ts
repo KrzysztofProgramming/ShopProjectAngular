@@ -2,7 +2,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { ValidatorFn } from '@angular/forms';
 import { Validators, FormControl } from '@angular/forms';
-import { passwordValidators, usernameValidators } from '../../models/shop-validators';
+import { passwordValidators, sameValueValidator, usernameValidators } from '../../models/shop-validators';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { getErrorsMessage } from '../../models/shop-validators';
@@ -32,9 +32,7 @@ export class RegisterComponent implements OnInit {
   public waitingForRegister: boolean = false;
 
   public repeatPasswordValidator(): ValidatorFn{
-    return (control: AbstractControl): ValidationErrors | null => {
-      return control.get("password")!.value !== control.get("repeatPassword")!.value ? {passwordsNotTheSame: true} : null
-    }
+     return sameValueValidator("password", "repeatPassword");
   }
 
   public get username(): FormControl {
@@ -84,13 +82,14 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public getErrorsMessage(control: AbstractControl){
-    return getErrorsMessage(control, c => c.errors!.pattern ? "Nazwa użytkownika może zawierać jedynie cyfry, litery i znak _" : null);
+  public getErrorsMessage(control: AbstractControl, isPassword: boolean = true){
+    let errorMessage = getErrorsMessage(control, c => c.errors!.pattern ? "Nazwa użytkownika może zawierać jedynie cyfry, litery i znak _" : null);
+    return errorMessage.length !== 0 ? errorMessage : this.isPasswordsError() && isPassword ? "Hasła nie są takie same" : ""; 
   }
 
   public isPasswordsError(): boolean{
     if(this.form.errors == null) return false;
-    return this.password.touched && this.repeatPassword.touched && this.form.errors?.passwordsNotTheSame;
+    return this.password.touched && this.repeatPassword.touched && this.form.errors?.notTheSameError;
   }
 
 }

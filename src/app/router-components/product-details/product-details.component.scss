@@ -1,0 +1,165 @@
+@import "../../../styling/all.scss";
+
+:host{
+    @include flex-fill-space;
+}
+
+.overlay{
+    @include flex-fill-space;
+    background-color: rgba(gray, 0.5);
+
+    .pi{
+        font-size: 50px;
+    }
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    background-color: $surface-color-3;
+    padding: 5px;
+}
+
+.title{
+    text-align: center;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: $theme-white;
+    padding: 5px;
+}
+
+.content{
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: flex-start;
+    margin: 5px;
+
+    &__image{
+
+        flex: 4;
+        min-height: min(100vh, 500px);
+        display: flex;
+        box-shadow: 0 0 2px 1px $box-shadow-color;
+        background-color: $theme-white;
+        border-radius: 3px;
+    }
+
+    &__info{
+        margin: 0 10px 10px 20px;
+        padding: 15px;
+        flex: 3;
+        border-radius: 5px;
+        box-shadow: 0 0 2px 1px $box-shadow-color;
+        background-color: $theme-white;
+
+        &-top{
+            margin-bottom: min(30px, 50%);
+
+            p{
+                margin-bottom: 8px;
+            }
+        }
+    }
+
+    &__price{
+        font-size: $font-size6;
+        margin-bottom: 15px;
+    }
+
+    &__price-calc{
+        margin-bottom: 8px;
+    }
+
+
+    &__buy{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        &-button{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            flex: 2;
+            margin-left: 5px;
+
+            .pi{
+                font-size: 25px;
+                margin-right: 6px;
+            }
+        }
+
+        &-count{
+            flex: 1;
+            margin-right: 5px;
+        }
+    }
+
+    &__available{
+        font-weight: 600;;
+        // font-size: $font-size4;
+
+        &--true{
+            color: rgb(67, 209, 39);
+        }
+
+        &--false{
+            color: rgb(255, 70, 45);
+        }
+    }
+}
+
+.description{
+    background-color: $theme-white;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    &__title{
+        border-bottom: 1px black solid;
+        padding: 5px;
+        margin: 10px 0 10px 0;
+    }
+    
+    &__info{
+        padding: 5px;
+    }
+}
+
+@media only screen and(max-width: 680px){
+    .content{
+        flex-direction: column;
+        justify-content: center;
+
+        &__info{
+            margin: 10px 0 0 0;
+            width: 100%;
+        }
+    }
+}
+
+:host ::ng-deep{
+
+    
+    & .p-inputnumber{
+        max-width: unset;
+        min-width: 0;
+
+        &-input{
+            max-width: unset;
+            width: 100%;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        &-button{
+            width: 1.5em;
+        }
+    }
+}
+
+
+

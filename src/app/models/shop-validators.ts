@@ -10,10 +10,18 @@ export const notEmptyListValidator: ValidatorFn = (control: AbstractControl) =>{
 export const usernameOrEmailValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null =>{
     let usernameValid: boolean = usernameValidators.every((validator: ValidatorFn) => validator(control) === null);
     let emailValid: boolean = Validators.email(control) === null;
-
     return (usernameValid || emailValid) && control.value !=null ? null : {notEmailOrUsername: true};
 }
 
+export function sameValueValidator(...value: string[]): ValidatorFn{
+    return (control: AbstractControl): ValidationErrors | null => {
+      let test: boolean = true;
+      for(let i=1; i<value.length && test; i++){
+        test = test && control.get(value[i-1])?.value === control.get(value[i])?.value;
+      }
+      return test ? null : {notTheSameError: true};
+  }
+}
 
 export function getErrorsMessage(control: AbstractControl, customErrorFactory?: (control: AbstractControl) => string | null): string{
     if(control.errors == null || control.untouched) return "";

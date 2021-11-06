@@ -1,6 +1,6 @@
 import { JwtToken } from './../../models/models';
 import { LoginRequest, RegisterRequest, RefreshRequest } from './../../models/requests';
-import { LoginResponse } from './../../models/responses';
+import { LoginResponse, ErrorResponse } from './../../models/responses';
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -103,7 +103,7 @@ export class AuthService{
         tap(this.tapToLogin()),
         mapTo(""),
         catchError((error, _value) => {
-          return of(error.error ? error.error.error : "Can't register");
+          return of(error.error ? (error.error as ErrorResponse).info : "Błąd rejestracji");
         })
       )
   }
@@ -162,7 +162,7 @@ export class AuthService{
   }
 
   public navigateToProfile(){
-    this.router.navigateByUrl("/profile");
+    this.router.navigateByUrl("/profile/settings");
   }
 
 }

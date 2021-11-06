@@ -1,6 +1,11 @@
-<h1 class="header">
-    {{this.headerText}}
-</h1>
+<div class="header">
+    <i class="pi pi-arrow-left" title="wróć" (click)="this.location.back()"></i>
+    <h1 class="header__text">
+        {{this.headerText}}
+    </h1>
+    <button *ngIf = "currentProductId" class="header__button-new" (click)="this.navigateToNewProductUrl()"
+     shopButton color = 'gray'>Stwórz nowy</button>
+</div>
 <div class="content">
     <div class="image">
         <div class="image__img">
@@ -20,8 +25,17 @@
         <h2 class="informations__header">Informacje: </h2>
         <form [formGroup] = "this.formGroup" class="informations__form" (ngSubmit) = "this.onSubmit()">
             <p>Nazwa:</p> <input class="informations__input" type="text" shopInputText formControlName="name" [invalid] = "this.nameControl.invalid && this.nameControl.touched"> 
-            <p>Cena:</p><p-inputNumber class="informations__input" [class.invalid-number]="this.priceControl.invalid && this.priceControl.touched"
-             [useGrouping]="false" [min] = "0" formControlName = "price" mode="currency" currency="PLN" locale="pl-PL"></p-inputNumber>
+            <div class="informations__group">
+                <div class="informations__subgroup">
+                    <p>Cena:</p><p-inputNumber class="informations__subgroup-element" [class.invalid-number]="this.priceControl.invalid && this.priceControl.touched"
+                    [useGrouping]="false" [min] = "0" formControlName = "price" mode="currency" currency="PLN" locale="pl-PL"></p-inputNumber>
+                </div>
+                <div class="informations__subgroup">
+                    <p>Ilość w magazynie:</p>
+                    <p-inputNumber class="informations__subgroup-element" formControlName = "inStock" [min] = "0" [useGrouping]="false"
+                    [class.invalid-number]="this.inStockControl.invalid && this.inStockControl.touched"></p-inputNumber>
+                </div>
+            </div>
             <p>Kategoria:</p><shop-editable-multi-select class="informations__input" [initializeItems] = "this.dropdownOptions"
              formControlName="categories" [invalid] = "this.categoriesControl.invalid && this.categoriesControl.touched"></shop-editable-multi-select>
             <h3>Opis:</h3>
@@ -34,7 +48,6 @@
             </div>
         </form>
     </div>
-    <p-toast [breakpoints]="{'600px': {width: '100%', right: '0', left: '0'}}"></p-toast>
 </div>
 <div class="overlay" *ngIf = "this.waitingForResponseMessage.length !== 0">
     <p>{{this.waitingForResponseMessage}}</p>

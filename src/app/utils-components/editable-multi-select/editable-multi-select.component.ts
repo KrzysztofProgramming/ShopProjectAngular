@@ -1,6 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, ElementRef, ViewChild, HostListener, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { trigger } from '@angular/animations';
 
 @Component({
   selector: 'shop-multi-select-item',
@@ -175,6 +176,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
     this.mergeWithInitializeItems();
     this.refreshDisplayInfo();
   }
+
   get initializeItems(): string[] {
     return this._initializeItems;
   }
@@ -226,9 +228,8 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
     this.allItems.forEach(item => {
       item.isChecked = obj.includes(item.label);
     });
-    let checkedStrings = this.getCheckedStrings();
-    if (checkedStrings.length === 0) this.selectedItemsString = "";
-    else this.selectedItemsString = `${checkedStrings.length} zaznaczeń`;
+    this.onChange(false);
+    this.cd.markForCheck();
   }
   
   registerOnChange(fn: any): void {
@@ -328,11 +329,11 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
     return this.allItems.filter(item => item.isChecked).map(item => item.label);
   }
 
-  private onChange() {
+  private onChange(triggerEvent: boolean = true) {
     let checkedStrings = this.getCheckedStrings();
     if (checkedStrings.length === 0) this.selectedItemsString = "";
     else this.selectedItemsString = `${checkedStrings.length} zaznaczeń`;
-    this.onChangeFunction(checkedStrings);
+    if(triggerEvent) this.onChangeFunction(checkedStrings);
   }
 
   private matchFilter(value: string): boolean {

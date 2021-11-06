@@ -2,9 +2,9 @@
     <form class="register" [formGroup] = "this.form" (ngSubmit) = "this.onRegisterClick()">
         <h2 class="register__header">Register:</h2>
         <div class="register__sector register__username">
-            <div>Username:</div>
+            <div>Nazwa użytkownika:</div>
             <input type="text" pTooltip [pTooltip] = "this.getErrorsMessage(this.username)"
-             shopInputText placeholder="username" class="register__input register__username-input" formControlName = "username"
+             shopInputText placeholder="nazwa użytkownika" class="register__input register__username-input" formControlName = "username"
             [invalid] = "this.username.invalid && this.username.touched">
         </div>
         <div class="register__sector register__email">
@@ -14,25 +14,24 @@
              [invalid] = "this.email.invalid && this.email.touched">
         </div>
         <div class="register__sector register__password">
-            <div >Password:</div>
-            <input placeholder="password" pTooltip [pTooltip] = "this.getErrorsMessage(this.password)" shopInputText type="password"
+            <div >Hasło:</div>
+            <shop-password-input placeholder="hasło" pTooltip [pTooltip] = "this.getErrorsMessage(this.password, true)" type="password"
              class="register__input register__password-input" formControlName = "password"
             [invalid] = "this.password.touched && (this.password.invalid
-             || (this.form.errors?.passwordsNotTheSame && this.repeatPassword.touched))">
+             || (this.form.errors?.notTheSameError && this.repeatPassword.touched))"></shop-password-input>
         </div>
         <div class="register__sector register__repeat-password">
-            <div>Repeat Password:</div>
-            <input placeholder="repeat password" pTooltip [pTooltip] = "this.getErrorsMessage(this.repeatPassword)"
-             shopInputText type="password" class="register__input register__repeat-password-input"
+            <div>Powtórz Hasło:</div>
+            <shop-password-input placeholder="powtórz hasło" pTooltip [pTooltip] = "this.getErrorsMessage(this.repeatPassword, true)"
+             class="register__input register__repeat-password-input"
              formControlName = "repeatPassword" [invalid] = "this.repeatPassword.touched
-              && (this.repeatPassword.invalid || (this.form.errors?.passwordsNotTheSame && this.password.touched))">
+              && (this.repeatPassword.invalid || (this.form.errors?.notTheSameError && this.password.touched))"></shop-password-input>
         </div>
         <div class="register__sector register__regulations">
             <p-checkbox formControlName = "regulations" [binary]="true"></p-checkbox>
-            <span>I accept all <a href="../regulations">regulations</a></span>
+            <span>Akceptuję <a href="../regulations">regulamin</a></span>
         </div>
         <input value="Register" type="submit" [disabled]="this.form.invalid || this.unchangedAfterError || this.waitingForRegister" shopButton class ="register__button">
-        <div class="register__sector register__validation-message" *ngIf = "this.isPasswordsError()">Passwords are not the same</div>
         <p-toast [breakpoints]="{'600px': {width: '100%', right: '0', left: '0'}}"></p-toast>
     </form>
 </div>

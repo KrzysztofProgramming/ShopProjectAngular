@@ -3,8 +3,15 @@
     font-size: 1rem;
     border-radius: 3px;
     border: 1px solid #ced4da;
-    padding: 0.5em;
     outline: none;
+
+    &--small-padding{
+        padding: 0.4em;
+    }
+
+    &--normal-padding{
+        padding: 0.5em;
+    }
 
     &:focus{
         box-shadow: 0 0 0 0.15rem #a6d5fa;

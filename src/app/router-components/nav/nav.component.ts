@@ -1,6 +1,8 @@
+import { TreeMenuComponent } from './../../utils-components/tree-menu/tree-menu.component';
 import { AuthService } from '../../services/auth/auth.service';
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, ViewChild } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
+import { TreeItem } from 'src/app/utils-components/tree-menu/tree-menu.component';
 
 @Component({
   selector: 'shop-nav',
@@ -10,7 +12,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 })
 export class NavComponent implements OnInit {
 
-  private productsItem: MenuItem = {
+  private productsItem: TreeItem = {
     label: "Produkty",
     items: [
       {
@@ -19,12 +21,12 @@ export class NavComponent implements OnInit {
       },
       {
         label: "Dodaj produkt",
-        routerLink: "product/new"
+        routerLink: "manageProduct/new"
       }
     ]
   }
 
-  private usersItem: MenuItem = {
+  private usersItem: TreeItem = {
     label: "Użytkownicy",
     items:[
       {
@@ -36,12 +38,13 @@ export class NavComponent implements OnInit {
     ]
   }
 
-  private initializeNavItems: MenuItem[] = [
+  private initializeNavItems: TreeItem[] = [
     {
       label: "Strona Główna"
     },
     {
-      label: "Oferta"
+      label: "Oferta",
+      routerLink: "offert"
     },
     {
       label: "Regulamin",
@@ -52,24 +55,29 @@ export class NavComponent implements OnInit {
     },
   ];
 
-  public navItems: MenuItem[] = [];
+  public navItems: TreeItem[] = [];
 
   public isLogin: boolean = false;
   public isExpanded: boolean = false;
   public refreshFlag: boolean = true;
+  @ViewChild("sidebarMenu") sidebarMenu?: TreeMenuComponent;
+
 
   constructor(public authService: AuthService, public cd: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
     this.authService.permissions.subscribe(_val=>{
-      let items: MenuItem[] = this.initializeNavItems.slice();
+      let items: TreeItem[] = this.initializeNavItems.slice();
+
       if(this.authService.hasPermission(this.authService.USERS_GET)){
         items.push(this.usersItem);
       }
+
       if(this.authService.hasPermission(this.authService.USERS_MODIFY)){
         items.push(this.productsItem);
       }
+
       this.navItems = items;
       this.refreshNavItems();
     })
@@ -102,4 +110,12 @@ export class NavComponent implements OnInit {
     this.authService.navigateToLogin();
   }
 
+  public collapseSidebarMenu(): void{
+    if(!this.sidebarMenu) return;
+    this.sidebarMenu.collapseAll();
+  }
+
+  public markForCheck(){
+    this.cd.markForCheck();
+  }
 }

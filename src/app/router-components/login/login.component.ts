@@ -1,3 +1,4 @@
+import { ToastMessageService } from '../../services/toast-message.service';
 import { AuthService } from '../..//services/auth/auth.service';
 
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
@@ -11,7 +12,6 @@ import { first } from 'rxjs/operators';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [MessageService]
 })
 export class LoginComponent implements OnInit {
 
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   public unchangedAfterError: boolean = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private cd: ChangeDetectorRef,
-     private messageService: MessageService) { }
+     private messageService: ToastMessageService) { }
 
   public form: FormGroup = this.fb.group({
     username: ['', [usernameOrEmailValidator, Validators.required]],
@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
       this.cd.markForCheck();
       this.passwordControl.reset();
       if(!success){
-        this.messageService.add({severity: "error", summary: "Login error", detail: "Nie udało się zalogować, sprawdź poprawność danych"});
+        this.messageService.showMessage({severity: "error", summary: "Login error", detail: "Nie udało się zalogować, sprawdź poprawność danych"});
         this.unchangedAfterError = true;
         this.form.valueChanges.pipe(first()).subscribe(()=> this.unchangedAfterError = false);
       }

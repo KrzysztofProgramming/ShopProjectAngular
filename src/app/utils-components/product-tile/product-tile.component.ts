@@ -15,6 +15,7 @@ export class ProductTileComponent implements OnInit {
   public imageUrl = this.EMPTY_IMAGE;
   
   @ViewChild("description") descriptionContainer!: ElementRef<HTMLParagraphElement>
+  // @Input() adminView: boolean = false;
 
   constructor(private productsService: ProductsService, private sanitizer: DomSanitizer) { }
 
@@ -22,25 +23,12 @@ export class ProductTileComponent implements OnInit {
   set product(p: ShopProduct){
     this._product = p;
     if(this._product.id) {
-      this.imageUrl = this.productsService.getProductImageUrl(this._product.id);
+      this.imageUrl = this.productsService.getProductSmallImageUrl(this._product.id);
     }
-    setTimeout(() => {
-      this.addTextOverflowEllipsis();
-    },0);
-  
   }
 
   get product(): ShopProduct{
     return this._product;
-  }
-
-  addTextOverflowEllipsis(){
-    const element = this.descriptionContainer.nativeElement;
-    if(!element.textContent) return;
-    console.log(element.scrollHeight > element.clientHeight);
-    if(element.scrollHeight > element.clientHeight){
-      element.textContent = element.textContent.replace(/\W*\s(\S)*$/, '...');
-    }
   }
 
   ngOnInit(): void {

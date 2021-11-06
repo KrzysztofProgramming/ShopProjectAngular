@@ -1,8 +1,8 @@
-<div class="image">
-        <img [src] = "this.imageUrl" (error) = "this.onImageError()">
-</div>
+<shop-product-image class="image" imageResolution="small" [productId] = "this.product.id!">
+
+</shop-product-image>
 <div class="informations">
-    <p class="informations__name"> {{this.product.name}} </p>
+    <p class="informations__name"> {{this.product.name}} </p>   
     <p class="informations__price">
         Cena:
         <ng-container *ngIf = "this.product.price === 0">Bezpłatny</ng-container>

@@ -1,0 +1,58 @@
+@import "../../../../styling/all.scss";
+
+:host{
+    @include flex-fill-space;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+
+.content{
+    flex: 1;
+    padding: 10px 10px 10px 40px;
+    
+    h2{
+        font-size: $font-size9;
+        margin-top: 0;
+        margin-bottom: 50px;
+    }
+
+    &__element{
+        margin-top: 40px;
+
+        &:first-child{
+            margin-top: 0;
+        }
+    }
+
+    &__login{
+       font-size: $font-size6;
+    }
+}
+
+.email{
+    font-size: $font-size5;
+
+    &__header{
+        margin-bottom: 10px;
+    }
+
+    &-wrapper{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+
+        &__input{
+            font-size: $font-size5;
+            max-width: unset;
+            min-width: unset;
+            width: min(100%, 400px);
+        }
+
+        &__button{
+            margin-left: 10px;
+        }
+    }
+}

@@ -8,31 +8,45 @@ export interface JwtToken{
     sub: string;
 }
 
+export interface ShopUser{
+}
+
+export interface ShoppingCart{
+    ownerUsername?: string;
+    items: {
+        [key: string] : number;
+    }
+    expireDate?: Date;
+}
+
 export interface ShopProduct extends ShopProductRequest{
     id?: string | null;
-    // name: string;
-    // price: number;
-    // description: string;
-    // types: string[];
 }
 
 export interface ShopProductWithId extends ShopProduct{
     id: string;
 }
 
-
 export interface ProductsFilters{
     searchPhrase?: string;
     minPrice?: number;
     maxPrice?: number;
     types?: string[];
-  }
+    minInStock?: number;
+    maxInStock?: number;
+}
+
+export interface ProfileInfo{
+    username: string,
+    email: string
+}
 
 export const EMPTY_PRODUCT: ShopProduct = {
     name: "",
     price: 0,
     description: "",
-    types: []
+    types: [],
+    inStock: 0
 }
 
 export const productsTypes: string[] = [

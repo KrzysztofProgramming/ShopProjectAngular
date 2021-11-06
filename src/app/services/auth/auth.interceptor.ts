@@ -30,7 +30,6 @@ export class AuthInterceptor implements HttpInterceptor {
         return this.handle401Error(request, next, error);
       }
       else{
-        console.log(error);
         return throwError(error);
       }
     }));

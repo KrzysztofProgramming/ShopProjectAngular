@@ -6,6 +6,10 @@
             <i class="pi pi-align-justify"></i>
         </div>
         <div class="top-nav__right">
+            <div class="top-nav__icon" shopNavButton>
+                <i class="pi pi-shopping-cart"></i>
+                <div>Koszyk</div>
+            </div>
             <div class="top-nav__login top-nav__icon" shopNavButton routerLink="login" *ngIf = "!this.isLogin">
                 <i class="pi pi-user"></i>
                 <div>Logowanie</div>
@@ -14,7 +18,7 @@
                 <i class="pi pi-user-plus"></i>
                 <div>Rejestracja</div>
             </div>
-            <div class="top-nav__icon" *ngIf = "this.isLogin" shopNavButton routerLink = "profile">
+            <div class="top-nav__icon" *ngIf = "this.isLogin" shopNavButton routerLink = "profile/settings">
                 <i class="pi pi-user-edit"></i>
                 <div>Profil</div>
             </div>
@@ -24,9 +28,9 @@
             </div>
         </div>
     </div>
-    <p-sidebar class="sidebar" [(visible)] = "this.isExpanded">
-        <p-panelMenu [model] = "this.navItems" *ngIf = "this.refreshFlag"></p-panelMenu>
-    </p-sidebar>
+    <shop-sidebar class="sidebar" [(visible)] = "this.isExpanded" (onHide) = "this.markForCheck()" (onShow) = "this.markForCheck()">
+        <shop-tree-menu #sidebarMenu class="sidebar__menu" [items] = "this.navItems" ></shop-tree-menu>
+    </shop-sidebar>
 </nav>
 
 <div class="router">

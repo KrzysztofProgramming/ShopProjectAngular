@@ -1,1 +1,58 @@
 @import "../../.././styling/all.scss";
+
+:host{
+    @include flex-fill-space;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 15px;
+}
+
+// .navigation{
+//     padding: 0 15px 0 15px;
+// }
+
+.link-list{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: min(2%, 15px);
+    padding-bottom: 2px;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 3px -3px $box-shadow-color;
+    
+    &__element{
+        cursor: pointer;
+        background-color: $surface-color-3;
+        padding: 8px;
+        margin: 2px;
+        margin-top: 5px;
+        border-radius: 1px;
+        box-shadow: 0 0 2px 0.3px $box-shadow-color;
+        transform: skew(15deg);
+        transition-duration: 200ms;
+
+        & p{
+            transform: skew(-15deg);
+        }
+
+        &:hover{
+            background-color: $surface-color-4;
+        }
+
+        &--selected{
+            box-shadow: 0 0 3px 2px $box-shadow-color;
+        }
+    }
+}
+
+.router-outlet{
+
+    // padding-left: 15px;
+    // padding-right: 15px;
+    display: flex;
+    flex-direction: column;
+}

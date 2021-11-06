@@ -1,3 +1,4 @@
+import { ShopProduct } from './../../models/models';
 import { Subscription } from 'rxjs';
 import { GetProductsParams, PageableParams } from './../../models/requests';
 import { ProductsService } from 'src/app/services/products.service';
@@ -61,11 +62,19 @@ export class MergeProductsComponent implements OnInit {
     // this.pageNumberModel = params.pageNumber ? params.pageNumber : this.pageNumberModel
     // this.pageSizeModel = params.pageCount ? params.pageCount : this.pageSizeModel;
 
-    
     this.productsParams = params;
 
     this.filtersModel = Object.assign({}, this.productsParams);
     this.cd.markForCheck();
+  }
+
+  public navigateToProduct(id: string){
+    if(this.isAdminMode()){
+      this.router.navigateByUrl("manageProduct/" + id);
+    }
+    else{
+      this.router.navigateByUrl("product/" + id);
+    }
   }
 
   public updateRequestParams(){
@@ -75,8 +84,19 @@ export class MergeProductsComponent implements OnInit {
     });
   }
 
+  public isAdminMode(){
+    return this.router.url.startsWith("/products");
+  }
+
+  public cancelPreviousRequest(){
+    if(this.lastRequest){
+      this.lastRequest.unsubscribe();
+    };
+  }
+
   public refreshProducts(): void{
-    if(this.lastRequest) this.lastRequest.unsubscribe;
+    this.isAdminMode();
+    this.cancelPreviousRequest();
     this.lastRequest = this.productService.getAllProducts(this.activatedRoute.snapshot.queryParams).subscribe(response=>{
       
       this.httpResponse = Object.assign({}, response);
@@ -89,7 +109,6 @@ export class MergeProductsComponent implements OnInit {
        : +this.pageSizeModel : +this.pageSizeModel;
 
       this.pageSizeModel = params.pageSize?.toString();
-      console.log("82", this.pageNumberModel);
 
       this.writeParams(params);
       this.updateRequestParams();

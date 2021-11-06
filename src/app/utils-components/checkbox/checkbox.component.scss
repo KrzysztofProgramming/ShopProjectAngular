@@ -1,0 +1,42 @@
+@import "../../../styling/all.scss";
+
+.checkbox{
+    border-radius: 0.2em;
+    height: 1.35em;
+    width: 1.4em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition-duration: 150ms;
+    // flex: 1;
+
+    &--checked{
+        background-color: $color-blue;
+        box-shadow: 0 0 2px 1px $color-blue;
+    }
+
+    &--unchecked{
+        background-color: $theme-white;
+        border: 2px solid $box-shadow-color;
+    }
+
+    & .pi{
+        // flex: 1;
+        color: white;
+        font-size: inherit;
+    }
+
+    &--disabled{
+        cursor: unset;
+        border-color: #999999;
+
+        & .pi{
+            color: #bbbbbb;
+        }
+    }
+
+}
+

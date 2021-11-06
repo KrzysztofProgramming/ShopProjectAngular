@@ -1,0 +1,106 @@
+@import "../../../styling/all.scss";
+
+:host{
+    display: flex;
+}
+
+.list{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 0 2px 0.5px $box-shadow-color;
+    background-color: $surface-color;
+
+    &__header{
+        padding: 0.5em;
+        font-size: 20px;
+
+        border-radius: 3px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-weight: bold;;
+
+        &-title{
+            flex: 1;
+        }
+
+        & .pi{
+            font-size: 20px;
+        }
+    }
+
+    &__animation-wrapper{
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    &__elements{
+        padding: 0px 10px 10px 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__element{
+        margin-top: 5px;
+        background-color: $surface-color;
+        padding: 0.4em;
+        box-shadow: 0 0 2px 0px $box-shadow-color;
+        border-radius: 3px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        &:hover{
+            background-color: $surface-color-3;
+            transition-duration: 150ms;
+        }
+
+        &--selected{
+            transform: scale(1.01);
+            transition-duration: 200ms;
+            box-shadow: 0 0 2px 1px $theme-color;
+        }
+
+        & p{
+            flex: 1;
+        }
+
+        &__switcher{
+            margin-right: 10px;
+            font-size: $font-size2;
+        }
+    }
+
+    &__icon-right{
+        margin-left: 5px;
+    }
+
+    &__icon-left{
+        margin-right: 5px;
+    }
+
+    &__content{
+        margin: 2px;
+        border-radius: 3px;
+        box-shadow: 0 0 2px 0px $box-shadow-color;
+
+    }
+
+    &__check-all{
+        display: flex;
+        flex-direction: row;
+        // justify-content: center;
+        // align-items: center;
+        // margin: 8px 8px 0 8px;
+        margin: 0;
+
+        &-checkbox{
+            // padding: 2px;
+        }
+    }
+}

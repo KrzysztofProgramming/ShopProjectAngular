@@ -1,3 +1,4 @@
+import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
 import { NavButtonDirective } from './directives/nav-button/nav-button.directive';
 import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/editable-multi-select/editable-multi-select.component';
 import { NgModule } from '@angular/core';
@@ -34,11 +35,24 @@ import { MergeProductsComponent } from './router-components/merge-products/merge
 import { ProductTileComponent } from './utils-components/product-tile/product-tile.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ProductsFiltersComponent } from './utils-components/products-filters/products-filters.component';
-import {ButtonModule} from 'primeng/button';
+import { ButtonModule } from 'primeng/button';
 import { ProductDetailsComponent } from './router-components/product-details/product-details.component';
 import { ProductImageComponent } from './utils-components/product-image/product-image.component';
 import { ProfileSettingsComponent } from './router-components/profile/profile-settings/profile-settings.component';
-import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
+import { ProfileOpinionsComponent } from './router-components/profile/profile-opinions/profile-opinions.component';
+import { BusyOverlayComponent } from './utils-components/busy-overlay/busy-overlay.component';
+import { TreeMenuComponent } from './utils-components/tree-menu/tree-menu.component';
+import { AccordionModule } from 'primeng/accordion';
+import { SidebarComponent } from './utils-components/sidebar/sidebar.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { DialogComponent } from './utils-components/dialog/dialog.component';
+import { ChangeEmailComponent } from './router-components/profile/profile-settings/change-email/change-email.component';
+import { ChangePasswordComponent } from './router-components/profile/profile-settings/change-password/change-password.component';
+import { PasswordInputComponent } from './utils-components/password-input/password-input.component';
+import { SelectableListComponent } from './utils-components/selectable-list/selectable-list.component';
+import { CheckboxComponent } from './utils-components/checkbox/checkbox.component';
+import { CartComponent } from './router-components/cart/cart.component';
+import { CartEditorComponent } from './utils-components/cart-editor/cart-editor.component';
 
 
 @NgModule({
@@ -62,7 +76,20 @@ import { ProfileOrdersComponent } from './router-components/profile/profile-orde
     ProductDetailsComponent,
     ProductImageComponent,
     ProfileSettingsComponent,
-    ProfileOrdersComponent
+    ProfileOpinionsComponent,
+    ProfileOrdersComponent,
+    BusyOverlayComponent,
+    TreeMenuComponent,
+    SidebarComponent,
+    DialogComponent,
+    ChangeEmailComponent,
+    ChangePasswordComponent,
+    PasswordInputComponent,
+    SelectableListComponent,
+    CheckboxComponent,
+    CartComponent,
+    CartEditorComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -84,7 +111,9 @@ import { ProfileOrdersComponent } from './router-components/profile/profile-orde
     RippleModule,
     ConfirmDialogModule,
     MultiSelectModule,
-    ButtonModule
+    ButtonModule,
+    AccordionModule,
+    LayoutModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}

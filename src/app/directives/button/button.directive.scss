@@ -3,11 +3,24 @@
     border: none;
     font-size: $font-size5;
    // padding: max(10px, 3%) max(30px, 8%) max(10px, 3%) max(30px, 8%);
-    padding: 0.5em 1em 0.5em 1em;
     background-color: $theme-color;
     cursor: pointer;
-    transition-duration: 150ms;
+    transition-duration: 200ms;
     text-align: center;
+
+    &:disabled{
+        cursor: not-allowed;
+    }
+
+    &--padding{
+        &-large{
+            padding: 0.5em 1em 0.5em 1em;
+        }
+
+        &-medium{
+            padding: 0.4em 0.8em 0.4em 0.8em;
+        }
+    }
 
     &--blue{
 
@@ -16,7 +29,6 @@
         }
 
         &:disabled{
-            cursor: unset;
             background-color: $theme-color;
         }
     }
@@ -29,8 +41,48 @@
         }
 
         &:disabled{
-            cursor: unset;
             background-color: $theme-color2;
+        }
+    }
+
+    &--gray{
+        background-color: $theme-color3;
+        color: white;
+
+        &:hover{
+            background-color: $theme-color3-hover;
+        }
+
+        &:disabled{
+            background-color: $theme-color3;
+        }
+    }
+
+    &--orange{
+        background-color: orange;
+        color: black;
+
+        &:hover{
+            background-color: #ffb429;
+        }
+
+        &:disabled{
+            color:  #4d4d4d;
+            background-color: #f19d00;
+        }
+    }
+
+    &--green{
+        background-color: rgb(36, 231, 36);
+        color: black;
+
+        &:hover{
+            background-color: rgb(76, 240, 76);
+        }
+
+        &:disabled{
+            color:  #4d4d4d;
+            background-color: #1eb41e;
         }
     }
 }
