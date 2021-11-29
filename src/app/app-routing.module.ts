@@ -1,3 +1,4 @@
+import { HomeComponent } from './router-components/home/home.component';
 import { CartComponent } from './router-components/cart/cart.component';
 import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
 import { ProfileSettingsComponent } from './router-components/profile/profile-settings/profile-settings.component';
@@ -14,6 +15,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProfileOpinionsComponent } from './router-components/profile/profile-opinions/profile-opinions.component';
 
 const routes: Routes = [
+  {path: "home", component: HomeComponent},
+  {path: '', redirectTo: "home", pathMatch: 'full'},
   {path: "login", component: LoginComponent, canActivate:[RouterGuard]},
   {path: "register", component: RegisterComponent, canActivate: [RouterGuard]},
   {path: "regulations", component: RegulationsComponent},
@@ -26,13 +29,14 @@ const routes: Routes = [
   {path: "products", component: MergeProductsComponent, canActivate: [RouterGuard]},
   {path: "offert", component: MergeProductsComponent},
   {path: "product/:id", component: ProductDetailsComponent},
-  {path: "cart", component: CartComponent, canActivate: [RouterGuard]}
+  {path: "cart", component: CartComponent}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
           initialNavigation: 'enabled',
-          paramsInheritanceStrategy: 'always'
+          paramsInheritanceStrategy: 'always',
+          scrollPositionRestoration: 'enabled'
   })],
   exports: [RouterModule]
 })

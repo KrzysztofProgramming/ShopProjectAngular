@@ -16,8 +16,10 @@
             </div>
             <p class="content__price-calc">Łącznie: +{{(this.selectedCount * this.product.price) | number: '1.2-2'}} zł</p>
             <div class="content__buy">
-                <p-inputNumber [(ngModel)]="this.selectedCount" class="content__buy-count" [min]="1" [showButtons]="true"></p-inputNumber>
-                <button shopButton class="content__buy-button" [disabled]="this.product.inStock <=0"><i class="pi pi-shopping-cart"></i> Dodaj do koszyka</button>
+                <p-inputNumber [(ngModel)]="this.selectedCount" class="content__buy-count" [min]="this.product.inStock <=0 ? 0 : 1" [showButtons]="true"
+                [max]="this.product.inStock"></p-inputNumber>
+                <button shopButton class="content__buy-button" [disabled]="this.product.inStock <=0 || this.waitingForResponse"
+                (click)="this.addToCart()"><i class="pi pi-shopping-cart"></i> Dodaj do koszyka</button>
             </div>
         </div>
     </div>
@@ -29,4 +31,5 @@
 <div class="overlay" *ngIf="!this.product">
     <i class="pi pi-spinner pi-spin"></i>
 </div>
+<shop-busy-overlay *ngIf="this.waitingForResponse"></shop-busy-overlay>
 

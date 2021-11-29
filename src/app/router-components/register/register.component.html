@@ -1,6 +1,6 @@
 <div class="content">
     <form class="register" [formGroup] = "this.form" (ngSubmit) = "this.onRegisterClick()">
-        <h2 class="register__header">Register:</h2>
+        <h2 class="register__header">Rejestracja:</h2>
         <div class="register__sector register__username">
             <div>Nazwa użytkownika:</div>
             <input type="text" pTooltip [pTooltip] = "this.getErrorsMessage(this.username)"

@@ -22,14 +22,14 @@
         }
     }
 
-    &--blue{
+    &--primary{
 
         &:hover{
-            background-color: $theme-color-hover;
+            background-color: $theme-color-light-1;
         }
 
         &:disabled{
-            background-color: $theme-color;
+            background-color: $theme-color-light-2;
         }
     }
 

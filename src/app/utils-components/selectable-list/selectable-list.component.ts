@@ -1,4 +1,3 @@
-import { PageableParams } from './../../models/requests';
 import { state, style, trigger, transition, animate } from '@angular/animations';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';

@@ -1,7 +1,9 @@
 @import "../../.././styling/all.scss";
 
 nav{
-    width: 100%;
+    z-index: 100;
+    position: sticky;
+    top: 0;
 }
 
 :host{
@@ -15,16 +17,17 @@ nav{
 }
 
 .top-nav{
+
     width: 100%;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    background-color: $surface-color;
+    background-color: $theme-color;
     box-shadow: 0 0 2px 0 $box-shadow-color;
     font-size: $font-size3;
     text-align: center;
+    flex-wrap: wrap;
 
     &__menu{
         flex: 1;
@@ -33,7 +36,6 @@ nav{
 
     &__right{
         display: flex;
-        flex-wrap: wrap;
     }
 
     &__expand{
@@ -43,7 +45,7 @@ nav{
         padding: 5px;
 
         & .pi{
-            font-size: $font-size7 ;
+            font-size: min(10vw, 50px) ;
         }
     }
 
@@ -52,15 +54,15 @@ nav{
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        margin: 8px 6px 5px 5px;
+        margin: 6px 4px 4px 4px;
         text-align: center;
-
+        font-size: min(19px, 3.8vw);
         & .pi{
-           transform: scale(1.2, 1.1);
-           font-size: $font-size6;
+           transform: scale(1.4, 1.3);
+           font-size: inherit;
 
             &-user-plus{
-                transform: scale(1.4, 1.3);
+                transform: scale(1.5, 1.4);
             }
         }
 
@@ -78,7 +80,7 @@ nav{
     justify-content: space-between;
     padding-top: 40px;
     padding: 20px;;
-    background-color: $surface-color;
+    background-color: $theme-color;
     color: $text-color;
     box-shadow: 0 0 2px 0 $box-shadow-color;
 
@@ -100,12 +102,16 @@ nav{
 
 .router{
     @include flex-fill-space;
+    align-self: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 :host ::ng-deep{
     & .p-menubar{
         border: none;
         outline: none;
+        background-color: $theme-color;
     }
 
     & .p-sidebar{
@@ -117,6 +123,39 @@ nav{
         &-content{
             padding: 5px !important;
         }
+    }
+
+    & .p-menuitem {
+
+        &-link{
+            // &-active{
+            //     box-shadow: 0 0 1px 2.5px inset $theme-color-light;
+            // }
+
+            &:active{
+                box-shadow: 0 0 1px 2.5px inset $theme-color-light-2;
+            }
+
+            &:hover{
+                background-color: $theme-color-light-1 !important;
+            }
+        }
+
+        &-active > .p-menuitem-link{
+            background-color: $theme-color-light-1 !important;
+        }
+
+        &-text{
+            color: $text-color !important;
+        }
+    }
+
+    & .p-submenu-list{
+        background-color: $theme-color;
+    }
+
+    & .p-submenu-icon{
+        color: black !important;
     }
 }
 

@@ -16,7 +16,7 @@
         </div>
         <div class="buttons">
             <input type="file" style="display: none;" (change) = "this.onFileChange(fileInput)"
-            accept="image/*" #fileInput>
+            accept="image/jpeg, image/png, image/bmp" #fileInput>
             <button class="buttons__button" shopButton (click) = "fileInput.click()">Wybierz obraz <i class="pi pi-image"></i></button>
             <button class="buttons__button" [disabled] = "!hasImage()" shopButton (click) = "this.onImageRemove()" color="red">Usuń obraz <i class="pi pi-times"></i></button>
         </div>

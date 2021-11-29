@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column;
     z-index: 1001;
-    background-color: $surface-color;
+    background-color: $theme-color;
     height: 100%;
     top: 0;
 
@@ -17,13 +17,13 @@
         & .pi{
             padding: max(4px, 2%);
             border-radius: 50%;
-            background-color: $surface-color-2;
+            background-color: $theme-color-light-1;
             transition-duration: 200ms;
             cursor: pointer;
             margin: max(3px, 1.5%);
 
             &:hover{
-                background-color: $surface-color-4;
+                background-color: $theme-color-light-2;
             }
         }
     }

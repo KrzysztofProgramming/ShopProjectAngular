@@ -1,4 +1,3 @@
-import { DomSanitizer } from '@angular/platform-browser';
 import { ProductsService } from 'src/app/services/products.service';
 import { EMPTY_PRODUCT, ShopProduct } from './../../models/models';
 import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
@@ -17,7 +16,7 @@ export class ProductTileComponent implements OnInit {
   @ViewChild("description") descriptionContainer!: ElementRef<HTMLParagraphElement>
   // @Input() adminView: boolean = false;
 
-  constructor(private productsService: ProductsService, private sanitizer: DomSanitizer) { }
+  constructor(private productsService: ProductsService) { }
 
   @Input()
   set product(p: ShopProduct){

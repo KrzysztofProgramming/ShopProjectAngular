@@ -29,9 +29,6 @@ export class RouterGuard implements CanActivate {
       case "products":{
         return this.authService.hasPermission(this.authService.PRODUCTS_MODIFY);
       }
-      case "cart":{
-        return this.authService.isLogin();
-      }
     }
     return true;
   }

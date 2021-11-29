@@ -52,7 +52,8 @@ import { PasswordInputComponent } from './utils-components/password-input/passwo
 import { SelectableListComponent } from './utils-components/selectable-list/selectable-list.component';
 import { CheckboxComponent } from './utils-components/checkbox/checkbox.component';
 import { CartComponent } from './router-components/cart/cart.component';
-import { CartEditorComponent } from './utils-components/cart-editor/cart-editor.component';
+import { CartEditorComponent, CartEditorElementComponent } from './utils-components/cart-editor/cart-editor.component';
+import { HomeComponent } from './router-components/home/home.component';
 
 
 @NgModule({
@@ -89,7 +90,8 @@ import { CartEditorComponent } from './utils-components/cart-editor/cart-editor.
     CheckboxComponent,
     CartComponent,
     CartEditorComponent,
-    
+    CartEditorElementComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

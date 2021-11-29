@@ -5,7 +5,7 @@ export interface LoginRequest{
     password: string
 }
 
-export interface SetCartProductRequest{
+export interface CartProductRequest{
     productId: string;
     amount: number;
 }

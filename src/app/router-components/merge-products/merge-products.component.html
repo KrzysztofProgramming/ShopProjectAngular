@@ -1,15 +1,18 @@
 <div class="content">
     <div class="top-bar">
-        <div class="top-bar__part1">
-            <button shopButton color="gray" class="top-bar__filters-switcher" (click) = "this.filtersExpanded = true">
+        <div class="p-input-icon-right top-bar__searcher">
+            <input class="top-bar__searcher-input" placeholder="wyszukiwanie" type="text" pInputText formControlName = "searchPhrase">
+            <i class="pi pi-search"></i>
+        </div>
+        <div class="top-bar__part-1">
+            <!-- <button shopButton color="gray" class="top-bar__filters-switcher" (click) = "this.filtersExpanded = true">
                 <p>Filtry</p>
                 <i class="pi pi-book"></i>
-            </button>
+            </button> -->
             <div class="page-select">
-                <p>Strona:</p>
                 <p-inputNumber class="page-select__input" [useGrouping]="false" [max]="this.httpResponse.totalPages"
                     [min]="1" [step]="1" [showButtons]="true" buttonLayout="horizontal"
-                    incrementButtonClass="p-button-secondary" decrementButtonClass="p-button-secondary"
+                    incrementButtonClass="p-button-primary" decrementButtonClass="p-button-primary"
                     incrementButtonIcon="pi pi-chevron-right" decrementButtonIcon="pi pi-chevron-left"
                     [(ngModel)]="this.pageNumberModel" (ngModelChange)="this.onPageNumberChange($event)">
                 </p-inputNumber>
@@ -27,8 +30,8 @@
     </div>
     
     <div class="main">
-        <shop-products-filters (ngModelChange)="this.onFiltersChange($event)" class="main-filters"
-            [(ngModel)]="this.filtersModel" (startChanging)="this.cancelPreviousRequest()"></shop-products-filters>
+        <!-- <shop-products-filters (ngModelChange)="this.onFiltersChange($event)" class="main-filters"
+            [(ngModel)]="this.filtersModel" (startChanging)="this.cancelPreviousRequest()"></shop-products-filters> -->
         <div class="main-tiles">
             <ng-container *ngIf="this.httpResponse">
                 <ng-container *ngFor="let product of this.httpResponse.products">
@@ -41,4 +44,8 @@
         <shop-products-filters class = "filters-dialog__filters" (ngModelChange)="this.onFiltersChange($event)" (startChanging)="this.cancelPreviousRequest()"
         [(ngModel)]="this.filtersModel"></shop-products-filters>
     </shop-dialog>
+
+    <div class="scroll-button" (click) = "this.scrollUp()">
+        <i class="pi pi-arrow-up"></i>
+    </div>
 </div>

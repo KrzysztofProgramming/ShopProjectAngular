@@ -1,4 +1,4 @@
-import { SetCartProductRequest, SetCartRequest } from './../models/requests';
+import { CartProductRequest, SetCartRequest } from './../models/requests';
 import { AuthService } from './auth/auth.service';
 import { ShoppingCart } from './../models/models';
 import { catchError, tap } from 'rxjs/operators';
@@ -26,6 +26,10 @@ export class ShoppingCartService implements OnInit, OnDestroy{
     );
   }
 
+  // public getCart(){
+  //   return this.currentCart.getValue();
+  // }
+
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub=>sub.unsubscribe());
   }
@@ -35,16 +39,16 @@ export class ShoppingCartService implements OnInit, OnDestroy{
   }
 
   public refreshCart(): Observable<ShoppingCart>{
-    if(this.authService.isLogin()){
+    if(!this.authService.isLogin()){
       return this.handleGetErrors()();
     }
     return this.http.get<ShoppingCart>(`${this.URL}getCart`).pipe(
-      catchError(this.handleGetErrors()),
-      tap(this.tapToRefresh())
+      tap(this.tapToRefresh()),
+      catchError(this.handleGetErrors())
     )
   }
 
-  public setProductInCart(request: SetCartProductRequest): Observable<ShoppingCart>{
+  public setProductInCart(request: CartProductRequest): Observable<ShoppingCart>{
     if(!this.authService.isLogin()){
       return this.setProductOnClient(request)();
     }
@@ -64,6 +68,16 @@ export class ShoppingCartService implements OnInit, OnDestroy{
     )
   }
 
+  public addProductToCart(request: CartProductRequest): Observable<ShoppingCart>{
+    if(!this.authService.isLogin){
+      return this.addProductOnClient(request)();
+    }
+    return this.http.put<ShoppingCart>(`${this.URL}addProduct`, request).pipe(
+      tap(this.tapToRefresh),
+      catchError(this.addProductOnClient(request))
+    )
+  }
+
   public setCartOnClient(request: SetCartRequest){
      return (): Observable<ShoppingCart>=>{
         let modyfiedCart = this.currentCart.getValue();
@@ -73,10 +87,20 @@ export class ShoppingCartService implements OnInit, OnDestroy{
       }
   }
 
-  public setProductOnClient(request: SetCartProductRequest){
+
+  public setProductOnClient(request: CartProductRequest){
     return ()=>{
       let modyfiedCart = this.currentCart.getValue();
-      modyfiedCart.items[request.productId] = request.amount
+      modyfiedCart.items[request.productId] = request.amount;
+      this.currentCart.next(modyfiedCart);
+      return of(modyfiedCart);
+    }
+  }
+  
+  public addProductOnClient(request: CartProductRequest){
+    return ()=>{
+      let modyfiedCart = this.currentCart.getValue();
+      modyfiedCart.items[request.productId] = request.amount + modyfiedCart.items[request.productId];
       this.currentCart.next(modyfiedCart);
       return of(modyfiedCart);
     }

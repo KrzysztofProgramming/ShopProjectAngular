@@ -1,17 +1,19 @@
-<shop-product-image class="image" imageResolution="small" [productId] = "this.product.id!">
+<div class="wrapper">
+    <shop-product-image class="image" imageResolution="small" [productId] = "this.product.id!">
 
-</shop-product-image>
-<div class="informations">
-    <p class="informations__name"> {{this.product.name}} </p>   
-    <p class="informations__price">
-        Cena:
-        <ng-container *ngIf = "this.product.price === 0">Bezpłatny</ng-container>
-        <ng-container *ngIf = "this.product.price !== 0">{{this.product.price}} zł</ng-container>
-    </p>
-    <p class="informations__types">
-      <span class=informations__types-name>Typ:</span> {{product.types.join(", ")}}
-    </p>
-    <p class="informations__description" #description>
-        {{this.product.description}}
-    </p>
+    </shop-product-image>
+    <div class="informations">
+        <p class="informations__name"> {{this.product.name}} </p>   
+        <p class="informations__price informations__element">
+            Cena:
+            <ng-container *ngIf = "this.product.price === 0">Bezpłatny</ng-container>
+            <ng-container *ngIf = "this.product.price !== 0">{{this.product.price}} zł</ng-container>
+        </p>
+        <p class="informations__types informations__element">
+          {{product.types.join(", ")}}
+        </p>
+        <p class="informations__description informations__element" #description>
+            {{this.product.description}}
+        </p>
+    </div>
 </div>

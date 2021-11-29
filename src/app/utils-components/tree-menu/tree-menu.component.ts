@@ -44,7 +44,7 @@ export interface TreeItem{
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./tree-menu.component.scss']
 })
-export class TreeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TreeMenuComponent {
   
   _items: TreeItem[] = [];
   public expandedItems: boolean[] = [];
@@ -85,16 +85,5 @@ export class TreeMenuComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private cd: ChangeDetectorRef) { }
 
-  ngOnInit(): void {
-    console.log("init");
-  }
-
-  ngAfterViewInit(): void{
-    console.log("after init");
-  }
-
-  ngOnDestroy(): void{
-    console.log("destroy");
-  }
 
 }

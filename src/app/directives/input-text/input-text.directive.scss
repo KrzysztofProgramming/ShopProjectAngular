@@ -14,7 +14,7 @@
     }
 
     &:focus{
-        box-shadow: 0 0 0 0.15rem #a6d5fa;
+        box-shadow: 0 0 0 0.15rem $theme-color-light-3;
         border-color: $theme-color;
     }
 

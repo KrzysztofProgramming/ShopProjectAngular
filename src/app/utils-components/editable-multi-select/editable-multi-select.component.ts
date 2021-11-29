@@ -1,13 +1,12 @@
 import { BehaviorSubject } from 'rxjs';
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, ElementRef, ViewChild, HostListener, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { trigger } from '@angular/animations';
 
 @Component({
   selector: 'shop-multi-select-item',
   template: `
     <div class="content" (click) = "this.triggerOnClick()" [class.selected] = "this.isChecked" [class.highlighted] = "this.isHighlighted">
-        <p-checkbox #checkbox [disabled] = "true" [ngModel] = "this.isChecked" class="checkbox" [binary] = "true"></p-checkbox>
+        <p-checkbox #checkbox [readonly] = "true" [ngModel] = "this.isChecked" class="checkbox" [binary] = "true"></p-checkbox>
         <div class="label"> {{label}} </div>
     </div>
   `,
@@ -32,14 +31,14 @@ import { trigger } from '@angular/animations';
     }
 
     .highlighted{
-      box-shadow: 0 0 4px 3px $theme-color-light;
+      box-shadow: 0 0 4px 3px $theme-color-light-2;
     }
 
     .selected{
-      background-color: $theme-color-hover !important;
+      background-color: $theme-color-light-1 !important;
 
       &:hover{
-        background-color: $theme-color-light !important;
+        background-color: $theme-color-light-2 !important;
       }
     }
 
@@ -52,17 +51,15 @@ import { trigger } from '@angular/animations';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MultiSelectItemComponent implements AfterViewInit {
+export class MultiSelectItemComponent {
   @Input() label: string = "";
   private _isChecked: boolean = false;
   private _isHighlighted: boolean = false;
   @Output() onClick: EventEmitter<void> = new EventEmitter();
-  @ViewChild("checkbox", { read: ElementRef }) checkbox!: ElementRef<HTMLElement>;
 
   @Input()
   set isHighlighted(value: boolean) {
     this._isHighlighted = value;
-    this.removeDisabledStyling();
   }
   get isHighlighted(): boolean {
     return this._isHighlighted;
@@ -71,7 +68,6 @@ export class MultiSelectItemComponent implements AfterViewInit {
   @Input()
   set isChecked(value: boolean) {
     this._isChecked = value;
-    this.removeDisabledStyling();
   }
   get isChecked(): boolean {
     return this._isChecked;
@@ -79,21 +75,9 @@ export class MultiSelectItemComponent implements AfterViewInit {
 
   constructor(public eref: ElementRef<HTMLElement>) { }
 
-  ngAfterViewInit(): void {
-    this.removeDisabledStyling();
-  }
 
-  public removeDisabledStyling() {
-    setTimeout(() => {
-      if (this.checkbox == null) return;
-      let child = this.checkbox.nativeElement.firstElementChild!;
-      child.classList.remove("p-checkbox-disabled");
-      child.children[1].classList.remove("p-disabled");
-    }, 0);
-  }
 
   public triggerOnClick(): void {
-    this.removeDisabledStyling();
     this.onClick.emit();
   }
 
@@ -356,6 +340,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
         const filtered = this.displayItems.filter(item => item.label === this.highlightedItem);
         if (filtered.length === 0) return;
         filtered[0].isChecked = !filtered[0].isChecked;
+        this.onChange(true);
         break;
       }
 

@@ -120,4 +120,11 @@ export class MergeProductsComponent implements OnInit {
     });
   }
 
+  public scrollUp(){
+    window.scroll({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
 }

@@ -14,8 +14,8 @@
     // flex: 1;
 
     &--checked{
-        background-color: $color-blue;
-        box-shadow: 0 0 2px 1px $color-blue;
+        background-color: $theme-color;
+        box-shadow: 0 0 2px 1px $theme-color;
     }
 
     &--unchecked{

@@ -11,6 +11,7 @@ export interface JwtToken{
 export interface ShopUser{
 }
 
+
 export interface ShoppingCart{
     ownerUsername?: string;
     items: {
@@ -18,6 +19,8 @@ export interface ShoppingCart{
     }
     expireDate?: Date;
 }
+
+export const EMPTY_CART = {items: {}};
 
 export interface ShopProduct extends ShopProductRequest{
     id?: string | null;

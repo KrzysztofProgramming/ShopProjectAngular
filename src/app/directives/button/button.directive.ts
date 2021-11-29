@@ -5,7 +5,7 @@ import { Directive, Input } from '@angular/core';
   host:{
     '[class.d-button]': 'true',
     '[class.d-button--red]': "color === 'red'",
-    '[class.d-button--blue]': "color === 'blue'",
+    '[class.d-button--primary]': "color === 'primary'",
     '[class.d-button--gray]': "color === 'gray'",
     '[class.d-button--orange]': "color === 'orange'",
     '[class.d-button--green]': "color === 'green'",
@@ -14,7 +14,7 @@ import { Directive, Input } from '@angular/core';
   }
 })
 export class ButtonDirective {
-  @Input() color: 'blue' | 'red' | 'gray' | 'orange' | 'green' = "blue";
+  @Input() color: 'primary' | 'red' | 'gray' | 'orange' | 'green' = "primary";
   @Input() padding: 'large' | 'medium' = 'large';
   constructor() { }
 

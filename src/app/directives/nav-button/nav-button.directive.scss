@@ -2,15 +2,16 @@
 
 .d-nav-button{
     cursor: pointer;
-    background-color: $surface-color;
+    background-color: $theme-color;
     padding: 0.4em;
     transition-duration: 150ms;
+    border-radius: 3px;
 
     &:hover{
-        background-color: $surface-hover;
+        background-color: $theme-color-light-1;
     }
 
     &-clicked{
-        box-shadow: $box-shadow;
+        box-shadow: 0 0 1px 2.5px inset $theme-color-light-3;
     }
 }

@@ -1,7 +1,6 @@
 import { TreeMenuComponent } from './../../utils-components/tree-menu/tree-menu.component';
 import { AuthService } from '../../services/auth/auth.service';
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, ViewChild } from '@angular/core';
-import { MenuItem, MessageService } from 'primeng/api';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { TreeItem } from 'src/app/utils-components/tree-menu/tree-menu.component';
 
 @Component({
@@ -26,21 +25,10 @@ export class NavComponent implements OnInit {
     ]
   }
 
-  private usersItem: TreeItem = {
-    label: "Użytkownicy",
-    items:[
-      {
-        label: "Dodaj użytkownika"
-      },
-      {
-        label: "Przegląd użytkowników"
-      }
-    ]
-  }
-
   private initializeNavItems: TreeItem[] = [
     {
-      label: "Strona Główna"
+      label: "Strona Główna",
+      routerLink: "home"
     },
     {
       label: "Oferta",
@@ -70,11 +58,7 @@ export class NavComponent implements OnInit {
     this.authService.permissions.subscribe(_val=>{
       let items: TreeItem[] = this.initializeNavItems.slice();
 
-      if(this.authService.hasPermission(this.authService.USERS_GET)){
-        items.push(this.usersItem);
-      }
-
-      if(this.authService.hasPermission(this.authService.USERS_MODIFY)){
+      if(this.authService.hasPermission(this.authService.PRODUCTS_MODIFY)){
         items.push(this.productsItem);
       }
 

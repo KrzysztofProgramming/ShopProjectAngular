@@ -25,6 +25,11 @@ export class ProductsService {
     return this.http.get<ShopProductWithId>(`${this.url}byId/${id}`);
   }
 
+  public getProducts(ids: string[]): Observable<ShopProductWithId[]>{
+    if(ids.length === 0) return of([]);
+    return this.http.get<ShopProductWithId[]>(`${this.url}byIds`, {params: {"ids": ids}});
+  }
+
   public addProduct(product: ShopProductRequest): Observable<ShopProductWithId>{
    return this.http.post<ShopProductWithId>(this.url + "addNewProduct", product);
   }
