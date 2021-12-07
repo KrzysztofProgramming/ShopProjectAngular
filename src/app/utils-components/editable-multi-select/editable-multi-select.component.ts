@@ -1,6 +1,9 @@
+import { distinctUntilChanged } from 'rxjs/operators';
+import { ProductDetailsComponent } from './../../router-components/product-details/product-details.component';
 import { BehaviorSubject } from 'rxjs';
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, ElementRef, ViewChild, HostListener, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'shop-multi-select-item',
@@ -14,12 +17,20 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     `
     @import "../../../styling/all.scss";
 
+    :host{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 32px;
+    }
+
     .content{
+      height: 32px;
+      padding: 0 4px 0 4px;
+      margin: 0 2px 0 2px;
       display: flex;
       flex-direction: row;
       align-items: center;
-      padding: 5px;
-      margin: 3px;
       transition-duration: 150ms;
       border-radius: 3px;
       cursor: pointer;
@@ -31,11 +42,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
 
     .highlighted{
-      box-shadow: 0 0 4px 3px $theme-color-light-2;
+      box-shadow: 0 0 4px 3px $theme-color;
+      z-index: 1;
     }
 
     .selected{
-      background-color: $theme-color-light-1 !important;
+      background-color: $theme-color-light-3 !important;
 
       &:hover{
         background-color: $theme-color-light-2 !important;
@@ -51,7 +63,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MultiSelectItemComponent {
+export class MultiSelectItemComponent  {
   @Input() label: string = "";
   private _isChecked: boolean = false;
   private _isHighlighted: boolean = false;
@@ -112,10 +124,15 @@ interface ItemOptions {
             </div>
           </div>
 
-          <div class="expansion__list">
-            <shop-multi-select-item  *ngFor = "let item of displayItems" #item [label] = "item.label"
-             [isChecked] = "item.isChecked" [isHighlighted] = "this.isHighlighted(item.label)" (onClick) = "this.onItemClick(item)"></shop-multi-select-item>
-          </div>
+          <!-- <div class="expansion__list"> -->
+            <cdk-virtual-scroll-viewport #cdkViewport class="expansion__viewport" itemSize="32"
+             [ngStyle] = "{'height': this.displayItems.length * 32 + 8 + 'px'}">
+              <shop-multi-select-item *cdkVirtualFor="let item of displayItems" #item [label] = "item.label"
+               [isChecked] = "item.isChecked" [isHighlighted] = "this.isHighlighted(item.label)"
+               (onClick) = "this.onItemClick(item)"></shop-multi-select-item>
+            </cdk-virtual-scroll-viewport>
+           
+          <!-- </div> -->
       </div>  
     </div>
   `,
@@ -144,6 +161,9 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
 
   @ViewChildren("item") items!: QueryList<MultiSelectItemComponent>;
 
+  @ViewChild("cdkViewport")
+  private cdkViewport?: CdkVirtualScrollViewport;
+
   private _initializeItems: string[] = [];
   private expandedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public selectedItemsString: string = "";
@@ -152,7 +172,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
   public groupChecked: boolean = false;
   public onChangeFunction: any = () => { };
   public onTouchedFunction: any = () => { };
-  private highlightedItem: string = "";
+  private highlightedItem?: ItemOptions;
 
   @Input()
   set initializeItems(items: string[]) {
@@ -243,7 +263,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
   public focusInput(): void {
     setTimeout(() => {
       this.filterInput.nativeElement.focus();
-      this.highlightedItem = "";
+      this.highlightedItem = undefined;
     }, 0);
   }
 
@@ -261,7 +281,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
   public onItemClick(item: ItemOptions) {
     item.isChecked = !item.isChecked;
     this.groupChecked = this.isAllChecked();
-    this.highlightedItem = item.label;
+    this.highlightedItem = item;
     this.onChange();
   }
 
@@ -334,10 +354,10 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
     
     switch (keyCode) {
       case "Enter": {
-        if (this.highlightedItem === "") {
+        if (!this.highlightedItem) {
           this.addNewItemClick();
         }
-        const filtered = this.displayItems.filter(item => item.label === this.highlightedItem);
+        const filtered = this.displayItems.filter(item => item.label === this.highlightedItem?.label);
         if (filtered.length === 0) return;
         filtered[0].isChecked = !filtered[0].isChecked;
         this.onChange(true);
@@ -346,7 +366,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
 
       case "ArrowUp":
         {
-          const filtered = this.displayItems.filter(item => item.label === this.highlightedItem);
+          const filtered = this.displayItems.filter(item => item.label === this.highlightedItem?.label);
           if (filtered.length === 0)
             return;
           const index = this.displayItems.indexOf(filtered[0]);
@@ -355,46 +375,49 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
             break;
           };
           if (index <= 0) return;
-          this.highlightedItem = this.displayItems[index - 1].label;
+          this.highlightedItem = this.displayItems[index - 1];
           break;
         }
 
       case "ArrowDown": {
-        if (this.highlightedItem === "" && this.displayItems.length > 0) {
-          this.highlightedItem = this.displayItems[0].label;
+        if (!this.highlightedItem && this.displayItems.length > 0) {
+          this.highlightedItem = this.displayItems[0];
           this.unfocusInput();
           break;
         }
-        const filtered = this.displayItems.filter(item => item.label === this.highlightedItem);
+        const filtered = this.displayItems.filter(item => item.label === this.highlightedItem?.label);
         if (filtered.length === 0) return;
         const index = this.displayItems.indexOf(filtered[0]);
         if (index >= this.displayItems.length - 1) return;
-        this.highlightedItem = this.displayItems[index + 1].label;
+        this.highlightedItem = this.displayItems[index + 1];
         break;
       }
       default: {
         return;
       }
     }
+    if(!this.highlightedItem) return;
     this.scrollToItemIfOverflowing(this.highlightedItem);
   }
 
   public isHighlighted(itemValue: string): boolean {
-    return itemValue === this.highlightedItem;
+    return itemValue === this.highlightedItem?.label;
   }
 
-  public scrollToItemIfOverflowing(label: string) {
-    this.items.filter(item => item.label === label).forEach(item => {
-      if(!this.isItemOverflowing(item.eref.nativeElement))
-        return;
-      item.eref.nativeElement.scrollIntoView({block: 'nearest'});
-    });
+  public scrollToItemIfOverflowing(item: ItemOptions) {
+    if(!this.cdkViewport) return;
+
+    if(this.isItemOverflowing(this.items.find(i => i.label === item.label)!.eref.nativeElement)){
+      this.cdkViewport?.scrollToIndex(this.displayItems.indexOf(item), "smooth");
+    }
   }
 
 
   public isItemOverflowing(elementRef: HTMLElement){
-    const parent = this.expansion.nativeElement.getBoundingClientRect();
+    if(!this.cdkViewport) return true;
+    const parent = this.cdkViewport.elementRef.nativeElement.getBoundingClientRect();
     const element = elementRef.getBoundingClientRect();
+    console.log("parent: ", parent, "element: ", element);
     return parent.y > element.y || parent.y + parent.height < element.y + element.height;
   }
 }

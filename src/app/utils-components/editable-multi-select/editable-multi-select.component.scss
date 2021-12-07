@@ -49,11 +49,17 @@
     border: 1.5px solid $theme-border;
     background-color: $theme-white;
     width: 100%;
-    max-height: 300px;
+    // max-height: 300px;
     display: flex;
     flex-direction: column;
     outline: none;
     overflow: auto;
+
+    &__viewport{
+        max-height: 300px;
+        // contain: none !important;
+        // box-sizing: content-box;
+    }
 
     &__top{
         display: flex;
@@ -92,11 +98,11 @@
             }
         }
     }
+}
 
-    &__list{
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        // overflow: auto;
+:host ::ng-deep{
+    & .cdk-virtual-scroll-content-wrapper{
+        padding: 4px 0 4px 0;
+        // position: unset;
     }
 }
