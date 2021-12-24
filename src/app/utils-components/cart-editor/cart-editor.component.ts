@@ -4,7 +4,7 @@ import { EMPTY_CART, ShoppingCart, ShopProductWithId } from './../../models/mode
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ElementRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ProductsService } from 'src/app/services/products.service';
+import { ProductsService } from 'src/app/services/http/products.service';
 import { Router } from '@angular/router';
 
 export interface CartEditorElementModel{

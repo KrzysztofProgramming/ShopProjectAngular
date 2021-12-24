@@ -1,4 +1,4 @@
-import { ShoppingCartService } from './../../services/shopping-cart.service';
+import { ShoppingCartService } from './../../services/http/shopping-cart.service';
 import { ShoppingCart } from './../../models/models';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';

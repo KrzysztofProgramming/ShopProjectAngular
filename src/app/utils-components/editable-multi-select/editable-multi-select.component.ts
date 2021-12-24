@@ -1,5 +1,3 @@
-import { distinctUntilChanged } from 'rxjs/operators';
-import { ProductDetailsComponent } from './../../router-components/product-details/product-details.component';
 import { BehaviorSubject } from 'rxjs';
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy, ElementRef, ViewChild, HostListener, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -10,7 +8,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
   template: `
     <div class="content" (click) = "this.triggerOnClick()" [class.selected] = "this.isChecked" [class.highlighted] = "this.isHighlighted">
         <p-checkbox #checkbox [readonly] = "true" [ngModel] = "this.isChecked" class="checkbox" [binary] = "true"></p-checkbox>
-        <div class="label"> {{label}} </div>
+        <div class="label"> {{this.getLabel()}} </div>
     </div>
   `,
   styles: [
@@ -21,13 +19,13 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
       display: flex;
       flex-direction: column;
       justify-content: center;
-      height: 32px;
+      height: 33px;
     }
 
     .content{
-      height: 32px;
+      height: 30px;
       padding: 0 4px 0 4px;
-      margin: 0 2px 0 2px;
+      margin: 1.5px 2px 1.5px 2px;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -38,6 +36,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
       &:hover{
         background-color: $theme-border;
+        z-index: 2;
       }
     }
 
@@ -51,6 +50,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
       &:hover{
         background-color: $theme-color-light-2 !important;
+        z-index: 2;
       }
     }
 
@@ -64,7 +64,8 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultiSelectItemComponent  {
-  @Input() label: string = "";
+  @Input() element: string | ItemModel = "";
+  @Input() displayProperty: string = "name";
   private _isChecked: boolean = false;
   private _isHighlighted: boolean = false;
   @Output() onClick: EventEmitter<void> = new EventEmitter();
@@ -87,7 +88,9 @@ export class MultiSelectItemComponent  {
 
   constructor(public eref: ElementRef<HTMLElement>) { }
 
-
+  public getLabel(): string{
+    return typeof(this.element) === "string" ? this.element : this.element[this.displayProperty];
+  }
 
   public triggerOnClick(): void {
     this.onClick.emit();
@@ -95,14 +98,16 @@ export class MultiSelectItemComponent  {
 
 }
 
+
+type ItemModel = string | {[key: string]: any};
+
 interface ItemOptions {
-  label: string;
+  element: ItemModel;
   isChecked: boolean;
   isDisplay: boolean;
   isAdded: boolean;
   // isHighlighted: boolean;
 }
-
 
 @Component({
   selector: 'shop-editable-multi-select',
@@ -114,24 +119,29 @@ interface ItemOptions {
       </div>
 
       <div class="expansion" #expansion *ngIf = "this.expanded"  (keydown) = "this.handleKeyPress($event)" tabindex="0">
-          <div class="expansion__top">
-            <p-checkbox class="expansion__top-checkbox" [binary] = "true" [(ngModel)] = "this.groupChecked" 
-             (onChange) = "this.onCheckedAllClicked()"></p-checkbox>
-            <div class="p-input-icon-right expansion__top-input">
-              <i class="pi pi-plus-circle" *ngIf = "this.editable" (click) = "this.addNewItemClick()"></i>
-              <input type="text" #filterInput pInputText [(ngModel)] = "this.currentFilter"
-               (input) = "this.onFilterChange()" (focus) = "this.focusInput()">
+        <ng-container *ngIf="!this.waitingForDataFlag">
+            <div class="expansion__top">
+              <p-checkbox class="expansion__top-checkbox" [binary] = "true" [(ngModel)] = "this.groupChecked" 
+               (onChange) = "this.onCheckedAllClicked()"></p-checkbox>
+              <div class="p-input-icon-right expansion__top-input">
+                <i class="pi pi-plus-circle" *ngIf = "this.editable" (click) = "this.addNewItemClick()"></i>
+                <input type="text" #filterInput pInputText [(ngModel)] = "this.currentFilter"
+                 (input) = "this.onFilterChange()" (focus) = "this.focusInput()">
+              </div>
             </div>
-          </div>
-
-          <!-- <div class="expansion__list"> -->
-            <cdk-virtual-scroll-viewport #cdkViewport class="expansion__viewport" itemSize="32"
-             [ngStyle] = "{'height': this.displayItems.length * 32 + 8 + 'px'}">
-              <shop-multi-select-item *cdkVirtualFor="let item of displayItems" #item [label] = "item.label"
-               [isChecked] = "item.isChecked" [isHighlighted] = "this.isHighlighted(item.label)"
-               (onClick) = "this.onItemClick(item)"></shop-multi-select-item>
-            </cdk-virtual-scroll-viewport>
-           
+  
+            <!-- <div class="expansion__list"> -->
+              <cdk-virtual-scroll-viewport #cdkViewport class="expansion__viewport" itemSize="32"
+               [ngStyle] = "{'height': this.displayItems.length * 33 + 8 + 'px'}">
+                <shop-multi-select-item *cdkVirtualFor="let item of displayItems" #item [element] = "item.element"
+                [displayProperty] = "this.displayProperty"
+                 [isChecked] = "item.isChecked" [isHighlighted] = "this.isHighlighted(item.element)"
+                 (onClick) = "this.onItemClick(item)"></shop-multi-select-item>
+              </cdk-virtual-scroll-viewport>
+         </ng-container>     
+         <div class="expansion__busy-overlay" *ngIf="this.waitingForDataFlag">
+           <shop-busy-overlay overlayStyle = "light"></shop-busy-overlay>
+         </div>      
           <!-- </div> -->
       </div>  
     </div>
@@ -151,6 +161,8 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
   @Input() labelOverflowSize: number = 3;
   @Input() invalid: boolean = false;
   @Input() editable: boolean = true;
+  @Input() displayProperty: string = "name";
+  @Input() waitingForDataFlag: boolean = false;
   @Output() blur: EventEmitter<void> = new EventEmitter<void>();
 
   @ViewChild("filterInput")
@@ -164,7 +176,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
   @ViewChild("cdkViewport")
   private cdkViewport?: CdkVirtualScrollViewport;
 
-  private _initializeItems: string[] = [];
+  private _initializeItems: ItemModel[] = [];
   private expandedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public selectedItemsString: string = "";
   public allItems: ItemOptions[] = [];
@@ -175,13 +187,13 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
   private highlightedItem?: ItemOptions;
 
   @Input()
-  set initializeItems(items: string[]) {
-    this._initializeItems = items.map(item => item.toUpperCase());
+  set initializeItems(items: ItemModel[]) {
+    this._initializeItems = new Array(...items);
     this.mergeWithInitializeItems();
     this.refreshDisplayInfo();
   }
 
-  get initializeItems(): string[] {
+  get initializeItems(): ItemModel[] {
     return this._initializeItems;
   }
 
@@ -207,14 +219,14 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
     let temp: ItemOptions[] = this.allItems.filter(item => item.isAdded); //addedItems
     let mappedInitializeItems: ItemOptions[] = this.initializeItems.map(item => {
       return {
-        label: item,
+        element: item,
         isDisplay: this.matchFilter(item), isAdded: false, isChecked: false
       };
     });
     temp = Array.prototype.concat(mappedInitializeItems, temp); //added + initialized with repeatitions
     let uniqueLabels: ItemOptions[] = [];
     temp.forEach(item => { //removing repeatition
-      if (uniqueLabels.some(item2 => item2.label === item.label))
+      if (uniqueLabels.some(item2 => item2.element === item.element))
         return;
       uniqueLabels.push(item);
     }
@@ -226,11 +238,11 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
     return this.allItems.filter(item => item.isDisplay);
   }
 
-  writeValue(obj: string[]): void {
+  writeValue(obj: ItemModel[]): void {
     if(!obj) return;
-    obj = obj.map(item => item.toUpperCase());
+    obj = new Array(...obj);
     this.allItems.forEach(item => {
-      item.isChecked = obj.includes(item.label);
+      item.isChecked = obj.includes(item.element);
     });
     this.onChange(false);
     this.cd.markForCheck();
@@ -262,6 +274,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
 
   public focusInput(): void {
     setTimeout(() => {
+      if(!this.filterInput.nativeElement) return;
       this.filterInput.nativeElement.focus();
       this.highlightedItem = undefined;
     }, 0);
@@ -269,6 +282,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
 
   public unfocusInput(): void {
     setTimeout(() => {
+      if(!this.filterInput) return;
       this.filterInput.nativeElement.blur();
     }, 0);
   }
@@ -292,14 +306,14 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
   }
 
   public refreshDisplayInfo() {
-    this.allItems.map(item => { item.isDisplay = this.matchFilter(item.label); return item; });
+    this.allItems.map(item => { item.isDisplay = this.matchFilter(item.element); return item; });
     this.groupChecked = this.displayItems.length > 0 && this.displayItems.every(item => item.isChecked);
   }
 
   public addNewItemClick() {
     if (this.currentFilter.length === 0 || !this.editable) return;
     if (this.allItems.some(item => {
-      if (item.label === this.currentFilter.toUpperCase()) {
+      if (item.element === this.currentFilter.toUpperCase()) {
         item.isChecked = true;
         return true;
       }
@@ -307,12 +321,14 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
     }))
       return;
 
-    this.allItems.push({ label: this.currentFilter.toUpperCase(), isDisplay: true, isAdded: true, isChecked: true });
+    this.allItems.push({ element: this.currentFilter.toUpperCase(), isDisplay: true, isAdded: true, isChecked: true });
     this.currentFilter = "";
 
     if (this.sort) {
       this.allItems.sort((item1, item2) => {
-        return item1.label.localeCompare(item2.label);
+        const string1: string = typeof(item1.element) === "string" ? item1.element : item1.element[this.displayProperty];
+        const string2: string = typeof(item2.element) === "string" ? item2.element : item2.element[this.displayProperty];
+        return string1.localeCompare(string2);
       });
     }
     this.refreshDisplayInfo();
@@ -329,19 +345,21 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
     return !this.allItems.some(item => !item.isChecked);
   }
 
-  private getCheckedStrings(): string[] {
-    return this.allItems.filter(item => item.isChecked).map(item => item.label);
+  private getCheckedElements(): ItemModel[] {
+    return this.allItems.filter(item => item.isChecked).map(item => item.element);
   }
 
   private onChange(triggerEvent: boolean = true) {
-    let checkedStrings = this.getCheckedStrings();
-    if (checkedStrings.length === 0) this.selectedItemsString = "";
-    else this.selectedItemsString = `${checkedStrings.length} zaznaczeń`;
-    if(triggerEvent) this.onChangeFunction(checkedStrings);
+    let checkedElements = this.getCheckedElements();
+    if (checkedElements.length === 0) this.selectedItemsString = "";
+    else this.selectedItemsString = `${checkedElements.length} zaznaczeń`;
+    if(triggerEvent) { this.onChangeFunction(checkedElements)};
   }
 
-  private matchFilter(value: string): boolean {
-    return value.search(new RegExp(this.currentFilter)) != -1;
+  private matchFilter(value: ItemModel): boolean {
+    if(typeof(value) === "string")
+      return value.search(new RegExp(this.currentFilter)) != -1;
+    return value[this.displayProperty].search(new RegExp(this.currentFilter)) != -1;
   }
 
 
@@ -357,7 +375,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
         if (!this.highlightedItem) {
           this.addNewItemClick();
         }
-        const filtered = this.displayItems.filter(item => item.label === this.highlightedItem?.label);
+        const filtered = this.displayItems.filter(item => item.element === this.highlightedItem?.element);
         if (filtered.length === 0) return;
         filtered[0].isChecked = !filtered[0].isChecked;
         this.onChange(true);
@@ -366,7 +384,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
 
       case "ArrowUp":
         {
-          const filtered = this.displayItems.filter(item => item.label === this.highlightedItem?.label);
+          const filtered = this.displayItems.filter(item => item.element === this.highlightedItem?.element);
           if (filtered.length === 0)
             return;
           const index = this.displayItems.indexOf(filtered[0]);
@@ -385,7 +403,7 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
           this.unfocusInput();
           break;
         }
-        const filtered = this.displayItems.filter(item => item.label === this.highlightedItem?.label);
+        const filtered = this.displayItems.filter(item => item.element === this.highlightedItem?.element);
         if (filtered.length === 0) return;
         const index = this.displayItems.indexOf(filtered[0]);
         if (index >= this.displayItems.length - 1) return;
@@ -400,14 +418,14 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
     this.scrollToItemIfOverflowing(this.highlightedItem);
   }
 
-  public isHighlighted(itemValue: string): boolean {
-    return itemValue === this.highlightedItem?.label;
+  public isHighlighted(itemValue: ItemModel): boolean {
+    return itemValue === this.highlightedItem?.element;
   }
 
   public scrollToItemIfOverflowing(item: ItemOptions) {
     if(!this.cdkViewport) return;
 
-    if(this.isItemOverflowing(this.items.find(i => i.label === item.label)!.eref.nativeElement)){
+    if(this.isItemOverflowing(this.items.find(i => i.element === item.element)!.eref.nativeElement)){
       this.cdkViewport?.scrollToIndex(this.displayItems.indexOf(item), "smooth");
     }
   }
@@ -417,7 +435,6 @@ export class EditableMultiSelectComponent implements OnInit, ControlValueAccesso
     if(!this.cdkViewport) return true;
     const parent = this.cdkViewport.elementRef.nativeElement.getBoundingClientRect();
     const element = elementRef.getBoundingClientRect();
-    console.log("parent: ", parent, "element: ", element);
     return parent.y > element.y || parent.y + parent.height < element.y + element.height;
   }
 }

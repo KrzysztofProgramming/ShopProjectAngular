@@ -1,11 +1,11 @@
-import { ShopProductRequest } from './../models/requests';
-import { ShopProduct, ShopProductWithId } from './../models/models';
+import { ShopProductRequest } from '../../models/requests';
+import { ShopProductWithId } from '../../models/models';
 import { catchError } from 'rxjs/operators';
 import { mapTo } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ErrorResponse, GetProductsResponse } from '../models/responses';
+import { ErrorResponse, GetProductsResponse } from '../../models/responses';
 import { Params } from '@angular/router';
 
 @Injectable({
@@ -31,7 +31,7 @@ export class ProductsService {
   }
 
   public addProduct(product: ShopProductRequest): Observable<ShopProductWithId>{
-   return this.http.post<ShopProductWithId>(this.url + "addNewProduct", product);
+   return this.http.post<ShopProductWithId>(this.url + "newProduct", product);
   }
 
   public updateProduct(product: ShopProductWithId): Observable<ShopProductWithId>{

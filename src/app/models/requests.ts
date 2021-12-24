@@ -1,4 +1,4 @@
-import { ProductsFilters } from "./models";
+import { Author, ProductsFilters } from "./models";
 
 export interface LoginRequest{
     usernameOrEmail: string,
@@ -34,7 +34,13 @@ export interface ShopProductRequest{
     price: number;
     description: string;
     types: string[];
+    authors: AuthorRequest[];
     inStock: number;
+}
+
+export interface AuthorRequest{
+  name: string, 
+  description: string
 }
 
 export interface UpdateProfileRequest{
@@ -44,6 +50,10 @@ export interface UpdateProfileRequest{
 export interface PageableParams{
     pageSize?: number,
     pageNumber?: number
+}
+
+export interface getAuthorsParams extends PageableParams{
+  searchPhrase: string
 }
 
 export interface GetProductsParams extends PageableParams, ProductsFilters{

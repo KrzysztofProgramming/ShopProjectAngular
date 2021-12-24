@@ -1,4 +1,4 @@
-import { ToastMessageService } from '../../services/toast-message.service';
+import { ToastMessageService } from '../../services/utils/toast-message.service';
 import { AuthService } from '../..//services/auth/auth.service';
 
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';

@@ -54,6 +54,7 @@ import { CheckboxComponent } from './utils-components/checkbox/checkbox.componen
 import { CartComponent } from './router-components/cart/cart.component';
 import { CartEditorComponent, CartEditorElementComponent } from './utils-components/cart-editor/cart-editor.component';
 import { HomeComponent } from './router-components/home/home.component';
+import { AuthorsSelectComponent } from './utils-components/authors-select/authors-select.component';
 
 
 @NgModule({
@@ -91,7 +92,8 @@ import { HomeComponent } from './router-components/home/home.component';
     CartComponent,
     CartEditorComponent,
     CartEditorElementComponent,
-    HomeComponent
+    HomeComponent,
+    AuthorsSelectComponent
   ],
   imports: [
     BrowserModule,

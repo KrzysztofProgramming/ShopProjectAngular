@@ -1,4 +1,4 @@
-import { ProductsService } from 'src/app/services/products.service';
+import { ProductsService } from 'src/app/services/http/products.service';
 import { EMPTY_PRODUCT, ShopProduct } from './../../models/models';
 import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 

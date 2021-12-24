@@ -1,7 +1,7 @@
 <div class="content">
     <div class="top-bar">
         <div class="p-input-icon-right top-bar__searcher">
-            <input class="top-bar__searcher-input" placeholder="wyszukiwanie" type="text" pInputText formControlName = "searchPhrase">
+            <input class="top-bar__searcher-input" placeholder="wyszukiwanie" type="text" pInputText>
             <i class="pi pi-search"></i>
         </div>
         <div class="top-bar__part-1">
@@ -34,7 +34,7 @@
             [(ngModel)]="this.filtersModel" (startChanging)="this.cancelPreviousRequest()"></shop-products-filters> -->
         <div class="main-tiles">
             <ng-container *ngIf="this.httpResponse">
-                <ng-container *ngFor="let product of this.httpResponse.products">
+                <ng-container *ngFor="let product of this.httpResponse.result">
                     <shop-product-tile class="main-tiles__tile" [product]="product" (click) = "this.navigateToProduct(product.id)"></shop-product-tile>
                 </ng-container>
             </ng-container>

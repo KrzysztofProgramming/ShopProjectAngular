@@ -1,4 +1,4 @@
-import { ToastMessageService } from './services/toast-message.service';
+import { ToastMessageService } from './services/utils/toast-message.service';
 import { MessageService } from 'primeng/api';
 import { Component } from '@angular/core';
 

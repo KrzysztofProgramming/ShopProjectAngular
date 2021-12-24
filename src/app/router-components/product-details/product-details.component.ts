@@ -1,10 +1,10 @@
-import { ShoppingCartService } from './../../services/shopping-cart.service';
-import { ProductsService } from './../../services/products.service';
+import { ShoppingCartService } from './../../services/http/shopping-cart.service';
+import { ProductsService } from './../../services/http/products.service';
 import { ShopProduct, ShopProductWithId, EMPTY_PRODUCT } from './../../models/models';
 import { Observable, of, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ToastMessageService } from 'src/app/services/toast-message.service';
+import { ToastMessageService } from 'src/app/services/utils/toast-message.service';
 import { mergeMap, tap } from 'rxjs/operators';
 
 @Component({

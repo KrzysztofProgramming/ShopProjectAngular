@@ -1,9 +1,9 @@
 import { UpdatePasswordRequest } from './../../../models/requests';
-import { ToastMessageService } from './../../../services/toast-message.service';
+import { ToastMessageService } from './../../../services/utils/toast-message.service';
 import { FormControl } from '@angular/forms';
 import { ProfileInfo } from './../../../models/models';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { ProfileInfoService } from 'src/app/services/profile-info.service';
+import { ProfileInfoService } from 'src/app/services/http/profile-info.service';
 import { UpdateProfileRequest } from 'src/app/models/requests';
 
 @Component({

@@ -1,13 +1,13 @@
-import { ToastMessageService } from './../../services/toast-message.service';
+import { ToastMessageService } from './../../services/utils/toast-message.service';
 
 import { catchError, finalize, switchMap, mapTo, tap } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
-import { ShopProduct, productsTypes, EMPTY_PRODUCT, ShopProductWithId } from './../../models/models';
+import { ShopProduct, productsTypes, EMPTY_PRODUCT, ShopProductWithId, SimpleAuthor } from './../../models/models';
 import { notEmptyListValidator } from './../../models/shop-validators';
 import { AbstractControl, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { ProductsService } from 'src/app/services/products.service';
+import { ProductsService } from 'src/app/services/http/products.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription, Observable, of, throwError } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -62,6 +62,8 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
   public waitingForImage = false;
   public waitingForResponseMessage: string = "";
 
+  testModel: SimpleAuthor[] = [];
+
 
   get isWaitingForResponse(): boolean{
     return this.waitingForResponseMessage.length!==0;
@@ -74,7 +76,8 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
       price: this.priceControl.value,
       description: this.descriptionControl.value,
       types: this.categoriesControl.value,
-      inStock: this.inStockControl.value
+      inStock: this.inStockControl.value,
+      authors: []
     }
   }
 

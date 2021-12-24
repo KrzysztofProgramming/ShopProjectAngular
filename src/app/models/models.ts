@@ -4,13 +4,20 @@ export interface JwtToken{
     authorities: number;
     exp: number;
     iat: number;
-    roles: string[];
     sub: string;
 }
 
 export interface ShopUser{
 }
 
+export interface Author extends SimpleAuthor{
+  description: string,
+}
+
+export interface SimpleAuthor{
+  id: string,
+  name: string
+}
 
 export interface ShoppingCart{
     ownerUsername?: string;
@@ -49,6 +56,7 @@ export const EMPTY_PRODUCT: ShopProduct = {
     price: 0,
     description: "",
     types: [],
+    authors: [],
     inStock: 0
 }
 

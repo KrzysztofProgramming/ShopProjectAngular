@@ -3,6 +3,7 @@
 :host{
     @include flex-fill-space;
     background-color: $surface-color-2;
+    max-width: $max-router-width;
 }
 
 .header{

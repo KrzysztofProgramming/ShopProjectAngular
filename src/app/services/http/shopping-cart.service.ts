@@ -1,6 +1,6 @@
-import { CartProductRequest, SetCartRequest } from './../models/requests';
-import { AuthService } from './auth/auth.service';
-import { ShoppingCart } from './../models/models';
+import { CartProductRequest, SetCartRequest } from '../../models/requests';
+import { AuthService } from '../auth/auth.service';
+import { ShoppingCart } from '../../models/models';
 import { catchError, tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';

@@ -1,4 +1,4 @@
-import { ProductsService } from 'src/app/services/products.service';
+import { ProductsService } from 'src/app/services/http/products.service';
 import { Component, Input, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
 @Component({

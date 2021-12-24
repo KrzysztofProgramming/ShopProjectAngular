@@ -1,8 +1,7 @@
-import { ShopProduct } from './../../models/models';
 import { Subscription } from 'rxjs';
 import { GetProductsParams, PageableParams } from './../../models/requests';
-import { ProductsService } from 'src/app/services/products.service';
-import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ProductsService } from 'src/app/services/http/products.service';
+import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
 import { GetProductsResponse } from 'src/app/models/responses';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ProductsFilters } from 'src/app/models/models';
@@ -22,7 +21,7 @@ export class MergeProductsComponent implements OnInit {
   private lastRequest?: Subscription;
   public filtersExpanded: boolean = false;
 
-  public httpResponse: GetProductsResponse = {totalElements: 0, totalPages: 1, pageNumber: 0, products: []};
+  public httpResponse: GetProductsResponse = {totalElements: 0, totalPages: 1, pageNumber: 0, result: []};
   public productsParams: GetProductsParams = {pageSize: +this.pageSizeModel, pageNumber: this.pageNumberModel};
   public filtersModel: ProductsFilters = {};
 
