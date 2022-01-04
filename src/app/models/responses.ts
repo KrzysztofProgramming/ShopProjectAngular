@@ -17,6 +17,10 @@ export interface GetByParamsResponse<T>{
     result: T[];
 }
 
+export interface TypesResponse{
+  types: string[];
+}
+
 export interface SimpleAuthorsResponse{
   simpleAuthors: SimpleAuthor[];
 }

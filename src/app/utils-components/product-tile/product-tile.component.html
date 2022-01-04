@@ -9,7 +9,7 @@
             <ng-container *ngIf = "this.product.price === 0">Bezpłatny</ng-container>
             <ng-container *ngIf = "this.product.price !== 0">{{this.product.price}} zł</ng-container>
         </p>
-        <p class="informations__types informations__element">
+        <p class="informations__types informations__element" *ngIf="product.types">
           {{product.types.join(", ")}}
         </p>
         <p class="informations__description informations__element" #description>

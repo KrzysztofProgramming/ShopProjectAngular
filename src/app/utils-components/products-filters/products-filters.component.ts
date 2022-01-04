@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
 import { ControlValueAccessor, FormGroup, FormBuilder, AbstractControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
-import { ProductsFilters, productsTypes } from 'src/app/models/models';
+import { ProductsFilters } from 'src/app/models/models';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
@@ -19,11 +19,12 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy , ControlValu
 
   @Output("onChange") onChangeEmitter: EventEmitter<void> = new EventEmitter<void>();
   @Output("startChanging") filtersStartChanging: EventEmitter<void> = new EventEmitter<void>();
+  @Input() showHeader: boolean = true;
   @Input() adminView: boolean = false;
+  @Input() advancedAlign: boolean = false;
 
-  public filterOptions = productsTypes.map(item =>{return {label: item}});
+  //public filterOptions = productsTypes.map(item =>{return {label: item}});
   public formGroup: FormGroup = this.fb.group({
-    searchPhrase: '',
     minPrice: 0,
     maxPrice: 0,
     minInStock: 0,
@@ -51,10 +52,6 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy , ControlValu
     this.subscriptions = [];
   }
 
-  public get searchControl(): AbstractControl{
-    return this.formGroup.get("searchPhrase")!;
-  }
-
   public get minInStockControl(): AbstractControl{
     return this.formGroup.get("minInStock")!;
   }
@@ -79,7 +76,6 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy , ControlValu
     let filter: ProductsFilters = {};
     filter.maxPrice = this.maxPriceControl.value;
     filter.minPrice = this.minPriceControl.value;
-    filter.searchPhrase = this.searchControl.value ? this.searchControl.value.length === 0 ? undefined : this.searchControl.value : undefined
     filter.types = this.typesControl.value;
     filter.maxInStock = this.maxInStockControl.value;
     filter.minInStock = this.minInStockControl.value;
@@ -88,7 +84,6 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy , ControlValu
 
   writeValue(obj: ProductsFilters): void {
     if(!obj) return;
-    this.searchControl.setValue(obj.searchPhrase, {emitEvent: false});
     this.minPriceControl.setValue(obj.minPrice, {emitEvent: false});
     this.maxPriceControl.setValue(obj.maxPrice, {emitEvent: false});
     this.typesControl.setValue(obj.types, {emitEvent: false});

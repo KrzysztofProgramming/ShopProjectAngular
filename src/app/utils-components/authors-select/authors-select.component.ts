@@ -1,6 +1,6 @@
 import { SimpleAuthor } from './../../models/models';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input, ChangeDetectionStrategy } from '@angular/core';
 import { AuthorsService } from 'src/app/services/http/authors.service';
 
 
@@ -8,17 +8,20 @@ import { AuthorsService } from 'src/app/services/http/authors.service';
   selector: 'shop-authors-select',
   template: `
     <shop-editable-multi-select (blur)="this.onTouchedFn()" [(ngModel)] = "model" (ngModelChange)="this.onChangedFn($event)"
-    displayProperty="name" [waitingForDataFlag]="this.waitingForAuthors" [initializeItems]="this.allAuthors"></shop-editable-multi-select>
+    displayProperty="name" [waitingForDataFlag]="this.waitingForAuthors" [items]="this.allAuthors"
+    [invalid]="this.invalid" [editable]="false"></shop-editable-multi-select>
   `,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: AuthorsSelectComponent,
     multi: true
   }],
-  styleUrls: ['./authors-select.component.scss']
+  styleUrls: ['./authors-select.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AuthorsSelectComponent implements OnInit, ControlValueAccessor {
   
+  @Input() invalid: boolean = false;
   model: SimpleAuthor[] = [];
   allAuthors: SimpleAuthor[] = [];
   onChangedFn: any = ()=>{};

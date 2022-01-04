@@ -1,6 +1,6 @@
 import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
 import { NavButtonDirective } from './directives/nav-button/nav-button.directive';
-import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/editable-multi-select/editable-multi-select.component';
+import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/dropdown-multi-select/editable-multi-select.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -55,6 +55,12 @@ import { CartComponent } from './router-components/cart/cart.component';
 import { CartEditorComponent, CartEditorElementComponent } from './utils-components/cart-editor/cart-editor.component';
 import { HomeComponent } from './router-components/home/home.component';
 import { AuthorsSelectComponent } from './utils-components/authors-select/authors-select.component';
+import { TypesSelectComponent } from './utils-components/types-select/types-select.component';
+import { AuthorCreatorComponent } from './utils-components/author-creator/author-creator.component';
+import { PageSelectComponent } from './utils-components/page-select/page-select.component';
+import { FiltersDialogComponent } from './utils-components/filters-dialog/filters-dialog.component';
+import { AccordionListComponent } from './utils-components/accordion-list/accordion-list.component';
+import { AbstractListComponent } from './utils-components/abstract-editable-list/abstract-list.component';
 
 
 @NgModule({
@@ -93,7 +99,13 @@ import { AuthorsSelectComponent } from './utils-components/authors-select/author
     CartEditorComponent,
     CartEditorElementComponent,
     HomeComponent,
-    AuthorsSelectComponent
+    AuthorsSelectComponent,
+    TypesSelectComponent,
+    AuthorCreatorComponent,
+    PageSelectComponent,
+    FiltersDialogComponent,
+    AccordionListComponent,
+    AbstractListComponent
   ],
   imports: [
     BrowserModule,

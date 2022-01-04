@@ -1,21 +1,35 @@
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription } from 'rxjs';
 import { GetProductsParams, PageableParams } from './../../models/requests';
 import { ProductsService } from 'src/app/services/http/products.service';
-import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { GetProductsResponse } from 'src/app/models/responses';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { ProductsFilters } from 'src/app/models/models';
-
+import { ProductsFilters, SortOption, SORT_OPTIONS } from 'src/app/models/models';
 
 @Component({
   selector: 'app-merge-products',
   templateUrl: './merge-products.component.html',
   styleUrls: ['./merge-products.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations:[
+    trigger("hideWhileScrolling",[
+      state("hidden", style({"transform": "translateY(-100%)"})),
+      state("showed", style("*")),
+      transition("hidden <=> showed", animate("200ms ease"))
+    ]),
+    trigger("opacityEntry", [
+      state("void", style({"opacity": 0})),
+      state("*", style("*")),
+      transition("void <=> *", animate("200ms ease"))
+    ])
+  ]
 })
 export class MergeProductsComponent implements OnInit {
 
   public pageOptions: string[] = ["10", "25", "50"];
+  public sortOptions: SortOption[] = SORT_OPTIONS;
+  public sortOptionModel: SortOption = {name: "Sortowanie: Trafność", code: "none"};
   public pageSizeModel: string = "25";
   public pageNumberModel: number = 1;
   private lastRequest?: Subscription;
@@ -24,6 +38,35 @@ export class MergeProductsComponent implements OnInit {
   public httpResponse: GetProductsResponse = {totalElements: 0, totalPages: 1, pageNumber: 0, result: []};
   public productsParams: GetProductsParams = {pageSize: +this.pageSizeModel, pageNumber: this.pageNumberModel};
   public filtersModel: ProductsFilters = {};
+
+
+  public lastScrollTop: number = 0;
+  public hideSearchBar: boolean = false;
+  @ViewChild("topBar")
+  private topBarElement!: ElementRef<HTMLDivElement>;
+
+
+  @HostListener("window:scroll", ["$event"])
+  public onScrollListener(event: Event){
+    const newScrollTop = window.scrollY || document.documentElement.scrollTop;
+    
+    if(newScrollTop < this.lastScrollTop){ //scrolling up
+      this.hideSearchBar = false;
+    }
+    else if(newScrollTop > this.lastScrollTop){ //scrolling down
+      this.hideSearchBar = true;
+    }
+    const topBar = this.topBarElement.nativeElement;
+    this.hideSearchBar = this.hideSearchBar && newScrollTop > topBar.offsetHeight; 
+    this.lastScrollTop = newScrollTop;
+  
+    this.cd.markForCheck();
+  }
+
+  public openFiltersDialog(){
+    this.filtersExpanded = true;
+    this.cd.markForCheck();
+  }
 
   public onFiltersChange(newValue: ProductsFilters){
     // console.log("filter changed");

@@ -38,7 +38,6 @@ export interface ShopProductWithId extends ShopProduct{
 }
 
 export interface ProductsFilters{
-    searchPhrase?: string;
     minPrice?: number;
     maxPrice?: number;
     types?: string[];
@@ -60,17 +59,15 @@ export const EMPTY_PRODUCT: ShopProduct = {
     inStock: 0
 }
 
-export const productsTypes: string[] = [
-    "Przygodowa",
-    "Komedia",
-    "Detektywistyczna",
-    "Fantasy",
-    "Fikcja historyczna",
-    "Horror",
-    "Romans",
-    "Fikcja naukowa",
-    "Thriller",
-    "Biografia",
-    "Sztuka",
-    "Inna",
-].sort();
+export interface SortOption{
+  name: string,
+  code: string
+}
+
+export const SORT_OPTIONS: SortOption[] = [
+  {name: "Sortowanie: Trafność", code: "none"},
+  {name: "Cena: rosnąco", code: "price_asc"},
+  {name: "Cena: malejąco", code: "price_desc"},
+  {name: "Alfabetycznie: A-Z", code: "alphabetic_asc"},
+  {name: "Alfabatycznie: Z-A", code: "alphabetic_desc"}
+]

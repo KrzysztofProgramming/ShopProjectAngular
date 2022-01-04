@@ -1,6 +1,7 @@
+import { TypesResponse } from './../../models/responses';
 import { ShopProductRequest } from '../../models/requests';
 import { ShopProductWithId } from '../../models/models';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { mapTo } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -67,6 +68,15 @@ export class ProductsService {
 
   public deleteProductImage(id: string){
     return this.http.delete(`${this.url}deleteProductImage/${id}`)
+  }
+
+  public getTypes(): Observable<TypesResponse>{
+    return this.http.get<TypesResponse>(`${this.url}getTypes`).pipe(
+      switchMap(response=>{
+        response.types = response.types.sort((a, b)=>a.localeCompare(b));
+        return of(response);
+      })
+    );
   }
 
   public testApi(): Observable<boolean>{

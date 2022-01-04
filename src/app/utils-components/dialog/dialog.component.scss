@@ -26,9 +26,11 @@
 .dialog{
     display: flex;
     flex-direction: column;
+    position: relative;
     background-color: $theme-white;
     border-radius: 4px;
     max-width: 100%;
+   // min-width: 40%;
     overflow: auto;
     box-shadow: 0 0 4px 0px black;
 

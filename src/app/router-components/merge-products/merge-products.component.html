@@ -1,51 +1,51 @@
-<div class="content">
-    <div class="top-bar">
-        <div class="p-input-icon-right top-bar__searcher">
-            <input class="top-bar__searcher-input" placeholder="wyszukiwanie" type="text" pInputText>
-            <i class="pi pi-search"></i>
-        </div>
-        <div class="top-bar__part-1">
-            <!-- <button shopButton color="gray" class="top-bar__filters-switcher" (click) = "this.filtersExpanded = true">
-                <p>Filtry</p>
-                <i class="pi pi-book"></i>
-            </button> -->
-            <div class="page-select">
-                <p-inputNumber class="page-select__input" [useGrouping]="false" [max]="this.httpResponse.totalPages"
-                    [min]="1" [step]="1" [showButtons]="true" buttonLayout="horizontal"
-                    incrementButtonClass="p-button-primary" decrementButtonClass="p-button-primary"
-                    incrementButtonIcon="pi pi-chevron-right" decrementButtonIcon="pi pi-chevron-left"
-                    [(ngModel)]="this.pageNumberModel" (ngModelChange)="this.onPageNumberChange($event)">
-                </p-inputNumber>
-                <p>/</p>
-                <p class="page-select__total-pages">
-                    {{ this.httpResponse.totalPages }}
-                </p>
-            </div>
-        </div>
-        <div class="page-count">
-            <p>Produkty na stronie:</p>
-            <p-dropdown class="page-count__dropdown" [options]="this.pageOptions"
-                (ngModelChange)="this.onPageSizeChange($event)" [(ngModel)]="this.pageSizeModel"></p-dropdown>
-        </div>
+<div class="content" #container>
+  <div class="top-bar" #topBar [@hideWhileScrolling] = "hideSearchBar ? 'hidden': 'showed'"
+   [ngStyle]="{'top': this.container.offsetTop + 2 + 'px'}">
+    <div class="top-bar__content">
+      <div class="p-input-icon-right top-bar__searcher">
+        <input class="top-bar__searcher-input" placeholder="wyszukiwanie" type="text" pInputText>
+        <i class="pi pi-search"></i>
+      </div>
+      <p-dropdown class="top-bar__sorting" [options]="this.sortOptions" placeholder="Sortowanie" optionLabel="name"
+       [(ngModel)]="this.sortOptionModel"></p-dropdown>
+      <shop-page-select class="top-bar__page-select" [totalPages]="this.httpResponse.totalPages" [(ngModel)]="this.pageNumberModel"
+        (ngModelChange)="this.onPageNumberChange($event)"></shop-page-select>
+      <div class="top-bar__filters-icon" (click) = "this.openFiltersDialog()">
+        <p>Filtry</p>
+        <i class="pi pi-filter"></i>
+      </div>
     </div>
-    
-    <div class="main">
-        <!-- <shop-products-filters (ngModelChange)="this.onFiltersChange($event)" class="main-filters"
-            [(ngModel)]="this.filtersModel" (startChanging)="this.cancelPreviousRequest()"></shop-products-filters> -->
-        <div class="main-tiles">
-            <ng-container *ngIf="this.httpResponse">
-                <ng-container *ngFor="let product of this.httpResponse.result">
-                    <shop-product-tile class="main-tiles__tile" [product]="product" (click) = "this.navigateToProduct(product.id)"></shop-product-tile>
-                </ng-container>
-            </ng-container>
-        </div>
-    </div>
-    <shop-dialog class="filters-dialog" [(visibility)]="this.filtersExpanded" dialogTitle = "Filtry">
-        <shop-products-filters class = "filters-dialog__filters" (ngModelChange)="this.onFiltersChange($event)" (startChanging)="this.cancelPreviousRequest()"
-        [(ngModel)]="this.filtersModel"></shop-products-filters>
-    </shop-dialog>
+  </div>
 
-    <div class="scroll-button" (click) = "this.scrollUp()">
-        <i class="pi pi-arrow-up"></i>
+  <div class="main">
+    <shop-products-filters (ngModelChange)="this.onFiltersChange($event)" class="main-filters"
+      [(ngModel)]="this.filtersModel" (startChanging)="this.cancelPreviousRequest()"></shop-products-filters>
+    <div class="main-tiles">
+      <ng-container *ngIf="this.httpResponse">
+        <ng-container *ngFor="let product of this.httpResponse.result">
+          <shop-product-tile class="main-tiles__tile" [product]="product" (click)="this.navigateToProduct(product.id)">
+          </shop-product-tile>
+        </ng-container>
+      </ng-container>
     </div>
+  </div>
+  <div class="bottom">
+    <shop-page-select class="bottom__page-select" [totalPages]="this.httpResponse.totalPages" [(ngModel)]="this.pageNumberModel"
+      (ngModelChange)="this.onPageNumberChange($event)"></shop-page-select>
+    <div class="bottom__page-count">
+      <p>Produkty na stronie:</p>
+      <p-dropdown class="bottom__dropdown" [options]="this.pageOptions"
+        (ngModelChange)="this.onPageSizeChange($event)" [(ngModel)]="this.pageSizeModel"></p-dropdown>
+    </div>
+  </div>
+
+  <!-- <shop-dialog class="filters-dialog" [(visibility)]="this.filtersExpanded" dialogTitle="Filtry">
+    <shop-products-filters class="filters-dialog__filters" (ngModelChange)="this.onFiltersChange($event)"
+      (startChanging)="this.cancelPreviousRequest()" [(ngModel)]="this.filtersModel"></shop-products-filters>
+  </shop-dialog> -->
+  <shop-filters-dialog [(visibility)]="this.filtersExpanded"></shop-filters-dialog>
+
+  <div class="scroll-button" @opacityEntry *ngIf="this.lastScrollTop > 50" (click)="this.scrollUp()">
+    <i class="pi pi-arrow-up"></i>
+  </div>
 </div>

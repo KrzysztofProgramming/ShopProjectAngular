@@ -9,13 +9,14 @@ import { Directive, Input } from '@angular/core';
     '[class.d-button--gray]': "color === 'gray'",
     '[class.d-button--orange]': "color === 'orange'",
     '[class.d-button--green]': "color === 'green'",
+    '[class.d-button--padding-small]': "padding === 'small'",
     '[class.d-button--padding-medium]': "padding === 'medium'",
     '[class.d-button--padding-large]': "padding === 'large'"
   }
 })
 export class ButtonDirective {
   @Input() color: 'primary' | 'red' | 'gray' | 'orange' | 'green' = "primary";
-  @Input() padding: 'large' | 'medium' = 'large';
+  @Input() padding: 'large' | 'medium' | "small" = 'large';
   constructor() { }
 
 }

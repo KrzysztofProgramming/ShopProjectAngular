@@ -1,10 +1,6 @@
 <ng-container [formGroup] = "this.formGroup">
-    <div class="p-input-icon-right search">
-        <input placeholder="wyszukiwanie" type="text" pInputText formControlName = "searchPhrase" (blur) = "this.triggerOnTouched()">
-        <i class="pi pi-search"></i>
-    </div>
-    <h2 class="header">Filtry:</h2>
-    <h3>Cena:</h3>
+    <p class="header" *ngIf="this.showHeader">Filtry:</p>
+    <p class="subheader">Cena:</p>
     <div class="prices">
         <p-inputNumber class="prices__price" [useGrouping]="false" [min] = "0"
         placeholder="min" mode="currency" currency="PLN" locale="pl-PL" formControlName = "minPrice"
@@ -14,7 +10,7 @@
         placeholder="max" mode="currency" currency="PLN" locale="pl-PL" formControlName = "maxPrice"
         (onBlur) = "this.triggerOnTouched()"></p-inputNumber>
     </div>
-    <h3>Ilość w magazynie:</h3>
+    <p class="subheader">Dostępność:</p>
     <div class="prices">
         <p-inputNumber class="prices__price" [useGrouping]="false" [min] = "0"
         placeholder="min" formControlName = "minInStock"
@@ -24,7 +20,11 @@
         placeholder="max" formControlName = "maxInStock"
         (onBlur) = "this.triggerOnTouched()"></p-inputNumber>
     </div>
-    <!-- <h3>Typ:</h3> -->
-    <shop-selectable-list class="types" [items] = "filterOptions"
-    formControlName = "types" (blur) = "this.triggerOnTouched()" listTitle = "Typy:"></shop-selectable-list>
+    <p class="subheader">Autorzy:</p>
+    <shop-authors-select></shop-authors-select>
+    <p class="subheader">Kategorie</p>
+    <shop-types-select [editable]="false"></shop-types-select>
+    <!-- <p>Typ:</p> -->
+    <!-- <shop-selectable-list class="types" [items] = "filterOptions"
+    formControlName = "types" (blur) = "this.triggerOnTouched()" listTitle = "Typy:"></shop-selectable-list> -->
  </ng-container>

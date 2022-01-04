@@ -1,0 +1,17 @@
+@import "../../../styling/all.scss";
+
+:host{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: $font-size4;
+  margin: 0 15px 0 5px;
+}
+
+.input {
+  margin-right: 5px;
+}
+
+.total-pages {
+  margin-left: 5px;
+}

@@ -1,12 +1,14 @@
+import { AuthorsSelectComponent } from './../../utils-components/authors-select/authors-select.component';
+import { AuthorCreatorComponent } from './../../utils-components/author-creator/author-creator.component';
 import { ToastMessageService } from './../../services/utils/toast-message.service';
 
 import { catchError, finalize, switchMap, mapTo, tap } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
-import { ShopProduct, productsTypes, EMPTY_PRODUCT, ShopProductWithId, SimpleAuthor } from './../../models/models';
+import { ShopProduct, EMPTY_PRODUCT, ShopProductWithId, SimpleAuthor } from './../../models/models';
 import { notEmptyListValidator } from './../../models/shop-validators';
 import { AbstractControl, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
 import { ProductsService } from 'src/app/services/http/products.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Subscription, Observable, of, throwError } from 'rxjs';
@@ -40,6 +42,8 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
     this.descriptionControl.setValue(obj.description);
     this.categoriesControl.setValue(obj.types);
     this.inStockControl.setValue(obj.inStock)
+    this.authorsControl.setValue(obj.authors);
+    this.cd.markForCheck();
   }
 
   registerOnChange(fn: any): void {
@@ -61,9 +65,22 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
   public unchangedAfterSend: boolean = false; 
   public waitingForImage = false;
   public waitingForResponseMessage: string = "";
-
+  public authorCreatorVisibility: boolean = false;
+  @ViewChild("authorsSelect")
+  private authorsSelect?: AuthorsSelectComponent;
+ 
   testModel: SimpleAuthor[] = [];
 
+
+  public formGroup: FormGroup = this.fb.group({
+    name: ['', [Validators.required]],
+    price: [0, [Validators.required, Validators.min(0)]],
+    categories: [[], notEmptyListValidator],
+    description: ['', Validators.required],
+    inStock: [0, [Validators.required, Validators.min(0)]],
+    authors: [[], notEmptyListValidator]
+  })
+  
 
   get isWaitingForResponse(): boolean{
     return this.waitingForResponseMessage.length!==0;
@@ -77,19 +94,13 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
       description: this.descriptionControl.value,
       types: this.categoriesControl.value,
       inStock: this.inStockControl.value,
-      authors: []
+      authors: this.authorsControl.value
     }
   }
 
-  public formGroup: FormGroup = this.fb.group({
-    name: ['', [Validators.required]],
-    price: [0, [Validators.required, Validators.min(0)]],
-    categories: [[], notEmptyListValidator],
-    description: ['', Validators.required],
-    inStock: [0, [Validators.required, Validators.min(0)]]
-  })
-
-  public dropdownOptions: string[] = [];
+  get authorsControl(): AbstractControl{
+    return this.formGroup.get("authors")!;
+  }
 
   get inStockControl(): AbstractControl{
     return this.formGroup.get("inStock")!;
@@ -112,7 +123,6 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
   }
 
   ngOnInit(): void {
-    this.dropdownOptions = productsTypes;
     this.subscriptions.push(this.formGroup.valueChanges.subscribe(()=>this.unchangedAfterSend = false));
     this.subscriptions.push(this.formGroup.valueChanges.subscribe(()=>this.onChangeFunction(this.currentProduct)));
     this.subscriptions.push(this.activatedRoute.paramMap.subscribe((paramMap: ParamMap) =>{
@@ -149,6 +159,16 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
         this.navigateToNewProductUrl();
       })
     }))
+  }
+
+  public refreshAuthorsSelect(){
+    this.authorsSelect?.refreshAuthors();
+  }
+
+  public showAuthorCreator(){
+    console.log(this.authorCreatorVisibility);
+    this.authorCreatorVisibility = true;
+    this.cd.markForCheck();
   }
 
   public loadImage(){

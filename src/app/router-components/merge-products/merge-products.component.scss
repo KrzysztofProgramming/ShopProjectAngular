@@ -1,252 +1,289 @@
 @import "../../../styling/all.scss";
 
-:host{
-    @include flex-fill-space;
+:host {
+  @include flex-fill-space;
 }
 
-.content{
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  // align-items: center;
+}
+
+.scroll-button {
+  position: fixed;
+  width: 70px;
+  height: 70px;
+  background-color: rgba(gray, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  bottom: 5%;
+  right: 5%;
+  cursor: pointer;
+
+  & .pi {
+    font-size: 200%;
+  }
+  // background-color: rebeccapurple;
+}
+
+.main {
+  align-self: center;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-width: $max-router-width;
+
+  &-filters {
+    width: 260px;
+    background-color: $surface-50;
+    margin: 4px;
+    border-radius: 4px;
+    box-shadow: 0 0 2px 0 $box-shadow-color;
+    padding: 5px 10px 5px 15px;
     display: flex;
     flex-direction: column;
-    flex: 1;
-    position: relative;
-    // align-items: center;
-}
+  }
 
-.scroll-button{
-    position: fixed;
-    width: 70px;
-    height: 70px;
-    background-color: rgba(gray, 0.35);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 2px;
-    bottom: 5%;
-    right: 5%;
-    cursor: pointer;
-
-    & .pi{
-        font-size: 200%;
-    }
-    // background-color: rebeccapurple;
-}
-
-.main{
-    align-self: center;
-    flex: 1;
+  &-tiles {
+    width: calc(100% - 268px);
+    flex: 3;
     display: flex;
     flex-direction: row;
-    width: 100%;
-    max-width: $max-router-width;
+    flex-wrap: wrap;
+    height: 100%;
+    padding: 5px 2% 5px 1%;
 
-    &-filters{
-        width: 260px;
-        background-color: $surface-color-3;
-        margin: 4px;
-        border-radius: 4px;
-        box-shadow: 0 0 2px 0 $box-shadow-color;
-        padding: 5px;
-        display: flex;
-        flex-direction: column;
-
+    &__tile {
+      height: 480px;
+      width: 25%;
     }
-
-    &-tiles{
-        width: calc(100% - 268px);
-        flex: 3;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        height: 100%;
-        padding: 5px 2% 5px 1%;
-
-        &__tile{
-            height: 480px;
-            width: 25%;
-        }
-    }
+  }
 }
 
-.top-bar{
+.top-bar {
+  position: sticky;
+  width: 100%;
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  // justify-content: flex-end;
+  background-color: $surface-color-3;
+  box-shadow: 0 0 2px 0 $box-shadow-color;
+  margin: 4px 0 4px 0;
+  z-index: 50;
+
+  &__content{
     width: 100%;
+    max-width: $max-router-width;
     display: flex !important;
     flex-direction: row;
     align-items: center;
-    // justify-content: flex-end;
-    background-color: $surface-color-3;
-    box-shadow: 0 0 2px 0 $box-shadow-color;
-    margin: 4px 0 4px 0;
+    flex-wrap: nowrap;
+  }
 
-    &__searcher{
-        padding: 5px;
-        margin-left: 10px;
-        flex: 1;
+  &__options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 
-        &-input{
-            width: 100%;
-        }
+  &__filters-icon{
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 10px 5px 10px;
+    cursor: pointer;
+    margin-right: 8px;
 
-        & .pi{
-            cursor: pointer;
-            font-size: $font-size5;
-            padding: 8px;
-            transform: translate(4px, -8px);
-        }
+    & .pi{
+      font-size: 25px;
+      margin-left: 2px;
     }
-    // &__part-1{
-    //     display: flex;
-    //     flex: 1;
-    //     flex-direction: row;
-    //     align-items: center;
-    //     justify-content: flex-end;
-    // }
+  }
 
-    // &__filters-switcher{
-    //     // justify-self: flex-end;
-    //     flex-direction: row;
-    //     align-items: center;
-    //     margin-left: 5px;
-    //     font-size: $font-size3;
-    //     display: none;
-    //     flex-wrap: nowrap !important;
+  &__searcher {
+    padding: 5px;
+    margin-left: 5px;
+    flex: 1;
 
-    //     & .pi{
-    //         margin-left: 3px;
-    //     }
-    // }
+    &-input {
+      width: 100%;
+    }
+
+    & .pi {
+      cursor: pointer;
+      font-size: $font-size5;
+      padding: 8px;
+      transform: translate(4px, -8px);
+    }
+  }
 }
 
-.page-count{
+.bottom {
+  background-color: $surface-color-3;
+  box-shadow: 0 0 2px 0 $box-shadow-color;
+  margin: 6px 0 4px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+
+  &__page-select{
+    margin-left: 5%;
+  }
+
+  &__page-count {
     padding: 5px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-right: 10%;
 
-    &__dropdown{
-        padding: 5px;
-    }
+  }
+
+  &__dropdown {
+    padding: 5px;
+  }
 }
 
-.page-select{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    font-size: $font-size4;
-    margin: 0 15px 0 5px;
-
-    &__input{
-        margin-right: 5px;
-    }
-
-    &__total-pages{
-        margin-left: 5px;
-    }
+.filters-dialog {
+  &__filters {
+    padding: 20px min(20px, 5%) 20px min(20px, 5%);
+  }
 }
 
-.filters-dialog{
-    &__filters{
-        padding: 20px min(20px, 5%) 20px min(20px, 5%);
+:host ::ng-deep {
+  & .p-inputnumber {
+    width: unset !important;
+
+    &-input {
+      width: 40px;
+      margin: 0px;
+      padding: 5px;
+      text-align: center;
+      box-shadow: unset !important;
     }
+
+    &-button {
+      padding: 0;
+      width: unset;
+    }
+  }
+
+  // & .p-dropdown{
+  //   min-width: 240px;
+  // }
 }
 
-:host ::ng-deep{
-
-    & .p-inputnumber{
-        width: unset !important;
-
-        &-input{
-            width: 40px;
-            margin: 0px;
-            padding: 5px;
-            text-align: center;
-            box-shadow: unset !important;
-        }
-
-        &-button{
-            padding: 0;
-            width: unset;
-        }
+@media only screen and (max-width: 1100px) {
+  .main {
+    &-tiles {
+      &__tile {
+        width: 33.3333333%;
+      }
     }
+  }
 }
 
-@media only screen and (max-width: 1050px){
-    .main{
-        &-tiles{
-            &__tile{
-                width: 33.3333333%;
-            }
-        }
+@media only screen and (max-width: 900px) {
+  .main {
+    &-tiles {
+      &__tile {
+        width: 50%;
+      }
     }
+  }
 }
 
-@media only screen and (max-width: 800px){
-    .main{
-        &-tiles{
-            &__tile{
-                width: 50%;
-            }
-        }
+
+@media only screen and (max-width: 760px) {
+  .main {
+    &-filters {
+      display: none;
     }
+  }
+
+  .top-bar{
+       
+    &__sorting {
+      display: none;
+    }
+
+    &__filters-icon{
+      display: flex;
+    }
+  }
+
+  :host ::ng-deep{
+    & p-dropdown{
+      min-width: 0;
+    }
+  }
+
+  .bottom{
+    &__page-select{
+      margin-left: 1%;
+    }
+
+    &__page-count{
+      min-width: 0;
+    }
+  }
 }
 
-@media only screen and (max-width: 550px){
-    .main{
-        &-tiles{
-            &__tile{
-                width: 100%;
-            }
-        }
+@media only screen and (max-width: 500px) {
+  .main {
+    &-tiles {
+      &__tile {
+        width: 100%;
+      }
     }
+  }
 }
 
-@media only screen and (max-width: 760px){
 
-    .top-bar{
-        &__filters-switcher{
-            display: flex;
-        }
-
-        &__part1{
-            justify-content: space-between;
-        }
-    }
-
-
-    .main{
-        &-filters{
-            display: none;
-        }
-    }
+@media only screen and (max-width: 420px) {
+  .top-bar{
+      &__page-select{
+        display: none;
+      }
+  }
 }
 
-@media only screen and (max-width: 555px){
 
-    .top-bar{
-        flex-direction: column;
-
-        &__filters-switcher{
-            display: flex;
-            margin-right: 5px;
-        }
-
+@media only screen and (max-width: 305px) {
+  .main {
+    &-tiles {
+      &__tile {
+        width: 100%;
+      }
     }
-}
-@media only screen and (max-width: 270px){
-
-    .top-bar{
-        flex-direction: column;
-        &__filters-switcher{
-            display: flex;
-            margin-right: 5px;
-        }
-
-        &__part-1{
-            flex-direction: column;
-        }
+  }
+  
+  .bottom{
+    padding-top: 10px;
+    flex-direction: column;
+    
+    &__page-select{
+      margin: 0;
     }
 
-    .page-select{
-        margin: 10px 0 0 0 !important;
+
+    &__page-count{
+      margin-right: 0;
+      margin-top: 15px;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
+  }
 }

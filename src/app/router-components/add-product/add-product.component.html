@@ -36,8 +36,15 @@
                     [class.invalid-number]="this.inStockControl.invalid && this.inStockControl.touched"></p-inputNumber>
                 </div>
             </div>
-            <p>Kategoria:</p><shop-editable-multi-select class="informations__input" [initializeItems] = "this.dropdownOptions"
-             formControlName="categories" [invalid] = "this.categoriesControl.invalid && this.categoriesControl.touched"></shop-editable-multi-select>
+            <p>Kategoria:</p><shop-types-select class="informations__input"
+             formControlName="categories" [invalid] = "this.categoriesControl.invalid && this.categoriesControl.touched"></shop-types-select>
+            <p>Autorzy:</p>
+            <div class="informations__input informations__authors">
+              <shop-authors-select formControlName="authors" class="informations__authors-select"
+              [invalid] = "this.authorsControl.invalid && this.authorsControl.touched" #authorsSelect></shop-authors-select>
+              <button padding="small" class="informations__authors-button" type="button" shopButton
+               (click)="this.showAuthorCreator()" title="nowy autor"> <i class="pi pi-plus"></i> </button>
+            </div>
             <h3>Opis:</h3>
             <textarea class="informations__description informations__input" formControlName="description" shopInputText
              [invalid] = "this.descriptionControl.invalid && this.descriptionControl.touched"></textarea>
@@ -53,4 +60,5 @@
     <p>{{this.waitingForResponseMessage}}</p>
     <i class="pi pi-spinner pi-spin"></i>
 </div>
+<shop-author-creator [(visibility)]="this.authorCreatorVisibility" (authorAdded)="this.refreshAuthorsSelect()"></shop-author-creator>
 <p-confirmDialog [breakpoints]="{'600px': {width: '100%', right: '0', left: '0'}}"></p-confirmDialog>
