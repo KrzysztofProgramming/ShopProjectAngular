@@ -1,3 +1,5 @@
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
 import { NavButtonDirective } from './directives/nav-button/nav-button.directive';
 import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/dropdown-multi-select/dropdown-multi-select.component';
