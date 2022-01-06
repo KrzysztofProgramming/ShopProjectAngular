@@ -1,6 +1,6 @@
 import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
 import { NavButtonDirective } from './directives/nav-button/nav-button.directive';
-import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/dropdown-multi-select/editable-multi-select.component';
+import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/dropdown-multi-select/dropdown-multi-select.component';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -59,8 +59,11 @@ import { TypesSelectComponent } from './utils-components/types-select/types-sele
 import { AuthorCreatorComponent } from './utils-components/author-creator/author-creator.component';
 import { PageSelectComponent } from './utils-components/page-select/page-select.component';
 import { FiltersDialogComponent } from './utils-components/filters-dialog/filters-dialog.component';
-import { AccordionListComponent } from './utils-components/accordion-list/accordion-list.component';
-import { AbstractListComponent } from './utils-components/abstract-editable-list/abstract-list.component';
+import { AccordionMultiSelectComponent } from './utils-components/accordion-multi-select/accordion-multi-select.component';
+import { AbstractMultiSelectComponent } from './utils-components/abstract-multi-select/abstract-multi-select.component';
+import { TypesCreatorComponent } from './utils-components/types-creator/types-creator.component';
+import { RadioButtonModule } from "primeng/radiobutton";
+import { SingleSelectComponent } from './utils-components/single-select/single-select.component';
 
 
 @NgModule({
@@ -104,8 +107,10 @@ import { AbstractListComponent } from './utils-components/abstract-editable-list
     AuthorCreatorComponent,
     PageSelectComponent,
     FiltersDialogComponent,
-    AccordionListComponent,
-    AbstractListComponent
+    AccordionMultiSelectComponent,
+    AbstractMultiSelectComponent,
+    TypesCreatorComponent,
+    SingleSelectComponent
   ],
   imports: [
     BrowserModule,
@@ -129,7 +134,8 @@ import { AbstractListComponent } from './utils-components/abstract-editable-list
     MultiSelectModule,
     ButtonModule,
     AccordionModule,
-    LayoutModule
+    LayoutModule,
+    RadioButtonModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}

@@ -1,7 +1,8 @@
-import { TypesResponse } from './../../models/responses';
+import { TypeRequest } from './../../models/requests';
+import { TypeResponse, TypesResponse } from './../../models/responses';
 import { ShopProductRequest } from '../../models/requests';
 import { ShopProductWithId } from '../../models/models';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, switchMap, map } from 'rxjs/operators';
 import { mapTo } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -71,11 +72,19 @@ export class ProductsService {
   }
 
   public getTypes(): Observable<TypesResponse>{
-    return this.http.get<TypesResponse>(`${this.url}getTypes`).pipe(
-      switchMap(response=>{
-        response.types = response.types.sort((a, b)=>a.localeCompare(b));
-        return of(response);
-      })
+    return this.http.get<TypesResponse>(`${this.url}getTypes`);
+    // .pipe(
+    //   switchMap(response=>{
+    //     response.types = response.types.sort((a, b)=>a.localeCompare(b));
+    //     return of(response);
+    //   })
+    // );
+  }
+
+  public addType(name: string): Observable<string>{
+    const request: TypeRequest = {name: name};
+    return this.http.post<TypeResponse>(`${this.url}newType`, request).pipe(
+      map(value => value.name)
     );
   }
 

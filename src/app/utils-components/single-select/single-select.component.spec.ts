@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AccordionListComponent } from './accordion-list.component';
+import { SingleSelectComponent } from './single-select.component';
 
-describe('AccordionListComponent', () => {
-  let component: AccordionListComponent;
-  let fixture: ComponentFixture<AccordionListComponent>;
+describe('SingleSelectComponent', () => {
+  let component: SingleSelectComponent;
+  let fixture: ComponentFixture<SingleSelectComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AccordionListComponent ]
+      declarations: [ SingleSelectComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AccordionListComponent);
+    fixture = TestBed.createComponent(SingleSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

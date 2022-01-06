@@ -29,6 +29,7 @@
       </ng-container>
     </div>
   </div>
+
   <div class="bottom">
     <shop-page-select class="bottom__page-select" [totalPages]="this.httpResponse.totalPages" [(ngModel)]="this.pageNumberModel"
       (ngModelChange)="this.onPageNumberChange($event)"></shop-page-select>
@@ -39,12 +40,8 @@
     </div>
   </div>
 
-  <!-- <shop-dialog class="filters-dialog" [(visibility)]="this.filtersExpanded" dialogTitle="Filtry">
-    <shop-products-filters class="filters-dialog__filters" (ngModelChange)="this.onFiltersChange($event)"
-      (startChanging)="this.cancelPreviousRequest()" [(ngModel)]="this.filtersModel"></shop-products-filters>
-  </shop-dialog> -->
   <shop-filters-dialog [(visibility)]="this.filtersExpanded"></shop-filters-dialog>
-
+  
   <div class="scroll-button" @opacityEntry *ngIf="this.lastScrollTop > 50" (click)="this.scrollUp()">
     <i class="pi pi-arrow-up"></i>
   </div>

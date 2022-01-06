@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditableMultiSelectComponent } from './editable-multi-select.component';
+import { EditableMultiSelectComponent } from './dropdown-multi-select.component';
 
 describe('EditableMultiSelectComponent', () => {
   let component: EditableMultiSelectComponent;

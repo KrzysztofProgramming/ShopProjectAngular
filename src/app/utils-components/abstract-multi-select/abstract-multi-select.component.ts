@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
@@ -52,7 +52,7 @@ export interface ItemOptions {
   template: ``,
   styles: []
 })
-export class AbstractListComponent implements OnInit {
+export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   @Input() sort: boolean = true;
   @Input() label: string = "Wybierz";
   @Input() labelOverflowSize: number = 3;
@@ -61,6 +61,7 @@ export class AbstractListComponent implements OnInit {
   @Input() displayProperty: string = "name";
   @Input() waitingForDataFlag: boolean = false;
   @Output() blur: EventEmitter<void> = new EventEmitter<void>();
+  
 
   public selectedItemsString: string = "";
   public allItems: ItemOptions[] = [];
@@ -72,12 +73,25 @@ export class AbstractListComponent implements OnInit {
   public onTouchedFunction: ()=>void = () => {};
   public filterChange: Subject<string> = new Subject();
   protected subscriptions: Subscription[] = [];
-  protected highlightedItem?: ItemOptions;
+  protected _highlightedItem?: ItemOptions;
+  protected previouslyHighlightedItem? :ItemOptions;
   private _expanded: boolean = false;
+  protected clickCooldown: number = 100;
+  private lastKeyCode: string = "";
+  private lastClickedTime: number = 0;
+
+  get highlightedItem(): ItemOptions | undefined{
+    return this._highlightedItem;
+  }
+  set highlightedItem(value: ItemOptions | undefined){
+    if(value === this._highlightedItem) return;
+    this.previouslyHighlightedItem = this._highlightedItem;
+    this._highlightedItem = value;
+  }
 
   @Input()
   set items(items: ItemModel[]) {
-    // items = new Array(1000000).fill(0).map(()=>(Math.random() * 10 + 1).toString(36).substring(2));
+    // items = new Array(1000).fill(0).map(()=>(Math.random() * 10 + 1).toString(36).substring(2));
     this.allItems = items.map((item, index) =>
      {return {element: item,
        isDisplay: false,
@@ -87,7 +101,6 @@ export class AbstractListComponent implements OnInit {
     if(this.sort) this.sortItems();
     this.calcDisplayItems();
     this.refreshDisplayInfo();
-    
   }
 
   sortItems(): void{
@@ -144,7 +157,7 @@ export class AbstractListComponent implements OnInit {
       this.filterChange.pipe(
         debounceTime(300),
         distinctUntilChanged()
-      ).subscribe(this.onFilterChange.bind(this))
+      ).subscribe(this.calcFilterChange.bind(this))
     )
   }
 
@@ -183,7 +196,7 @@ export class AbstractListComponent implements OnInit {
     this.cd.markForCheck();
   }
 
-  public checkForTouched() {
+  protected checkForTouched() {
     if (!this.expanded) {
       this.onTouchedFunction();
       this.blur.emit();
@@ -208,7 +221,7 @@ export class AbstractListComponent implements OnInit {
     this.onItemCheckedChange();
   }
 
-  public onItemCheckedChange(){
+  protected onItemCheckedChange(){
     this.refreshDisplayInfo();
     // console.log("refreshing display info: ", this.groupChecked);
     this.cd.markForCheck();
@@ -220,6 +233,10 @@ export class AbstractListComponent implements OnInit {
   }
 
   public onFilterChange() {
+    this.filterChange.next(this.currentFilter);
+  }
+
+  protected calcFilterChange(){
     this.calcDisplayItems();
     this.refreshDisplayInfo();
   }
@@ -264,10 +281,16 @@ export class AbstractListComponent implements OnInit {
 
   public handleKeyPress(event: KeyboardEvent) {
     const keyCode = event.code;
-    console.log(keyCode);
+    // console.log(keyCode);
     if (!["Enter", "ArrowUp", "ArrowDown"].includes(keyCode)) return;
-    this.focusExpansion();
     event.preventDefault();
+    event.stopPropagation();
+    this.focusExpansion();
+      
+    const time = new Date().getTime();
+    if(this.lastClickedTime + this.clickCooldown >= time && keyCode === this.lastKeyCode) return;
+    this.lastClickedTime = time;
+    this.lastKeyCode = keyCode;
 
     switch (keyCode) {
       case "Enter": {
@@ -281,7 +304,9 @@ export class AbstractListComponent implements OnInit {
         {
           const index: number = this.highlightedItem?.displayItemsIndex || 0;
           if (index === 0) {
+            this.highlightedItem = undefined;
             this.focusInput();
+            // this.highlightedItem = undefined;
             break;
           };
           this.highlightedItem = this.displayItems[index - 1];

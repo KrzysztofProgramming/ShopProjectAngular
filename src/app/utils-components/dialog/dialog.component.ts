@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'shop-dialog',
@@ -54,18 +54,24 @@ export class DialogComponent implements OnInit {
   @Input() exitButton: boolean = true;
   @Input() dialogTitle?: string;
   @Input() busyOverlay: boolean = false;
+  @Input() constHeight: boolean = true;
   @Output() visibilityChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() accept: EventEmitter<void> = new EventEmitter<void>();
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();
   @Output() deny: EventEmitter<void> = new EventEmitter<void>();
 
-  @Input()
-  get visibility(): boolean{
+  @ViewChild("dialogContent")
+  dialogContent!: ElementRef<HTMLDivElement>;
+
+
+  @Input("visibility")
+  get visibilityInput(): boolean{
     return this._visibility;
   }
-  set visibility(value: boolean){
+  set visibilityInput(value: boolean){
     this._visibility = value;
     this.lockUnlockScrolling();
+    this.cd.markForCheck();
   }
   
   _visibility: boolean = true;

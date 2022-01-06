@@ -21,6 +21,10 @@ export interface TypesResponse{
   types: string[];
 }
 
+export interface TypeResponse{
+  name: string;
+}
+
 export interface SimpleAuthorsResponse{
   simpleAuthors: SimpleAuthor[];
 }

@@ -161,27 +161,10 @@
   }
 }
 
-:host ::ng-deep {
-  & .p-inputnumber {
-    width: unset !important;
-
-    &-input {
-      width: 40px;
-      margin: 0px;
-      padding: 5px;
-      text-align: center;
-      box-shadow: unset !important;
-    }
-
-    &-button {
-      padding: 0;
-      width: unset;
-    }
+:host ::ng-deep{
+  & .top-bar__sorting .p-dropdown {
+    min-width: 240px;
   }
-
-  // & .p-dropdown{
-  //   min-width: 240px;
-  // }
 }
 
 @media only screen and (max-width: 1100px) {
@@ -248,42 +231,33 @@
       }
     }
   }
+  .bottom{
+    justify-content: space-evenly;
+
+    &__page-count{
+      margin-right: 0;
+    }
+  }
 }
 
 
-@media only screen and (max-width: 420px) {
+@media only screen and (max-width: 450px) {
   .top-bar{
       &__page-select{
         display: none;
       }
   }
-}
 
-
-@media only screen and (max-width: 305px) {
-  .main {
-    &-tiles {
-      &__tile {
-        width: 100%;
-      }
-    }
-  }
-  
   .bottom{
-    padding-top: 10px;
-    flex-direction: column;
-    
-    &__page-select{
-      margin: 0;
-    }
-
+    justify-content: center;
 
     &__page-count{
-      margin-right: 0;
-      margin-top: 15px;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+      display: none;
+    }
+
+    &__page-select{
+      padding: 10px;
+      margin: 0;
     }
   }
 }

@@ -7,9 +7,15 @@ import { AuthorsService } from 'src/app/services/http/authors.service';
 @Component({
   selector: 'shop-authors-select',
   template: `
-    <shop-editable-multi-select (blur)="this.onTouchedFn()" [(ngModel)] = "model" (ngModelChange)="this.onChangedFn($event)"
+    <shop-dropdown-multi-select *ngIf="this.type==='dropdown'" (blur)="this.onTouchedFn()"
+     [(ngModel)] = "model" (ngModelChange)="this.onChangedFn($event)"
     displayProperty="name" [waitingForDataFlag]="this.waitingForAuthors" [items]="this.allAuthors"
-    [invalid]="this.invalid" [editable]="false"></shop-editable-multi-select>
+    [invalid]="this.invalid" [editable]="false"></shop-dropdown-multi-select>
+
+    <shop-accordion-multi-select *ngIf="this.type==='accordion'" (blur)="this.onTouchedFn()"
+     [(ngModel)] = "model" (ngModelChange)="this.onChangedFn($event)"
+    displayProperty="name" [waitingForDataFlag]="this.waitingForAuthors" [items]="this.allAuthors"
+    [invalid]="this.invalid" [editable]="false"></shop-accordion-multi-select>
   `,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
@@ -22,6 +28,7 @@ import { AuthorsService } from 'src/app/services/http/authors.service';
 export class AuthorsSelectComponent implements OnInit, ControlValueAccessor {
   
   @Input() invalid: boolean = false;
+  @Input() type: 'dropdown' | 'accordion' = 'dropdown';
   model: SimpleAuthor[] = [];
   allAuthors: SimpleAuthor[] = [];
   onChangedFn: any = ()=>{};

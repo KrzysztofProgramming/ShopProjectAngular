@@ -36,15 +36,6 @@ export interface ShopProduct extends ShopProductRequest{
 export interface ShopProductWithId extends ShopProduct{
     id: string;
 }
-
-export interface ProductsFilters{
-    minPrice?: number;
-    maxPrice?: number;
-    types?: string[];
-    minInStock?: number;
-    maxInStock?: number;
-}
-
 export interface ProfileInfo{
     username: string,
     email: string

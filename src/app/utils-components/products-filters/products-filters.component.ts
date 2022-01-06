@@ -1,8 +1,18 @@
 import { Subscription } from 'rxjs';
 import { ControlValueAccessor, FormGroup, FormBuilder, AbstractControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
-import { ProductsFilters } from 'src/app/models/models';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+
+export interface ProductsFiltersModel{
+  minPrice?: number;
+  maxPrice?: number;
+  types?: string[];
+  authorsNames?: string[];
+  minInStock?: number;
+  maxInStock?: number;
+}
+
 
 @Component({
   selector: 'shop-products-filters',
@@ -15,13 +25,12 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
     multi: true
   }],
 })
-export class ProductsFiltersComponent implements OnInit, OnDestroy , ControlValueAccessor {
+export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValueAccessor {
 
-  @Output("onChange") onChangeEmitter: EventEmitter<void> = new EventEmitter<void>();
   @Output("startChanging") filtersStartChanging: EventEmitter<void> = new EventEmitter<void>();
   @Input() showHeader: boolean = true;
   @Input() adminView: boolean = false;
-  @Input() advancedAlign: boolean = false;
+  @Input() selectsType: 'dropdown' | 'accordion'= 'dropdown';
 
   //public filterOptions = productsTypes.map(item =>{return {label: item}});
   public formGroup: FormGroup = this.fb.group({
@@ -29,7 +38,8 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy , ControlValu
     maxPrice: 0,
     minInStock: 0,
     maxInStock: 0,
-    types: []
+    types: [],
+    authors: [],
   })
 
   private subscriptions: Subscription[] = [];
@@ -43,7 +53,6 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy , ControlValu
     this.subscriptions.push(this.formGroup.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
     .subscribe(() =>{
       this.onChangeFn(this.getProductsFilters());
-      this.onChangeEmitter.emit();
     }));
   }
 
@@ -72,23 +81,29 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy , ControlValu
     return this.formGroup.get("types")!;
   }
 
-  public getProductsFilters(): ProductsFilters{
-    let filter: ProductsFilters = {};
+  public get authorsControl(): AbstractControl{
+    return this.formGroup.get("authors")!;
+  }
+
+  public getProductsFilters(): ProductsFiltersModel{
+    let filter: ProductsFiltersModel = {};
     filter.maxPrice = this.maxPriceControl.value;
     filter.minPrice = this.minPriceControl.value;
     filter.types = this.typesControl.value;
     filter.maxInStock = this.maxInStockControl.value;
     filter.minInStock = this.minInStockControl.value;
+    filter.authorsNames = this.authorsControl.value;
     return filter;
   }
 
-  writeValue(obj: ProductsFilters): void {
+  writeValue(obj: ProductsFiltersModel): void {
     if(!obj) return;
     this.minPriceControl.setValue(obj.minPrice, {emitEvent: false});
     this.maxPriceControl.setValue(obj.maxPrice, {emitEvent: false});
     this.typesControl.setValue(obj.types, {emitEvent: false});
     this.maxInStockControl.setValue(obj.maxInStock, {emitEvent: false});
     this.minInStockControl.setValue(obj.minInStock, {emitEvent: false});
+    this.authorsControl.setValue(obj.authorsNames, {emitEvent: false});
   }
 
   registerOnChange(fn: any): void {

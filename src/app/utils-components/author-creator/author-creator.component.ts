@@ -86,7 +86,6 @@ export class AuthorCreatorComponent implements OnInit {
   }
 
   private requestFinished(){
-    console.log("finished");
     this.waitingForResponse = false;
     this.cd.markForCheck();
   }

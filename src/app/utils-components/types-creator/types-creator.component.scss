@@ -1,0 +1,10 @@
+@import "../../../styling/all.scss";
+
+.content{
+  padding: max(15px, 5%);
+  width: 500px;
+
+  &__input{
+    width: 100%;
+  }
+}

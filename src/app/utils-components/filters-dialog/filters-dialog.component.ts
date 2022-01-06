@@ -10,11 +10,23 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 export class FiltersDialogComponent implements OnInit {
   @Input() visibility: boolean = false;
   @Output() visibilityChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  
+  public items = SORT_OPTIONS;
+  public selectedSortOption: SortOption = {name: "Sortowanie: Trafność", code: "none"};
+
+  _selectedPageCount: number = 10;
   sortOptions: SortOption[] = SORT_OPTIONS;
   sortOptionModel: SortOption = {name: "Sortowanie: Trafność", code: "none"};
-  
+    
 
-  constructor() { }
+  set selectedPageCount(value: number){
+    this._selectedPageCount = value;
+  }
+  get selectedPageCount(): number{
+    return this._selectedPageCount;
+  }
+
+  constructor() {}
 
   ngOnInit(): void {
   }

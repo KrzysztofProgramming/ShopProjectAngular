@@ -5,7 +5,8 @@ import { ProductsService } from 'src/app/services/http/products.service';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { GetProductsResponse } from 'src/app/models/responses';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { ProductsFilters, SortOption, SORT_OPTIONS } from 'src/app/models/models';
+import { SortOption, SORT_OPTIONS } from 'src/app/models/models';
+import { ProductsFiltersModel } from 'src/app/utils-components/products-filters/products-filters.component';
 
 @Component({
   selector: 'app-merge-products',
@@ -36,8 +37,8 @@ export class MergeProductsComponent implements OnInit {
   public filtersExpanded: boolean = false;
 
   public httpResponse: GetProductsResponse = {totalElements: 0, totalPages: 1, pageNumber: 0, result: []};
-  public productsParams: GetProductsParams = {pageSize: +this.pageSizeModel, pageNumber: this.pageNumberModel};
-  public filtersModel: ProductsFilters = {};
+  public productsParams: GetProductsParams = {};
+  public filtersModel: ProductsFiltersModel = {};
 
 
   public lastScrollTop: number = 0;
@@ -68,7 +69,7 @@ export class MergeProductsComponent implements OnInit {
     this.cd.markForCheck();
   }
 
-  public onFiltersChange(newValue: ProductsFilters){
+  public onFiltersChange(newValue: ProductsFiltersModel){
     // console.log("filter changed");
     this.productsParams = Object.assign({}, this.productsParams);
     this.productsParams = Object.assign(this.productsParams, newValue);

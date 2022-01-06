@@ -1,3 +1,4 @@
+import { TypesSelectComponent } from './../../utils-components/types-select/types-select.component';
 import { AuthorsSelectComponent } from './../../utils-components/authors-select/authors-select.component';
 import { AuthorCreatorComponent } from './../../utils-components/author-creator/author-creator.component';
 import { ToastMessageService } from './../../services/utils/toast-message.service';
@@ -66,8 +67,12 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
   public waitingForImage = false;
   public waitingForResponseMessage: string = "";
   public authorCreatorVisibility: boolean = false;
+  public typeCreatorVisibility: boolean = false;
   @ViewChild("authorsSelect")
   private authorsSelect?: AuthorsSelectComponent;
+
+  @ViewChild("typesSelect")
+  private typesSelect?: TypesSelectComponent;
  
   testModel: SimpleAuthor[] = [];
 
@@ -165,9 +170,17 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
     this.authorsSelect?.refreshAuthors();
   }
 
+  public refreshTypesSelect(){
+    this.typesSelect?.refreshTypes();
+  }
+
   public showAuthorCreator(){
-    console.log(this.authorCreatorVisibility);
     this.authorCreatorVisibility = true;
+    this.cd.markForCheck();
+  }
+
+  public showTypeCreator(){
+    this.typeCreatorVisibility = true;
     this.cd.markForCheck();
   }
 

@@ -1,4 +1,3 @@
-import { Author, ProductsFilters } from "./models";
 
 export interface LoginRequest{
     usernameOrEmail: string,
@@ -52,10 +51,24 @@ export interface PageableParams{
     pageNumber?: number
 }
 
+export const DEFAULT_PAGEABLE: PageableParams = {pageSize: 25, pageNumber: 1};
+
 export interface getAuthorsParams extends PageableParams{
   searchPhrase: string
 }
 
-export interface GetProductsParams extends PageableParams, ProductsFilters{
+export interface GetProductsParams extends PageableParams{
+  searchPhrase?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  types?: string[];
+  sort?: string;
+  authorsNames?: string[];
+  minInStock?: number;
+  maxInStock?: number;
+}
+
+export interface TypeRequest{
+  name: string;
 }
 
