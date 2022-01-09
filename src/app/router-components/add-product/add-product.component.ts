@@ -1,13 +1,13 @@
+import { ShopProductRequest, ShopProductRequestWithId } from './../../models/requests';
 import { TypesSelectComponent } from './../../utils-components/types-select/types-select.component';
 import { AuthorsSelectComponent } from './../../utils-components/authors-select/authors-select.component';
-import { AuthorCreatorComponent } from './../../utils-components/author-creator/author-creator.component';
 import { ToastMessageService } from './../../services/utils/toast-message.service';
 
 import { catchError, finalize, switchMap, mapTo, tap } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
-import { ShopProduct, EMPTY_PRODUCT, ShopProductWithId, SimpleAuthor } from './../../models/models';
+import { ShopProduct, EMPTY_PRODUCT_REQUEST } from './../../models/models';
 import { notEmptyListValidator } from './../../models/shop-validators';
-import { AbstractControl, Validators, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { AbstractControl, Validators } from '@angular/forms';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
 import { ProductsService } from 'src/app/services/http/products.service';
@@ -21,14 +21,10 @@ import { Location } from '@angular/common';
   selector: 'shop-add-product',
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: AddProductComponent,
-    multi: true
-  }, ConfirmationService],
+  providers: [ConfirmationService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AddProductComponent implements OnInit, ControlValueAccessor, OnDestroy {
+export class AddProductComponent implements OnInit, OnDestroy {
   
   constructor(private cd: ChangeDetectorRef, private fb: FormBuilder, private messageService: ToastMessageService,
     private activatedRoute: ActivatedRoute, private router: Router, private productsService: ProductsService,
@@ -36,29 +32,21 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
     public location: Location) { }
 
 
-  writeValue(obj: ShopProduct): void {
+  writeValue(obj: ShopProductRequest): void {
     this.currentProductId = obj.id;
     this.nameControl.setValue(obj.name);
     this.priceControl.setValue(obj.price);
     this.descriptionControl.setValue(obj.description);
     this.categoriesControl.setValue(obj.types);
     this.inStockControl.setValue(obj.inStock)
-    this.authorsControl.setValue(obj.authors);
+    this.authorsControl.setValue(obj.authorsNames);
     this.cd.markForCheck();
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChangeFunction = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    //ignore
   }
 
   public readonly EMPTY_IMAGE: string = "../../../assets/img/empty-image.png";
   public imageUrl: string = this.EMPTY_IMAGE;
   public selectedFile?: Blob;
-  public currentProductId?: string | null;
+  public currentProductId?: string;
   private onChangeFunction: any = () => {};
   public notRealod: boolean = false;
   public headerText = "Stwórz nowy produkt";
@@ -73,9 +61,6 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
 
   @ViewChild("typesSelect")
   private typesSelect?: TypesSelectComponent;
- 
-  testModel: SimpleAuthor[] = [];
-
 
   public formGroup: FormGroup = this.fb.group({
     name: ['', [Validators.required]],
@@ -91,7 +76,7 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
     return this.waitingForResponseMessage.length!==0;
   };
 
-  get currentProduct(): ShopProduct{
+  get currentProduct(): ShopProductRequest{
     return {
       id: this.currentProductId,
       name: this.nameControl.value,
@@ -99,7 +84,7 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
       description: this.descriptionControl.value,
       types: this.categoriesControl.value,
       inStock: this.inStockControl.value,
-      authors: this.authorsControl.value
+      authorsNames: this.authorsControl.value
     }
   }
 
@@ -145,18 +130,18 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
       if(id.toLowerCase() === "new"){
           this.imageUrl = this.EMPTY_IMAGE;
           this.selectedFile = undefined;
-          this.currentProductId = null;
+          this.currentProductId = undefined;
           this.formGroup.reset();
           this.headerText = "Stwórz nowy produkt";
           this.unchangedAfterSend = false;
-          this.writeValue(EMPTY_PRODUCT);
+          this.writeValue(EMPTY_PRODUCT_REQUEST);
           return;
       }
 
       this.waitingForImage = true;
       this.productsService.getProduct(id).subscribe(product=>{
         this.headerText = "Edytuj produkt";
-        this.writeValue(product);
+        this.writeValue(this.toProductRequest(product));
         this.unchangedAfterSend = true;
         this.loadImage();
         this.cd.markForCheck();
@@ -164,6 +149,18 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
         this.navigateToNewProductUrl();
       })
     }))
+  }
+
+  public toProductRequest(product: ShopProduct): ShopProductRequest{
+    return {
+      name: product.name,
+      id: product.id,
+      types: product.types,
+      price: product.price,
+      inStock: product.inStock,
+      description: product.description,
+      authorsNames: product.authors.map(author=>author.name)
+    }
   }
 
   public refreshAuthorsSelect(){
@@ -230,8 +227,9 @@ export class AddProductComponent implements OnInit, ControlValueAccessor, OnDest
   }
 
 
-  private doRequest(fn: ((product: ShopProduct)=>Observable<ShopProduct>) | ((product: ShopProductWithId)=>Observable<ShopProduct>)){
-    fn(this.currentProduct as ShopProductWithId).pipe(
+  private doRequest(fn: ((((product: ShopProductRequest)=>Observable<ShopProduct>) |
+    ((product: ShopProductRequestWithId)=>Observable<ShopProduct>)))){
+    fn(this.currentProduct as ShopProductRequestWithId).pipe(
       catchError(productError=>{
         this.messageService.showMessage({severity: "error", summary: "Błąd", detail: "Operacja nie udana"});
         return throwError(productError);

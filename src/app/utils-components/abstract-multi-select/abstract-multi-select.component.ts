@@ -43,7 +43,6 @@ export interface ItemOptions {
   isChecked: boolean;
   isDisplay: boolean;
   displayItemsIndex?: number;
-  checkedItemsIndex?: number;
   allItemsIndex: number;
 }
 
@@ -57,7 +56,6 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   @Input() label: string = "Wybierz";
   @Input() labelOverflowSize: number = 3;
   @Input() invalid: boolean = false;
-  @Input() editable: boolean = true;
   @Input() displayProperty: string = "name";
   @Input() waitingForDataFlag: boolean = false;
   @Output() blur: EventEmitter<void> = new EventEmitter<void>();
@@ -120,7 +118,6 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
 
   public calcCheckedItems(){
     this.checkedItems = this.allItems.filter(item=>item.isChecked);
-    this.checkedItems.forEach((item, index)=>item.checkedItemsIndex = index);
   }
 
   @Input("expanded")
@@ -140,6 +137,7 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
     this._expanded = value;
     this.onExpandedChange(value);
     this.expandedChange.emit(this._expanded);
+    this.cd.markForCheck();
   }
 
   get expanded(): boolean {
@@ -163,7 +161,6 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
 
   writeValue(obj: ItemModel[]): void {
     if(!obj) return;
-    // console.log();
     obj = new Array(...obj);
 
     this.allItems.forEach(item => {
@@ -178,7 +175,7 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
     });
     this.calcDisplayItems();
     this.calcCheckedItems();
-    this.onChange(false);
+    this.refreshDisplayInfo();
     this.cd.markForCheck();
   }
   
@@ -210,12 +207,10 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   public switchItemChecked(item: ItemOptions){
     item.isChecked = !item.isChecked;
     if(!item.isChecked){
-      this.checkedItems.splice(item.checkedItemsIndex!, 1);
-      item.checkedItemsIndex = undefined;
+      this.checkedItems.splice(this.checkedItems.indexOf(item), 1);
     }
     else{
-      this.checkedItems.push(item);
-      item.checkedItemsIndex = this.checkedItems.length - 1; 
+      const size: number = this.checkedItems.push(item);
     }
     this.highlightedItem = item;
     this.onItemCheckedChange();
@@ -223,8 +218,12 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
 
   protected onItemCheckedChange(){
     this.refreshDisplayInfo();
-    // console.log("refreshing display info: ", this.groupChecked);
     this.cd.markForCheck();
+    this.callOnChangeFn();
+  }
+
+  public callOnChangeFn(){
+    this.onChangeFunction(this.checkedItems.map(item=>item.element));
   }
 
   public onExpandedChange(currentValue: boolean) {
@@ -261,17 +260,13 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   public onGroupCheckClicked() {
     this.displayItems.forEach(item => item.isChecked = this.groupChecked);
     this.calcCheckedItems();
-    this.onChange();
+    this.refreshDisplayInfo();
+    this.callOnChangeFn();
   }
 
   // private isAllChecked(): boolean {
   //   return !this.allItems.some(item => !item.isChecked);
   // }
-
-  protected onChange(triggerEvent: boolean = true) {
-    this.refreshDisplayInfo();
-    if(triggerEvent) { this.onChangeFunction(this.checkedItems.map(item=>item.element))};
-  }
 
   protected matchFilter(value: ItemModel): boolean {
     if(typeof(value) === "string")
@@ -281,7 +276,6 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
 
   public handleKeyPress(event: KeyboardEvent) {
     const keyCode = event.code;
-    // console.log(keyCode);
     if (!["Enter", "ArrowUp", "ArrowDown"].includes(keyCode)) return;
     event.preventDefault();
     event.stopPropagation();
@@ -296,9 +290,8 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
       case "Enter": {
         if(!this.highlightedItem) return;
         this.switchItemChecked(this.highlightedItem);
-        this.onChange(true);
         break;
-      }
+    }
 
       case "ArrowUp":
         {

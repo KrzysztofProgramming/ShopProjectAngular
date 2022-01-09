@@ -59,6 +59,7 @@ import { AbstractMultiSelectComponent, ItemOptions } from '../abstract-multi-sel
       flex: 1;
       margin-left: 10px;
       white-space: nowrap;
+      user-select: none;
     }
     `
   ],

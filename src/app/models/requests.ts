@@ -1,4 +1,3 @@
-
 export interface LoginRequest{
     usernameOrEmail: string,
     password: string
@@ -29,12 +28,17 @@ export interface RefreshRequest{
 }
 
 export interface ShopProductRequest{
+    id?: string;
     name: string;
     price: number;
     description: string;
     types: string[];
-    authors: AuthorRequest[];
+    authorsNames: string[];
     inStock: number;
+}
+
+export interface ShopProductRequestWithId extends ShopProductRequest{
+  id: string;
 }
 
 export interface AuthorRequest{
@@ -67,6 +71,13 @@ export interface GetProductsParams extends PageableParams{
   minInStock?: number;
   maxInStock?: number;
 }
+
+export const DEFAULT_PRODUCTS_PARAMS: GetProductsParams = {
+  pageSize: DEFAULT_PAGEABLE.pageSize,
+  pageNumber: DEFAULT_PAGEABLE.pageNumber,
+  sort: "none",
+  authorsNames: [],
+} 
 
 export interface TypeRequest{
   name: string;

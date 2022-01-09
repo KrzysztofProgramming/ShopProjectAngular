@@ -1,4 +1,4 @@
-import { Author, ShopProductWithId, SimpleAuthor } from './models';
+import { Author, ShopProduct, SimpleAuthor } from './models';
 
 export interface LoginResponse{
     jwtToken?: string,
@@ -29,5 +29,5 @@ export interface SimpleAuthorsResponse{
   simpleAuthors: SimpleAuthor[];
 }
 
-export type GetProductsResponse = GetByParamsResponse<ShopProductWithId>;
+export type GetProductsResponse = GetByParamsResponse<ShopProduct>;
 export type GetAuthorsResponse = GetByParamsResponse<Author>;

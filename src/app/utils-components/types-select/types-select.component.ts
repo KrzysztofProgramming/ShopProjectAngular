@@ -1,18 +1,19 @@
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ProductsService } from './../../services/http/products.service';
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'shop-types-select',
   template: `
     <shop-dropdown-multi-select *ngIf="this.type === 'dropdown'" [(ngModel)] = "model" [items]="this.allTypes"
      [invalid] = "this.invalid"(blur)="this.onTouchedFn()" (ngModelChange)="this.onChangeFn($event)"
-     [waitingForDataFlag]="this.waitingForResponse" [editable]="this.editable">
-    </shop-dropdown-multi-select>
+     [waitingForDataFlag]="this.waitingForResponse" [(expanded)] = "this.expanded"
+    (expandedChange)="this.expandedChange.emit($event)"></shop-dropdown-multi-select>
+
     <shop-accordion-multi-select *ngIf="this.type === 'accordion'" [(ngModel)] = "model" [items]="this.allTypes"
      [invalid] = "this.invalid"(blur)="this.onTouchedFn()" (ngModelChange)="this.onChangeFn($event)"
-     [waitingForDataFlag]="this.waitingForResponse" [editable]="this.editable">
-    </shop-accordion-multi-select>
+     [waitingForDataFlag]="this.waitingForResponse" [(expanded)] = "this.expanded"
+    (expandedChange)="this.expandedChange.emit($event)"></shop-accordion-multi-select>
   `,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
@@ -25,8 +26,9 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, Input } 
 export class TypesSelectComponent implements OnInit, ControlValueAccessor {
 
   @Input() invalid: boolean = false;
-  @Input() editable: boolean = true;
   @Input() type: 'dropdown' | 'accordion' = 'dropdown';
+  @Input() expanded: boolean = false;
+  @Output() expandedChange: EventEmitter<boolean> = new EventEmitter();
   model: string[] = [];
   onChangeFn: any = ()=>{};
   onTouchedFn: any = ()=>{};

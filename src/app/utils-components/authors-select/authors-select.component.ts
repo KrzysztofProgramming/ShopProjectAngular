@@ -1,8 +1,6 @@
-import { SimpleAuthor } from './../../models/models';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, OnInit, ChangeDetectorRef, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 import { AuthorsService } from 'src/app/services/http/authors.service';
-
 
 @Component({
   selector: 'shop-authors-select',
@@ -10,12 +8,14 @@ import { AuthorsService } from 'src/app/services/http/authors.service';
     <shop-dropdown-multi-select *ngIf="this.type==='dropdown'" (blur)="this.onTouchedFn()"
      [(ngModel)] = "model" (ngModelChange)="this.onChangedFn($event)"
     displayProperty="name" [waitingForDataFlag]="this.waitingForAuthors" [items]="this.allAuthors"
-    [invalid]="this.invalid" [editable]="false"></shop-dropdown-multi-select>
+    [invalid]="this.invalid" [(expanded)] = "this.expanded"
+    (expandedChange)="this.expandedChange.emit($event)"></shop-dropdown-multi-select >
 
     <shop-accordion-multi-select *ngIf="this.type==='accordion'" (blur)="this.onTouchedFn()"
      [(ngModel)] = "model" (ngModelChange)="this.onChangedFn($event)"
     displayProperty="name" [waitingForDataFlag]="this.waitingForAuthors" [items]="this.allAuthors"
-    [invalid]="this.invalid" [editable]="false"></shop-accordion-multi-select>
+    [invalid]="this.invalid" [(expanded)] = "this.expanded"
+    (expandedChange)="this.expandedChange.emit($event)"></shop-accordion-multi-select>
   `,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
@@ -29,15 +29,17 @@ export class AuthorsSelectComponent implements OnInit, ControlValueAccessor {
   
   @Input() invalid: boolean = false;
   @Input() type: 'dropdown' | 'accordion' = 'dropdown';
-  model: SimpleAuthor[] = [];
-  allAuthors: SimpleAuthor[] = [];
+  @Input() expanded: boolean = false;
+  @Output() expandedChange: EventEmitter<boolean> = new EventEmitter();
+  model: string[] = [];
+  allAuthors: string[] = [];
   onChangedFn: any = ()=>{};
   onTouchedFn: any = ()=>{};
   waitingForAuthors: boolean = true;
 
   constructor(private authorsService: AuthorsService,private cd: ChangeDetectorRef) { }
 
-  writeValue(obj: SimpleAuthor[]): void {
+  writeValue(obj: string[]): void {
     this.model = obj;
     this.cd.markForCheck();
   }
@@ -54,12 +56,11 @@ export class AuthorsSelectComponent implements OnInit, ControlValueAccessor {
     this.refreshAuthors();
   }
 
-
   refreshAuthors(){
     this.waitingForAuthors = true;
     this.cd.markForCheck();
     this.authorsService.getSimpleAuthors().subscribe(response=>{
-      this.allAuthors = response.simpleAuthors;
+      this.allAuthors = response.simpleAuthors.map(author=>author.name);
     },_error=>{
       this.allAuthors = [];
     }, ()=>{

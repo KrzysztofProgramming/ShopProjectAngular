@@ -10,7 +10,7 @@ import { MultiSelectItemComponent } from '../dropdown-multi-select/dropdown-mult
   template: `
     <div class="container">
       <div class="title" [ngClass] = "{'title--expanded': this.expanded}" (click)="this.switchExpanded()">
-        <div class="title__header">{{ label }}</div>
+        <div class="title__header">{{ this.selectedItemsString }}</div>
         <div class="title__icon" [@iconRotation] = "this.expanded ? 'expanded' : 'collapsed'"><i class="pi pi-angle-left"></i></div>
       </div>
       <div class="animation-wrapper" *ngIf="this.expanded" @smoothExpanding>

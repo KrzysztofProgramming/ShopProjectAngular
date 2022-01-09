@@ -1,7 +1,6 @@
-import { TypeRequest } from './../../models/requests';
+import { TypeRequest, ShopProductRequestWithId } from './../../models/requests';
 import { TypeResponse, TypesResponse } from './../../models/responses';
 import { ShopProductRequest } from '../../models/requests';
-import { ShopProductWithId } from '../../models/models';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { mapTo } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
@@ -9,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ErrorResponse, GetProductsResponse } from '../../models/responses';
 import { Params } from '@angular/router';
+import { ShopProduct } from 'src/app/models/models';
 
 @Injectable({
   providedIn: 'root'
@@ -23,22 +23,22 @@ export class ProductsService {
     return this.http.get<GetProductsResponse>(`${this.url}getAll`, {params: queryParams});
   }
 
-  public getProduct(id: string): Observable<ShopProductWithId>{
-    return this.http.get<ShopProductWithId>(`${this.url}byId/${id}`);
+  public getProduct(id: string): Observable<ShopProduct>{
+    return this.http.get<ShopProduct>(`${this.url}byId/${id}`);
   }
 
-  public getProducts(ids: string[]): Observable<ShopProductWithId[]>{
+  public getProducts(ids: string[]): Observable<ShopProduct[]>{
     if(ids.length === 0) return of([]);
-    return this.http.get<ShopProductWithId[]>(`${this.url}byIds`, {params: {"ids": ids}});
+    return this.http.get<ShopProduct[]>(`${this.url}byIds`, {params: {"ids": ids}});
   }
 
-  public addProduct(product: ShopProductRequest): Observable<ShopProductWithId>{
-   return this.http.post<ShopProductWithId>(this.url + "newProduct", product);
+  public addProduct(product: ShopProductRequest): Observable<ShopProduct>{
+   return this.http.post<ShopProduct>(this.url + "newProduct", product);
   }
 
-  public updateProduct(product: ShopProductWithId): Observable<ShopProductWithId>{
+  public updateProduct(product: ShopProductRequestWithId): Observable<ShopProduct>{
     if(product.id == null) throw(`Product: ${product} has no id`);
-    return this.http.put<ShopProductWithId>(`${this.url}updateProduct/${product.id}`, product, {headers: {}});
+    return this.http.put<ShopProduct>(`${this.url}updateProduct/${product.id}`, product, {headers: {}});
   }
 
   public deleteProduct(id: string){

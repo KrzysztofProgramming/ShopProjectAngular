@@ -21,9 +21,9 @@
         (onBlur) = "this.triggerOnTouched()"></p-inputNumber>
     </div>
     <p class="subheader">Autorzy:</p>
-    <shop-authors-select [type]="this.selectsType" formControlName="authors"></shop-authors-select>
+    <shop-authors-select [type]="this.selectsType" formControlName="authors" [(expanded)]="this.authorsExpandedModel"></shop-authors-select>
     <p class="subheader">Kategorie</p>
-    <shop-types-select [type]="this.selectsType" formControlName="types" [editable]="false"></shop-types-select>
+    <shop-types-select [type]="this.selectsType" formControlName="types" [(expanded)]="this.typesExpandedModel"></shop-types-select>
     <!-- <p>Typ:</p> -->
     <!-- <shop-selectable-list class="types" [items] = "filterOptions"
     formControlName = "types" (blur) = "this.triggerOnTouched()" listTitle = "Typy:"></shop-selectable-list> -->

@@ -6,10 +6,10 @@
         <input class="top-bar__searcher-input" placeholder="wyszukiwanie" type="text" pInputText>
         <i class="pi pi-search"></i>
       </div>
-      <p-dropdown class="top-bar__sorting" [options]="this.sortOptions" placeholder="Sortowanie" optionLabel="name"
-       [(ngModel)]="this.sortOptionModel"></p-dropdown>
-      <shop-page-select class="top-bar__page-select" [totalPages]="this.httpResponse.totalPages" [(ngModel)]="this.pageNumberModel"
-        (ngModelChange)="this.onPageNumberChange($event)"></shop-page-select>
+      <shop-sort-select class="top-bar__sorting" placeholder="Sortowanie" optionLabel="name"
+       [(ngModel)]="this.productsParams.sort" (ngModelChange)="this.onParamsModelChange()"></shop-sort-select>
+      <shop-page-select class="top-bar__page-select" [totalPages]="this.httpResponse.totalPages"
+       [(ngModel)]="this.productsParams.pageNumber" (ngModelChange)="this.onParamsModelChange()"></shop-page-select>
       <div class="top-bar__filters-icon" (click) = "this.openFiltersDialog()">
         <p>Filtry</p>
         <i class="pi pi-filter"></i>
@@ -18,8 +18,8 @@
   </div>
 
   <div class="main">
-    <shop-products-filters (ngModelChange)="this.onFiltersChange($event)" class="main-filters"
-      [(ngModel)]="this.filtersModel" (startChanging)="this.cancelPreviousRequest()"></shop-products-filters>
+    <shop-products-filters (ngModelChange)="this.onParamsModelChange()" class="main-filters"
+      [(ngModel)]="this.productsParams" (startChanging)="this.cancelPreviousRequest()"></shop-products-filters>
     <div class="main-tiles">
       <ng-container *ngIf="this.httpResponse">
         <ng-container *ngFor="let product of this.httpResponse.result">
@@ -31,16 +31,17 @@
   </div>
 
   <div class="bottom">
-    <shop-page-select class="bottom__page-select" [totalPages]="this.httpResponse.totalPages" [(ngModel)]="this.pageNumberModel"
-      (ngModelChange)="this.onPageNumberChange($event)"></shop-page-select>
+    <shop-page-select class="bottom__page-select" [totalPages]="this.httpResponse.totalPages"
+     [(ngModel)]="this.productsParams.pageNumber" (ngModelChange)="this.onParamsModelChange()"></shop-page-select>
     <div class="bottom__page-count">
       <p>Produkty na stronie:</p>
       <p-dropdown class="bottom__dropdown" [options]="this.pageOptions"
-        (ngModelChange)="this.onPageSizeChange($event)" [(ngModel)]="this.pageSizeModel"></p-dropdown>
+       [(ngModel)]="this.productsParams.pageSize" (ngModelChange)="this.onParamsModelChange()"></p-dropdown>
     </div>
   </div>
 
-  <shop-filters-dialog [(visibility)]="this.filtersExpanded"></shop-filters-dialog>
+  <shop-filters-dialog [(visibility)]="this.filtersExpanded" [(ngModel)] = "this.productsParams"
+   (ngModelChange)="this.onParamsModelChange()"></shop-filters-dialog>
   
   <div class="scroll-button" @opacityEntry *ngIf="this.lastScrollTop > 50" (click)="this.scrollUp()">
     <i class="pi pi-arrow-up"></i>

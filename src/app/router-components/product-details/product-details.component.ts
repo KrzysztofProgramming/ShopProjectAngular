@@ -1,6 +1,6 @@
 import { ShoppingCartService } from './../../services/http/shopping-cart.service';
 import { ProductsService } from './../../services/http/products.service';
-import { ShopProduct, ShopProductWithId, EMPTY_PRODUCT } from './../../models/models';
+import { ShopProduct } from './../../models/models';
 import { Observable, of, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
@@ -17,7 +17,7 @@ export class ProductDetailsComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
   public selectedCount: number = 1;
-  public product?: ShopProductWithId;
+  public product?: ShopProduct;
   public waitingForResponse: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute, private productsService: ProductsService,
@@ -60,7 +60,7 @@ export class ProductDetailsComponent implements OnInit {
     this.refreshProductObservable(id).subscribe(val=>{val});
   }
 
-  public refreshProductObservable(id?: string): Observable<ShopProduct>{
+  public refreshProductObservable(id?: string): Observable<ShopProduct | null>{
     if(id){
       return this.productsService.getProduct(id).pipe(
         tap(p =>{
@@ -76,7 +76,8 @@ export class ProductDetailsComponent implements OnInit {
     if(this.product){
       return this.refreshProductObservable(this.product.id);
     }
-    return of(EMPTY_PRODUCT);
+
+    return of(null);
   }
 
   

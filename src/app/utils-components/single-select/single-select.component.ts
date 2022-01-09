@@ -53,15 +53,17 @@ export class SingleSelectComponent implements OnInit, ControlValueAccessor {
   
   public items: Item[] = [];
   public selectedItemIndex: number = 0;
-  public onChangeFn: (item: ItemModel)=>void = ()=>{};
+  public onChangeFn: (item: string)=>void = ()=>{};
   public onToucheFn: ()=>void = ()=>{};
   private _expanded: boolean = false;
   @Output() expandedChange: EventEmitter<boolean> = new EventEmitter();
   @Input() label: string = "Wybierz";
   @Input() displayedProperty: string = "name";
+  @Input() modelProperty: string = "code";
 
   @Input("items")
   set itemsInput(value: ItemModel[]){
+    if(value.length === 0) return;
     if(!value || value.length === 0) return;
     this.items = value.map(item=>{return {
       element: item,
@@ -92,32 +94,48 @@ export class SingleSelectComponent implements OnInit, ControlValueAccessor {
     return this._expanded;
   }
 
+  public collapseAllExpansions(){
+    
+  }
+
   public switchExpanded(){
     this.expanded = !this.expanded;
+    if(!this.expanded){
+      this.onToucheFn();
+    }
   }
 
   constructor(private cd: ChangeDetectorRef) { }
 
   writeValue(value: ItemModel): void {
     this.items.forEach((item, index)=>{
-      if(item.element === value){
-        this.selectedItemIndex = index;
-        item.isSelected = true;
-        return true;
+      let matchingItem: Item | null = null;
+      if(typeof(item.element) === 'string' && item.element === value){
+        matchingItem = item;
       }
-      return false;
+      else if(typeof(item.element) !== 'string' && item.element[this.modelProperty] === value){
+        matchingItem = item;
+      }
+      if(!matchingItem) return;
+      matchingItem.isSelected = true;
+      this.selectedItemIndex = index;
     });
-
-  }
-
-  public onItemSelected(item: Item, index: number){
-    this.items[this.selectedItemIndex].isSelected = false;
-    this.selectedItemIndex = index;
-    item.isSelected = true;
     this.cd.markForCheck();
   }
 
-  
+  public onItemSelected(item: Item, index: number){
+    if(index === this.selectedItemIndex) return;
+    this.items[this.selectedItemIndex].isSelected = false;
+    this.selectedItemIndex = index;
+    item.isSelected = true;
+    this.callOnChange();
+    this.cd.markForCheck();
+  }
+
+  public callOnChange(){
+    const item = this.items[this.selectedItemIndex];
+    this.onChangeFn(typeof(item.element) === 'string' ? item.element : item.element[this.modelProperty]);
+  }
 
   registerOnChange(fn: any): void {
     this.onChangeFn = fn;

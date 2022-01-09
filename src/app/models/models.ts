@@ -29,26 +29,37 @@ export interface ShoppingCart{
 
 export const EMPTY_CART = {items: {}};
 
-export interface ShopProduct extends ShopProductRequest{
-    id?: string | null;
-}
-
-export interface ShopProductWithId extends ShopProduct{
+export interface ShopProduct{
     id: string;
+    name: string;
+    price: number;
+    description: string;
+    types: string[];
+    authors: Author[];
+    inStock: number;
 }
 export interface ProfileInfo{
     username: string,
     email: string
 }
 
-export const EMPTY_PRODUCT: ShopProduct = {
+export const EMPTY_PRODUCT_REQUEST: ShopProductRequest = {
     name: "",
     price: 0,
     description: "",
     types: [],
-    authors: [],
+    authorsNames: [],
     inStock: 0
 }
+
+// export const EMPTY_PRODUCT: ShopProduct = {
+//   name: "",
+//   price: 0,
+//   description: "",
+//   types: [],
+//   authors: [],
+//   inStock: 0
+// }
 
 export interface SortOption{
   name: string,
@@ -62,3 +73,21 @@ export const SORT_OPTIONS: SortOption[] = [
   {name: "Alfabetycznie: A-Z", code: "alphabetic_asc"},
   {name: "Alfabatycznie: Z-A", code: "alphabetic_desc"}
 ]
+
+export const PAGE_SIZES: number[] = [10, 25, 50];
+
+export const SORT_OPTION_DEFAULT: SortOption = {name: "Sortowanie: Trafność", code: "none"}
+
+export function deepCopy<T>(source: T): T {
+  return Array.isArray(source)
+    ? source.map(item => deepCopy(item))
+    : source instanceof Date
+    ? new Date(source.getTime())
+    : source && typeof source === 'object'
+    ? Object.getOwnPropertyNames(source).reduce((o, prop) => {
+        Object.defineProperty(o, prop, Object.getOwnPropertyDescriptor(source, prop)!);
+        o[prop] = deepCopy((source as { [key: string]: any })[prop]);
+        return o;
+      }, Object.create(Object.getPrototypeOf(source)))
+    : (source as T);
+}

@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 import { ControlValueAccessor, FormGroup, FormBuilder, AbstractControl, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, Input, ChangeDetectorRef } from '@angular/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 
@@ -31,7 +31,9 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
   @Input() showHeader: boolean = true;
   @Input() adminView: boolean = false;
   @Input() selectsType: 'dropdown' | 'accordion'= 'dropdown';
-
+  @Input() debounceTime: boolean = true;
+  
+  private model: ProductsFiltersModel = {};
   //public filterOptions = productsTypes.map(item =>{return {label: item}});
   public formGroup: FormGroup = this.fb.group({
     minPrice: 0,
@@ -45,20 +47,33 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
   private subscriptions: Subscription[] = [];
   private onTouchedFn: any = () =>{}
   private onChangeFn: any = () =>{}
+  public authorsExpandedModel: boolean = false;
+  public typesExpandedModel: boolean = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(this.formGroup.valueChanges.subscribe(()=>this.filtersStartChanging.emit()));
-    this.subscriptions.push(this.formGroup.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
-    .subscribe(() =>{
-      this.onChangeFn(this.getProductsFilters());
-    }));
+    if(this.debounceTime){
+      this.subscriptions.push(this.formGroup.valueChanges.subscribe(()=>this.filtersStartChanging.emit()));
+      this.subscriptions.push(this.formGroup.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(() =>{
+        this.onChangeFn(this.getProductsFilters());
+      }));
+    }
+    else{
+      this.subscriptions.push(this.formGroup.valueChanges.subscribe(()=>this.onChangeFn(this.getProductsFilters())));
+    }
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
     this.subscriptions = [];
+  }
+
+  public collapseAllExpansions(){
+    this.typesExpandedModel = false;
+    this.authorsExpandedModel = false;
+    this.cd.markForCheck();
   }
 
   public get minInStockControl(): AbstractControl{
@@ -86,18 +101,18 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
   }
 
   public getProductsFilters(): ProductsFiltersModel{
-    let filter: ProductsFiltersModel = {};
-    filter.maxPrice = this.maxPriceControl.value;
-    filter.minPrice = this.minPriceControl.value;
-    filter.types = this.typesControl.value;
-    filter.maxInStock = this.maxInStockControl.value;
-    filter.minInStock = this.minInStockControl.value;
-    filter.authorsNames = this.authorsControl.value;
-    return filter;
+    this.model.maxPrice = this.maxPriceControl.value;
+    this.model.minPrice = this.minPriceControl.value;
+    this.model.types = this.typesControl.value;
+    this.model.maxInStock = this.maxInStockControl.value;
+    this.model.minInStock = this.minInStockControl.value;
+    this.model.authorsNames = this.authorsControl.value;
+    return this.model;
   }
 
   writeValue(obj: ProductsFiltersModel): void {
     if(!obj) return;
+    this.model = obj;
     this.minPriceControl.setValue(obj.minPrice, {emitEvent: false});
     this.maxPriceControl.setValue(obj.maxPrice, {emitEvent: false});
     this.typesControl.setValue(obj.types, {emitEvent: false});

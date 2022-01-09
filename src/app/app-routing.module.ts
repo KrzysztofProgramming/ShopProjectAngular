@@ -36,7 +36,7 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {
           initialNavigation: 'enabled',
           paramsInheritanceStrategy: 'always',
-          scrollPositionRestoration: 'enabled'
+          // scrollPositionRestoration: 'enabled'
   })],
   exports: [RouterModule]
 })

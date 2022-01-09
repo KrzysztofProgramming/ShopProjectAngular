@@ -1,5 +1,5 @@
 import { ProductsService } from 'src/app/services/http/products.service';
-import { EMPTY_PRODUCT, ShopProduct } from './../../models/models';
+import { ShopProduct } from './../../models/models';
 import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
@@ -9,7 +9,7 @@ import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 })
 export class ProductTileComponent implements OnInit {
 
-  private _product: ShopProduct = EMPTY_PRODUCT;
+  private _product?: ShopProduct;
   public readonly EMPTY_IMAGE = "../../../assets/img/empty-image.png";
   public imageUrl = this.EMPTY_IMAGE;
   
@@ -19,14 +19,15 @@ export class ProductTileComponent implements OnInit {
   constructor(private productsService: ProductsService) { }
 
   @Input()
-  set product(p: ShopProduct){
+  set product(p: ShopProduct | undefined){
+    if(!p) return;
     this._product = p;
     if(this._product.id) {
       this.imageUrl = this.productsService.getProductSmallImageUrl(this._product.id);
     }
   }
 
-  get product(): ShopProduct{
+  get product(): ShopProduct | undefined{
     return this._product;
   }
 

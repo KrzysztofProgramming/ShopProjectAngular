@@ -1,12 +1,13 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription } from 'rxjs';
-import { GetProductsParams, PageableParams } from './../../models/requests';
+import { GetProductsParams, PageableParams, DEFAULT_PRODUCTS_PARAMS, DEFAULT_PAGEABLE } from './../../models/requests';
 import { ProductsService } from 'src/app/services/http/products.service';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { GetProductsResponse } from 'src/app/models/responses';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { SortOption, SORT_OPTIONS } from 'src/app/models/models';
+import { PAGE_SIZES, SortOption, SORT_OPTIONS } from 'src/app/models/models';
 import { ProductsFiltersModel } from 'src/app/utils-components/products-filters/products-filters.component';
+import { FiltersDialogModel } from 'src/app/utils-components/filters-dialog/filters-dialog.component';
 
 @Component({
   selector: 'app-merge-products',
@@ -28,17 +29,17 @@ import { ProductsFiltersModel } from 'src/app/utils-components/products-filters/
 })
 export class MergeProductsComponent implements OnInit {
 
-  public pageOptions: string[] = ["10", "25", "50"];
-  public sortOptions: SortOption[] = SORT_OPTIONS;
-  public sortOptionModel: SortOption = {name: "Sortowanie: Trafność", code: "none"};
-  public pageSizeModel: string = "25";
-  public pageNumberModel: number = 1;
+  public pageOptions: number[] = PAGE_SIZES;
+  // public sortOptions: SortOption[] = SORT_OPTIONS;
+  // public sortOptionModel: SortOption = {name: "Sortowanie: Trafność", code: "none"};
+
   private lastRequest?: Subscription;
   public filtersExpanded: boolean = false;
 
   public httpResponse: GetProductsResponse = {totalElements: 0, totalPages: 1, pageNumber: 0, result: []};
-  public productsParams: GetProductsParams = {};
-  public filtersModel: ProductsFiltersModel = {};
+  public productsParams: GetProductsParams = DEFAULT_PRODUCTS_PARAMS;
+
+  public dialogModel: FiltersDialogModel = {};
 
 
   public lastScrollTop: number = 0;
@@ -69,24 +70,7 @@ export class MergeProductsComponent implements OnInit {
     this.cd.markForCheck();
   }
 
-  public onFiltersChange(newValue: ProductsFiltersModel){
-    // console.log("filter changed");
-    this.productsParams = Object.assign({}, this.productsParams);
-    this.productsParams = Object.assign(this.productsParams, newValue);
-    this.updateRequestParams();
-  }
-
-  public onPageNumberChange(newValue: number){
-    // console.log("pageNumber changed");
-    this.productsParams = Object.assign({}, this.productsParams);
-    this.productsParams.pageNumber = newValue;
-    this.updateRequestParams();
-  }
-
-  public onPageSizeChange(newValue: string){
-    // console.log("pageSize changed");
-    this.productsParams = Object.assign({}, this.productsParams);
-    this.productsParams.pageSize = +newValue;
+  public onParamsModelChange(){
     this.updateRequestParams();
   }
 
@@ -106,8 +90,6 @@ export class MergeProductsComponent implements OnInit {
     // this.pageSizeModel = params.pageCount ? params.pageCount : this.pageSizeModel;
 
     this.productsParams = params;
-
-    this.filtersModel = Object.assign({}, this.productsParams);
     this.cd.markForCheck();
   }
 
@@ -121,9 +103,13 @@ export class MergeProductsComponent implements OnInit {
   }
 
   public updateRequestParams(){
+    const params = Object.assign({}, this.productsParams);
+    if(params.pageSize === DEFAULT_PAGEABLE.pageSize) params.pageSize = undefined;
+    if(params.pageNumber === DEFAULT_PAGEABLE.pageNumber) params.pageNumber = undefined;
+    if(params.sort === "none") params.sort = undefined;
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
-      queryParams: this.productsParams,
+      queryParams: params,
     });
   }
 
@@ -144,21 +130,18 @@ export class MergeProductsComponent implements OnInit {
       
       this.httpResponse = Object.assign({}, response);
       this.httpResponse.totalPages = Math.max(1, response.totalPages);
-      let params: GetProductsParams = Object.assign({}, this.activatedRoute.snapshot.queryParams);
-      this.pageNumberModel = response.pageNumber;
-      params.pageNumber = Math.min(this.httpResponse.totalPages, response.pageNumber);
+      let routerParams: GetProductsParams = Object.assign({}, DEFAULT_PRODUCTS_PARAMS);
+      Object.assign(routerParams, this.activatedRoute.snapshot.queryParams);
+      routerParams.pageNumber = Math.min(this.httpResponse.totalPages, response.pageNumber);
 
-      params.pageSize = params.pageSize ? this.pageOptions.includes(params.pageSize.toString()) ? params.pageSize
-       : +this.pageSizeModel : +this.pageSizeModel;
+      routerParams.pageSize = this.pageOptions.includes(routerParams.pageSize!) ? routerParams.pageSize
+       : this.productsParams.pageSize
 
-      this.pageSizeModel = params.pageSize?.toString();
-
-      this.writeParams(params);
+      this.writeParams(routerParams);
       this.updateRequestParams();
       this.cd.markForCheck();
     }, error =>{
-      let params: PageableParams = {pageSize: +this.pageSizeModel, pageNumber: this.pageNumberModel};
-       this.writeParams(params);
+       this.writeParams(DEFAULT_PRODUCTS_PARAMS);
        this.updateRequestParams();
     });
   }

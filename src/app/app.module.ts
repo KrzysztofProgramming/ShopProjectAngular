@@ -64,6 +64,8 @@ import { AbstractMultiSelectComponent } from './utils-components/abstract-multi-
 import { TypesCreatorComponent } from './utils-components/types-creator/types-creator.component';
 import { RadioButtonModule } from "primeng/radiobutton";
 import { SingleSelectComponent } from './utils-components/single-select/single-select.component';
+import { SortSelectComponent } from './utils-components/sort-select/sort-select.component';
+import { ProductCreatorComponent } from './utils-components/product-creator/product-creator.component';
 
 
 @NgModule({
@@ -110,7 +112,9 @@ import { SingleSelectComponent } from './utils-components/single-select/single-s
     AccordionMultiSelectComponent,
     AbstractMultiSelectComponent,
     TypesCreatorComponent,
-    SingleSelectComponent
+    SingleSelectComponent,
+    SortSelectComponent,
+    ProductCreatorComponent
   ],
   imports: [
     BrowserModule,
