@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="informations">
-        <h2 class="informations__header">Informacje: </h2>
+        <!-- <h2 class="informations__header">Informacje: </h2>
         <form [formGroup] = "this.formGroup" class="informations__form" (ngSubmit) = "this.onSubmit()">
 
             <p>Nazwa:</p> <input class="informations__input" type="text" shopInputText formControlName="name" [invalid] = "this.nameControl.invalid && this.nameControl.touched"> 
@@ -58,18 +58,18 @@
             <h3>Opis:</h3>
             <textarea class="informations__description informations__input" formControlName="description" shopInputText
              [invalid] = "this.descriptionControl.invalid && this.descriptionControl.touched"></textarea>
-            <div class="buttons">
-                <button class="buttons__button" [disabled] = "this.formGroup.invalid || this.waitingForResponseMessage
-                 || this.unchangedAfterSend" shopButton type="submit">Prześlij <i class="pi-check-circle pi"></i></button>
-                <button class="buttons__button" type="button" [disabled] = "!this.currentProductId" shopButton color = "red" (click)="this.onProductRemove()">Usuń produkt <i class="pi pi-times"></i></button>
-            </div>
-        </form>
+        </form> -->
+        <shop-product-creator [formControl]="this.requestControl" (onSubmit)="this.onSubmit()"></shop-product-creator>
+        <div class="buttons">
+          <button class="buttons__button" [disabled] = "this.requestControl.invalid || this.waitingForResponseMessage
+           || this.unchangedAfterSend" shopButton (click)="this.onSubmit()">Prześlij <i class="pi-check-circle pi"></i></button>
+          <button class="buttons__button" type="button" [disabled] = "!this.currentProductId" shopButton color = "red" (click)="this.onProductRemove()">Usuń produkt <i class="pi pi-times"></i></button>
+      </div>
     </div>
 </div>
 <div class="overlay" *ngIf = "this.waitingForResponseMessage.length !== 0">
     <p>{{this.waitingForResponseMessage}}</p>
     <i class="pi pi-spinner pi-spin"></i>
 </div>
-<shop-author-creator [(visibility)]="this.authorCreatorVisibility" (authorAdded)="this.refreshAuthorsSelect()"></shop-author-creator>
-<shop-types-creator [(visibility)] = "this.typeCreatorVisibility" (typeAdded)="this.refreshTypesSelect()">
+
 <p-confirmDialog [breakpoints]="{'600px': {width: '100%', right: '0', left: '0'}}"></p-confirmDialog>

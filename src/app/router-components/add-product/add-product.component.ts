@@ -7,7 +7,7 @@ import { catchError, finalize, switchMap, mapTo, tap } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
 import { ShopProduct, EMPTY_PRODUCT_REQUEST } from './../../models/models';
 import { notEmptyListValidator } from './../../models/shop-validators';
-import { AbstractControl, Validators } from '@angular/forms';
+import { AbstractControl, Validators, FormControl } from '@angular/forms';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
 import { ProductsService } from 'src/app/services/http/products.service';
@@ -32,89 +32,36 @@ export class AddProductComponent implements OnInit, OnDestroy {
     public location: Location) { }
 
 
-  writeValue(obj: ShopProductRequest): void {
-    this.currentProductId = obj.id;
-    this.nameControl.setValue(obj.name);
-    this.priceControl.setValue(obj.price);
-    this.descriptionControl.setValue(obj.description);
-    this.categoriesControl.setValue(obj.types);
-    this.inStockControl.setValue(obj.inStock)
-    this.authorsControl.setValue(obj.authorsNames);
-    this.cd.markForCheck();
-  }
-
   public readonly EMPTY_IMAGE: string = "../../../assets/img/empty-image.png";
   public imageUrl: string = this.EMPTY_IMAGE;
   public selectedFile?: Blob;
   public currentProductId?: string;
-  private onChangeFunction: any = () => {};
   public notRealod: boolean = false;
   public headerText = "Stwórz nowy produkt";
   public subscriptions: Subscription[] = [];
   public unchangedAfterSend: boolean = false; 
   public waitingForImage = false;
   public waitingForResponseMessage: string = "";
-  public authorCreatorVisibility: boolean = false;
-  public typeCreatorVisibility: boolean = false;
-  @ViewChild("authorsSelect")
-  private authorsSelect?: AuthorsSelectComponent;
-
-  @ViewChild("typesSelect")
-  private typesSelect?: TypesSelectComponent;
-
-  public formGroup: FormGroup = this.fb.group({
-    name: ['', [Validators.required]],
-    price: [0, [Validators.required, Validators.min(0)]],
-    categories: [[], notEmptyListValidator],
-    description: ['', Validators.required],
-    inStock: [0, [Validators.required, Validators.min(0)]],
-    authors: [[], notEmptyListValidator]
-  })
-  
+  public requestControl: FormControl = new FormControl(EMPTY_PRODUCT_REQUEST);
 
   get isWaitingForResponse(): boolean{
     return this.waitingForResponseMessage.length!==0;
   };
 
-  get currentProduct(): ShopProductRequest{
-    return {
-      id: this.currentProductId,
-      name: this.nameControl.value,
-      price: this.priceControl.value,
-      description: this.descriptionControl.value,
-      types: this.categoriesControl.value,
-      inStock: this.inStockControl.value,
-      authorsNames: this.authorsControl.value
-    }
+  getCurrentProduct(): ShopProductRequest{
+    let product: ShopProductRequest = this.requestControl.value;
+    product.id = this.currentProductId;
+    return product;
   }
 
-  get authorsControl(): AbstractControl{
-    return this.formGroup.get("authors")!;
-  }
-
-  get inStockControl(): AbstractControl{
-    return this.formGroup.get("inStock")!;
-  }
-
-  get categoriesControl(): AbstractControl{
-    return this.formGroup.get("categories")!
-  }
-
-  get nameControl(): AbstractControl{
-    return this.formGroup.get("name")!
-  }
-
-  get priceControl(): AbstractControl{
-    return this.formGroup.get("price")!
-  }
-
-  get descriptionControl(): AbstractControl{
-    return this.formGroup.get("description")!;
+  writeValue(obj: ShopProductRequest): void {
+    this.currentProductId = obj.id;
+    this.requestControl.setValue(obj);
+    this.cd.markForCheck();
   }
 
   ngOnInit(): void {
-    this.subscriptions.push(this.formGroup.valueChanges.subscribe(()=>this.unchangedAfterSend = false));
-    this.subscriptions.push(this.formGroup.valueChanges.subscribe(()=>this.onChangeFunction(this.currentProduct)));
+    this.subscriptions.push(this.requestControl.valueChanges.subscribe(()=>this.unchangedAfterSend = false));
     this.subscriptions.push(this.activatedRoute.paramMap.subscribe((paramMap: ParamMap) =>{
       if(this.notRealod){
         this.notRealod = false;
@@ -131,7 +78,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
           this.imageUrl = this.EMPTY_IMAGE;
           this.selectedFile = undefined;
           this.currentProductId = undefined;
-          this.formGroup.reset();
+          this.requestControl.reset();
           this.headerText = "Stwórz nowy produkt";
           this.unchangedAfterSend = false;
           this.writeValue(EMPTY_PRODUCT_REQUEST);
@@ -161,24 +108,6 @@ export class AddProductComponent implements OnInit, OnDestroy {
       description: product.description,
       authorsNames: product.authors.map(author=>author.name)
     }
-  }
-
-  public refreshAuthorsSelect(){
-    this.authorsSelect?.refreshAuthors();
-  }
-
-  public refreshTypesSelect(){
-    this.typesSelect?.refreshTypes();
-  }
-
-  public showAuthorCreator(){
-    this.authorCreatorVisibility = true;
-    this.cd.markForCheck();
-  }
-
-  public showTypeCreator(){
-    this.typeCreatorVisibility = true;
-    this.cd.markForCheck();
   }
 
   public loadImage(){
@@ -229,7 +158,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
   private doRequest(fn: ((((product: ShopProductRequest)=>Observable<ShopProduct>) |
     ((product: ShopProductRequestWithId)=>Observable<ShopProduct>)))){
-    fn(this.currentProduct as ShopProductRequestWithId).pipe(
+    fn(this.getCurrentProduct() as ShopProductRequestWithId).pipe(
       catchError(productError=>{
         this.messageService.showMessage({severity: "error", summary: "Błąd", detail: "Operacja nie udana"});
         return throwError(productError);

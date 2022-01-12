@@ -1,42 +1,45 @@
-<h2 class="informations__header">Informacje: </h2>
-        <form [formGroup] = "this.formGroup" class="informations__form" (ngSubmit) = "this.onSubmit()">
+<h2 class="header">Informacje: </h2>
+<form [formGroup] = "this.formGroup" class="form" (ngSubmit) = "this.onSubmit.emit()" (blur)="this.callOnToche()">
 
-            <p>Nazwa:</p> <input class="informations__input" type="text" shopInputText formControlName="name" [invalid] = "this.nameControl.invalid && this.nameControl.touched"> 
-            <div class="informations__group">
-                <div class="informations__subgroup">
-                    <p>Cena:</p><p-inputNumber class="informations__subgroup-element" [class.invalid-number]="this.priceControl.invalid && this.priceControl.touched"
-                    [useGrouping]="false" [min] = "0" formControlName = "price" mode="currency" currency="PLN" locale="pl-PL"></p-inputNumber>
-                </div>
-                <div class="informations__subgroup">
-                    <p>Ilość w magazynie:</p>
-                    <p-inputNumber class="informations__subgroup-element" formControlName = "inStock" [min] = "0" [useGrouping]="false"
-                    [class.invalid-number]="this.inStockControl.invalid && this.inStockControl.touched"></p-inputNumber>
-                </div>
-            </div>
+    <p>Nazwa:</p> <input class="input" type="text" shopInputText formControlName="name" [invalid] = "this.nameControl.invalid && this.nameControl.touched"> 
+    <div class="group">
+        <div class="group__subgroup">
+            <p>Cena:</p><p-inputNumber class="informations__subgroup-element" [class.invalid-number]="this.priceControl.invalid && this.priceControl.touched"
+            [useGrouping]="false" [min] = "0" formControlName = "price" mode="currency" currency="PLN" locale="pl-PL"></p-inputNumber>
+        </div>
+        <div class="group__subgroup">
+            <p>Ilość w magazynie:</p>
+            <p-inputNumber class="group__element" formControlName = "inStock" [min] = "0" [useGrouping]="false"
+            [class.invalid-number]="this.inStockControl.invalid && this.inStockControl.touched"></p-inputNumber>
+        </div>
+    </div>
 
-            <p>Kategoria:</p>
-            <div class="informations__input">
-              <shop-types-select #typesSelect class="informations__input-select"
-              formControlName="categories" [invalid] = "this.categoriesControl.invalid && this.categoriesControl.touched">
-              </shop-types-select>
-              <button padding="small" class="informations__input-button" type="button" shopButton
-               (click)="this.showTypeCreator()" title="nowy autor"> <i class="pi pi-plus"></i> </button>
-            </div>
+    <p>Kategoria:</p>
+    <div class="input">
+      <shop-types-select #typesSelect class="input__select"
+      formControlName="categories" [invalid] = "this.categoriesControl.invalid && this.categoriesControl.touched">
+      </shop-types-select>
+      <button padding="small" class="input__button" type="button" shopButton
+        (click)="this.showTypeCreator()" title="nowy autor"> <i class="pi pi-plus"></i> </button>
+    </div>
 
-            <p>Autorzy:</p>
-            <div class="informations__input">
-              <shop-authors-select formControlName="authors" class="informations__input-select"
-              [invalid] = "this.authorsControl.invalid && this.authorsControl.touched" #authorsSelect></shop-authors-select>
-              <button padding="small" class="informations__input-button" type="button" shopButton
-               (click)="this.showAuthorCreator()" title="nowy autor"> <i class="pi pi-plus"></i> </button>
-            </div>
+    <p>Autorzy:</p>
+    <div class="input">
+      <shop-authors-select formControlName="authors" class="input__select"
+      [invalid] = "this.authorsControl.invalid && this.authorsControl.touched" #authorsSelect></shop-authors-select>
+      <button padding="small" class="input__button" type="button" shopButton
+        (click)="this.showAuthorCreator()" title="nowy autor"> <i class="pi pi-plus"></i> </button>
+    </div>
 
-            <h3>Opis:</h3>
-            <textarea class="informations__description informations__input" formControlName="description" shopInputText
-             [invalid] = "this.descriptionControl.invalid && this.descriptionControl.touched"></textarea>
-            <div class="buttons">
-                <button class="buttons__button" [disabled] = "this.formGroup.invalid || this.waitingForResponseMessage
-                 || this.unchangedAfterSend" shopButton type="submit">Prześlij <i class="pi-check-circle pi"></i></button>
-                <button class="buttons__button" type="button" [disabled] = "!this.currentProductId" shopButton color = "red" (click)="this.onProductRemove()">Usuń produkt <i class="pi pi-times"></i></button>
-            </div>
-        </form>
+    <h3>Opis:</h3>
+    <textarea class="description input" formControlName="description" shopInputText
+      [invalid] = "this.descriptionControl.invalid && this.descriptionControl.touched"></textarea>
+    <!-- <div class="buttons">
+        <button class="buttons__button" [disabled] = "this.formGroup.invalid || this.waitingForResponseMessage
+          || this.unchangedAfterSend" shopButton type="submit">Prześlij <i class="pi-check-circle pi"></i></button>
+        <button class="buttons__button" type="button" [disabled] = "!this.currentProductId" shopButton color = "red" (click)="this.onProductRemove()">Usuń produkt <i class="pi pi-times"></i></button>
+    </div> -->
+</form>
+
+<shop-author-creator [(visibility)]="this.authorCreatorVisibility" (authorAdded)="this.refreshAuthorsSelect()"></shop-author-creator>
+<shop-types-creator [(visibility)] = "this.typeCreatorVisibility" (typeAdded)="this.refreshTypesSelect()">
