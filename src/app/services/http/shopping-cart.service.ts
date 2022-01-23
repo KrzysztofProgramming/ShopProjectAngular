@@ -1,50 +1,49 @@
 import { CartProductRequest, SetCartRequest } from '../../models/requests';
 import { AuthService } from '../auth/auth.service';
 import { ShoppingCart } from '../../models/models';
-import { catchError, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ShoppingCartService implements OnInit, OnDestroy{
+export class ShoppingCartService implements OnDestroy{
 
   private readonly URL: string = 'http://localhost:8080/api/users/cart/';
   public readonly DEFAULT_CART: ShoppingCart = {items: {}};
-  private currentCart: BehaviorSubject<ShoppingCart> = new BehaviorSubject<ShoppingCart>(this.DEFAULT_CART);
+  private currentCartSubject!: BehaviorSubject<ShoppingCart>;
   private subscriptions: Subscription[] = [];
 
   get cartChanges(): Observable<ShoppingCart>{
-    return this.currentCart;
+    return this.currentCartSubject;
+  }
+
+  get currentCart(): ShoppingCart{
+    return this.currentCartSubject.getValue();
   }
 
   constructor(private http: HttpClient, private authService: AuthService) {
+    this.readCartFromStorage();
     this.subscriptions.push(
       this.cartChanges.subscribe(cart => this.writeCartToStorage(cart))
     );
+    this.refreshCart().subscribe(()=>{});
   }
-
-  // public getCart(){
-  //   return this.currentCart.getValue();
-  // }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub=>sub.unsubscribe());
   }
 
-  ngOnInit(): void {
-    this.refreshCart().subscribe();
-  }
-
   public refreshCart(): Observable<ShoppingCart>{
+    console.log("refreshing");
     if(!this.authService.isLogin()){
       return this.handleGetErrors()();
     }
     return this.http.get<ShoppingCart>(`${this.URL}getCart`).pipe(
       tap(this.tapToRefresh()),
-      catchError(this.handleGetErrors())
+      // catchError(this.handleGetErrors())
     )
   }
 
@@ -54,35 +53,35 @@ export class ShoppingCartService implements OnInit, OnDestroy{
     }
     return this.http.put<ShoppingCart>(`${this.URL}setProduct`, request).pipe(
       tap(this.tapToRefresh()),
-      catchError(this.setProductOnClient(request))
+      // catchError(this.setProductOnClient(request))
     )
   }
 
   public setCart(request: SetCartRequest): Observable<ShoppingCart>{
-    if(!this.authService.isLogin){
+    if(!this.authService.isLogin()){
       return this.setCartOnClient(request)();
     }
     return this.http.put<ShoppingCart>(`${this.URL}setCart`, request).pipe(
       tap(this.tapToRefresh()),
-      catchError(this.setCartOnClient(request))
+      // catchError(this.setCartOnClient(request))
     )
   }
 
   public addProductToCart(request: CartProductRequest): Observable<ShoppingCart>{
-    if(!this.authService.isLogin){
+    if(!this.authService.isLogin()){
       return this.addProductOnClient(request)();
     }
     return this.http.put<ShoppingCart>(`${this.URL}addProduct`, request).pipe(
-      tap(this.tapToRefresh),
-      catchError(this.addProductOnClient(request))
+      tap(this.tapToRefresh()),
+      // catchError(this.addProductOnClient(request))
     )
   }
 
   public setCartOnClient(request: SetCartRequest){
      return (): Observable<ShoppingCart>=>{
-        let modyfiedCart = this.currentCart.getValue();
+        let modyfiedCart = this.currentCartSubject.getValue();
         modyfiedCart.items = request.products;
-        this.currentCart.next(modyfiedCart);
+        this.currentCartSubject.next(modyfiedCart);
         return of(modyfiedCart);
       }
   }
@@ -90,25 +89,26 @@ export class ShoppingCartService implements OnInit, OnDestroy{
 
   public setProductOnClient(request: CartProductRequest){
     return ()=>{
-      let modyfiedCart = this.currentCart.getValue();
+      let modyfiedCart = this.currentCartSubject.getValue();
       modyfiedCart.items[request.productId] = request.amount;
-      this.currentCart.next(modyfiedCart);
+      this.currentCartSubject.next(modyfiedCart);
       return of(modyfiedCart);
     }
   }
   
   public addProductOnClient(request: CartProductRequest){
     return ()=>{
-      let modyfiedCart = this.currentCart.getValue();
-      modyfiedCart.items[request.productId] = request.amount + modyfiedCart.items[request.productId];
-      this.currentCart.next(modyfiedCart);
+      let modyfiedCart = this.currentCartSubject.getValue();
+      modyfiedCart.items[request.productId] = request.amount + (modyfiedCart.items[request.productId] || 0);
+      this.currentCartSubject.next(modyfiedCart);
       return of(modyfiedCart);
     }
   }
 
   public tapToRefresh(){
      return (cart: ShoppingCart) =>{
-       this.currentCart.next(cart);
+      console.log("tapping");
+       this.currentCartSubject.next(cart);
     };
   }
 
@@ -119,17 +119,21 @@ export class ShoppingCartService implements OnInit, OnDestroy{
   }
 
   private writeCartToStorage(cart: ShoppingCart){
-    sessionStorage.setItem("shoppingCart", JSON.stringify(cart));
+    // if(!this.authService.isLogin()) return;
+    localStorage.setItem("shoppingCart", JSON.stringify(cart));
   }
 
   private readCartFromStorage(): ShoppingCart{
-    const jsonCart = sessionStorage.getItem("shoppingCart");
+    const jsonCart = localStorage.getItem("shoppingCart");
     let cart: ShoppingCart = this.DEFAULT_CART;
     if(jsonCart){
       try{cart = JSON.parse(jsonCart);}
       catch(e){}
     }
-    this.currentCart.next(cart);
+    if(!this.currentCartSubject)
+      this.currentCartSubject = new BehaviorSubject(cart);
+    else
+      this.currentCartSubject.next(cart);
     return cart;
   } 
   

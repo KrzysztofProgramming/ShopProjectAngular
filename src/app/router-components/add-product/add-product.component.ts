@@ -81,6 +81,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
           this.requestControl.reset();
           this.headerText = "Stwórz nowy produkt";
           this.unchangedAfterSend = false;
+          this.requestControl.reset();
           this.writeValue(EMPTY_PRODUCT_REQUEST);
           return;
       }
@@ -266,7 +267,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
       accept: ()=>{
         if(this.currentProductId == null) return;
         this.productsService.deleteProduct(this.currentProductId).subscribe(val =>{
-            this.router.navigateByUrl("/");
+            // this.router.navigateByUrl("/");
+            this.location.back();
           }
         );
       }

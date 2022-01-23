@@ -1,11 +1,11 @@
 import { ShoppingCartService } from './../../services/http/shopping-cart.service';
 import { ProductsService } from './../../services/http/products.service';
 import { ShopProduct } from './../../models/models';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, of, Subscription, throwError } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ToastMessageService } from 'src/app/services/utils/toast-message.service';
-import { mergeMap, tap } from 'rxjs/operators';
+import { finalize, mergeMap, tap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'shop-product-details',
@@ -19,6 +19,7 @@ export class ProductDetailsComponent implements OnInit {
   public selectedCount: number = 1;
   public product?: ShopProduct;
   public waitingForResponse: boolean = false;
+  public maxToSelect: number = 0;
 
   constructor(private activatedRoute: ActivatedRoute, private productsService: ProductsService,
      private cd: ChangeDetectorRef, private cartService: ShoppingCartService, private messageService: ToastMessageService ) { }
@@ -32,8 +33,19 @@ export class ProductDetailsComponent implements OnInit {
         }
         this.refreshProduct(id);
         // this.refreshProductObservable(id).subscribe();
-      })
-    )
+      }),
+      this.cartService.cartChanges.subscribe((value)=>{console.log("cartChange"); this.updateMaxSelect.bind(this)();})
+    );
+  }
+
+  public updateMaxSelect(){
+    if(!this.product) return;
+    console.log(this.cartService.currentCart);
+    let productCartAmount: number = this.cartService.currentCart.items[this.product.id] || 0;
+    console.log(productCartAmount);
+    this.maxToSelect = Math.max(0, this.product.inStock - productCartAmount);
+    this.selectedCount = Math.min(this.maxToSelect, this.selectedCount);
+    this.cd.markForCheck();
   }
 
   public addToCart(){
@@ -41,23 +53,22 @@ export class ProductDetailsComponent implements OnInit {
     this.waitingForResponse = true;
     this.cd.markForCheck();
     this.cartService.addProductToCart({productId: this.product.id, amount: this.selectedCount}).pipe(
-      mergeMap(()=>{return this.refreshProductObservable();})
+      mergeMap(()=>{return this.refreshProductObservable();}),
+      finalize(()=>{
+        this.waitingForResponse = false;
+        this.cd.markForCheck();
+      })
     ).subscribe(()=>{
-      this.waitingForResponse = false;
       this.messageService.showMessage({severity: "success", summary: "Sukces", detail: "Produkt dodany do koszyka"});
-      this.cd.markForCheck();
-      
-      
     }, error=>{
-      this.waitingForResponse = false;
-      this.messageService.showMessage({severity: "error", summary: "Niepowodzenie", detail: error.error ? error.error.info
-       : "Produkt dodany do koszyka"});
-      this.cd.markForCheck();
+      console.log(error);
+      this.messageService.showMessage({severity: "error", summary: "Niepowodzenie", detail: error.error.info ? error.error.info
+       : "Produkt nie został dodany do koszyka"});
     });
   }
 
   public refreshProduct(id?: string){
-    this.refreshProductObservable(id).subscribe(val=>{val});
+    this.refreshProductObservable(id).subscribe();
   }
 
   public refreshProductObservable(id?: string): Observable<ShopProduct | null>{
@@ -68,6 +79,7 @@ export class ProductDetailsComponent implements OnInit {
           if(this.product.inStock <= 0){
             this.selectedCount = 0;
           }
+          this.updateMaxSelect();
           this.cd.markForCheck();
         })
       );

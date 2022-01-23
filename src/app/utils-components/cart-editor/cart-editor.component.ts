@@ -21,15 +21,17 @@ export interface CartEditorElementModel{
         <shop-product-image class="link__image" [productId]="this.model.product.id" imageResolution="small"></shop-product-image>
         <p class="link__name">{{this.model.product.name}}</p>
       </div>
-        <p class="price">{{this.model.product.price * this.model.amount}} zł</p>
-        <div class="delete-icon">
+      <div class="modifiers">
+        <p class="modifiers__price modifiers__element">{{this.model.product.price * this.model.amount}} zł</p>
+        <div class="modifiers__delete modifiers__element">
           <i class="pi pi-trash" title="usuń z koszyka"></i>
         </div>
-        <p-inputNumber class="amount" [useGrouping]="false" [max]="this.maxCountModel"
+        <p-inputNumber class="modifiers__amount modifiers__element" [useGrouping]="false" [max]="this.maxCountModel"
           [min]="1" [step]="1" [showButtons]="true"
           incrementButtonClass="p-button-secondary" decrementButtonClass="p-button-secondary"
           [formControl]="this.amountControl">
         </p-inputNumber>
+      </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

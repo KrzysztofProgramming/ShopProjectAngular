@@ -11,7 +11,6 @@ import { Subscription } from 'rxjs';
       <shop-busy-overlay *ngIf="!this.cart"></shop-busy-overlay>
       <p *ngIf="this.isCartEmpty()">Twój koszyk jest pusty</p>
       <shop-cart-editor class="editor" *ngIf="this.cart" [(ngModel)]="this.cart"></shop-cart-editor>
-      <div class="other">some other content</div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

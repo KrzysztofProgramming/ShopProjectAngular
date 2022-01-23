@@ -20,7 +20,7 @@
       formControlName="categories" [invalid] = "this.categoriesControl.invalid && this.categoriesControl.touched">
       </shop-types-select>
       <button padding="small" class="input__button" type="button" shopButton
-        (click)="this.showTypeCreator()" title="nowy autor"> <i class="pi pi-plus"></i> </button>
+        (click)="this.showTypeCreator()" title="Nowy typ"> <i class="pi pi-plus"></i> </button>
     </div>
 
     <p>Autorzy:</p>
@@ -28,7 +28,7 @@
       <shop-authors-select formControlName="authors" class="input__select"
       [invalid] = "this.authorsControl.invalid && this.authorsControl.touched" #authorsSelect></shop-authors-select>
       <button padding="small" class="input__button" type="button" shopButton
-        (click)="this.showAuthorCreator()" title="nowy autor"> <i class="pi pi-plus"></i> </button>
+        (click)="this.showAuthorCreator()" title="Nowy autor"> <i class="pi pi-plus"></i> </button>
     </div>
 
     <h3>Opis:</h3>

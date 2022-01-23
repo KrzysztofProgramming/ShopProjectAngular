@@ -3,7 +3,8 @@
    [ngStyle]="{'top': this.container.offsetTop + 2 + 'px'}">
     <div class="top-bar__content">
       <div class="p-input-icon-right top-bar__searcher">
-        <input class="top-bar__searcher-input" placeholder="wyszukiwanie" type="text" pInputText>
+        <input class="top-bar__searcher-input" placeholder="wyszukiwanie" type="text" pInputText
+         [(ngModel)]="this.productsParams.searchPhrase" (ngModelChange)="this.onSearchPhraseChanged($event)">
         <i class="pi pi-search"></i>
       </div>
       <shop-sort-select class="top-bar__sorting" placeholder="Sortowanie" optionLabel="name"

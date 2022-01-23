@@ -25,9 +25,9 @@ export function sameValueValidator(...value: string[]): ValidatorFn{
 
 export function getErrorsMessage(control: AbstractControl, customErrorFactory?: (control: AbstractControl) => string | null): string{
     if(control.errors == null || control.untouched) return "";
-    if(customErrorFactory!=undefined){
+    if(customErrorFactory){
       let temp = customErrorFactory(control);
-      if(temp!=null)
+      if(temp)
         return temp;
     }
     if(control.errors.required)

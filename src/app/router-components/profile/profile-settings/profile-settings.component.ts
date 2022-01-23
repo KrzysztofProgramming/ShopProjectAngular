@@ -1,10 +1,9 @@
-import { UpdatePasswordRequest } from './../../../models/requests';
+import { UpdateEmailRequest, UpdatePasswordRequest } from './../../../models/requests';
 import { ToastMessageService } from './../../../services/utils/toast-message.service';
 import { FormControl } from '@angular/forms';
 import { ProfileInfo } from './../../../models/models';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { ProfileInfoService } from 'src/app/services/http/profile-info.service';
-import { UpdateProfileRequest } from 'src/app/models/requests';
 
 @Component({
   selector: 'app-profile-settings',
@@ -59,30 +58,25 @@ export class ProfileSettingsComponent implements OnInit {
     }) 
   }
 
-  public emailChangeConfirmed(newEmail: any): void{
-    let request = this.generateUpdateRequest();
-    request.email = newEmail;
-    this.updateProfile(request);
+  public emailChangeConfirmed(request: UpdateEmailRequest): void{
+    this.updateEmail(request);
   }
 
 
-  public updateProfile(request: UpdateProfileRequest){
+  public updateEmail(request: UpdateEmailRequest){
     this.waitingForResponse = true;
 
-    this.profileService.updateProfileInfo(request).subscribe(info =>{
+    this.profileService.updateEmail(request).subscribe(info =>{
       this.setProfileInfo(info);
       this.waitingForResponse = false;
       this.messageService.showMessage({severity: "success", summary: "Sukces", detail: "Pomyślnie zmieniono email"})
     }, error=>{
-      const details = error.error.info ? error.error.info : "Nie udało się zmienić email'a";
+      console.log(error);
+      const details = error && error.error ? error.error.info : "Nie udało się zmienić email'a";
       this.waitingForResponse = false;
       this.messageService.showMessage({severity: "error", summary: "Niepowodzenie", detail: details})
       this.cd.markForCheck();
     });
-  }
-
-  private generateUpdateRequest(): UpdateProfileRequest{
-    return {email: this.emailControl.value};
   }
 
   private redirectToPageError(){

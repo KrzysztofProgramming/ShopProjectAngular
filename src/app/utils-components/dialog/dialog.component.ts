@@ -12,7 +12,7 @@ import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectionStrategy
             <p class="title">{{this.dialogTitle}}</p>
             <i class="pi pi-times" *ngIf="this.exitButton" (click)="this.hideDialog()"></i>
           </div>
-          <div class="dialog__content">
+          <div class="dialog__content" [ngStyle]="{'max-height': this.maxContentHeigh}">
             <ng-content></ng-content>
           </div>
           <div *ngIf = "this.acceptPhrase || this.cancelPhrase || this.denyPhrase" class="dialog__bottom">
@@ -55,6 +55,7 @@ export class DialogComponent implements OnInit {
   @Input() dialogTitle?: string;
   @Input() busyOverlay: boolean = false;
   @Input() constHeight: boolean = true;
+  @Input() maxContentHeigh: string = "unset";
   @Output() visibilityChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() accept: EventEmitter<void> = new EventEmitter<void>();
   @Output() cancel: EventEmitter<void> = new EventEmitter<void>();

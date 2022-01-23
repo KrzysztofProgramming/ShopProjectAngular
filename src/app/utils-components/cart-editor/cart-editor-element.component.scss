@@ -6,11 +6,12 @@
 }
 
 .container{
-    height: 120px;
+    height: 100px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     box-shadow: 0 0 2px 1px $box-shadow-color;
+    border-radius: 3px;
     overflow: hidden;
 }
 
@@ -42,20 +43,33 @@
     }
 }
 
+.modifiers{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: min(15px, 2%);
+  // padding-right: min(15px, 5%);
 
+  &__element{
+    margin-right: 15px;
 
-.price{
-    padding-right: 10px;
-}
+    &:last-child{
+      margin-right: 0;
+    } 
+  }
 
-.amount{
-    padding-right: 15px;
+  &__price{
+  
+  }
+
+  &__amount{
+
     display: flex;
     justify-content: center;
-}
+  }
 
-.delete-icon{
-    padding-right: 15px;
+  &__delete{
+
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -72,7 +86,13 @@
             background-color: rgba(black, 0.1);
         }
     }
+  }
 }
+
+
+
+
+
 
 :host ::ng-deep{
 

@@ -2,6 +2,7 @@
 
 :host{
     @include flex-fill-space;
+    position: relative;
 }
 
 .overlay{
@@ -129,7 +130,7 @@
     }
 }
 
-@media only screen and(max-width: 680px){
+@media only screen and(max-width: 880px){
     .content{
         flex-direction: column;
         justify-content: center;

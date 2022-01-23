@@ -1,6 +1,7 @@
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ProductsService } from './../../services/http/products.service';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, Input, EventEmitter, Output } from '@angular/core';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'shop-types-select',
@@ -54,14 +55,16 @@ export class TypesSelectComponent implements OnInit, ControlValueAccessor {
 
   refreshTypes(): void{
     this.waitingForResponse = true;
-    this.productsService.getTypes().subscribe(response=>{
+    this.productsService.getTypes().pipe(
+      finalize(()=>{
+        this.waitingForResponse = false;
+        this.cd.markForCheck();
+      })
+    ).subscribe(response=>{
       this.allTypes = response.types;
     }, _error=>{
       this.allTypes = [];
-    }, ()=>{
-      this.waitingForResponse = false;
-      this.cd.markForCheck();
-    })
+    });
   }
 
 }

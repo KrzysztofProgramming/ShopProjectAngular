@@ -5,6 +5,7 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
+    max-width: $max-router-width;
 }
 
 .container{

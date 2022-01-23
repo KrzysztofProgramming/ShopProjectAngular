@@ -84,7 +84,10 @@
 
     &__button{
         font-size: 18px;
+    }
 
+    &__content{
+      overflow: auto;
     }
 
 }

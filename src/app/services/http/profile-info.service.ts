@@ -2,7 +2,7 @@ import { ProfileInfo } from '../../models/models';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { UpdatePasswordRequest, UpdateProfileRequest } from '../../models/requests';
+import { UpdateEmailRequest, UpdatePasswordRequest } from '../../models/requests';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,8 @@ export class ProfileInfoService {
     return this.http.get<ProfileInfo>(`${this.url}info`);
   }
 
-  public updateProfileInfo(info: UpdateProfileRequest):Observable<ProfileInfo>{
-    return this.http.put<ProfileInfo>(`${this.url}update`, info);
+  public updateEmail(info: UpdateEmailRequest):Observable<ProfileInfo>{
+    return this.http.put<ProfileInfo>(`${this.url}updateEmail`, info);
   }
   
   public updatePassword(request: UpdatePasswordRequest): Observable<any>{

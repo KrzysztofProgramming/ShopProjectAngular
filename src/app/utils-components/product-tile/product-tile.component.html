@@ -5,15 +5,15 @@
     <div class="informations">
         <p class="informations__name"> {{this.product.name}} </p>   
         <p class="informations__price informations__element">
-            Cena:
+            <span class="informations__label">Cena:</span>
             <ng-container *ngIf = "this.product.price === 0">Bezpłatny</ng-container>
             <ng-container *ngIf = "this.product.price !== 0">{{this.product.price}} zł</ng-container>
         </p>
         <p class="informations__types informations__element" *ngIf="product.types">
-          {{product.types.join(", ")}}
+          <span class="informations__label"> Kategorie: </span> {{product.types.join(", ")}}
         </p>
         <p class="informations__description informations__element" #description>
-            {{this.product.description}}
+           <span class="informations__label"> Opis: </span> {{this.product.description}}
         </p>
     </div>
 </div>

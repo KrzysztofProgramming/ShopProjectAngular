@@ -46,8 +46,9 @@ export interface AuthorRequest{
   description: string
 }
 
-export interface UpdateProfileRequest{
-    email: string;
+export interface UpdateEmailRequest{
+    newEmail: string;
+    password: string;
 }
 
 export interface PageableParams{
@@ -61,12 +62,14 @@ export interface getAuthorsParams extends PageableParams{
   searchPhrase: string
 }
 
+export type SortType = "none" | "price_asc" | "price_desc" | "alphabetic_asc" | "alphabetic_desc";
+
 export interface GetProductsParams extends PageableParams{
   searchPhrase?: string;
   minPrice?: number;
   maxPrice?: number;
   types?: string[];
-  sort?: string;
+  sort?: SortType;
   authorsNames?: string[];
   minInStock?: number;
   maxInStock?: number;

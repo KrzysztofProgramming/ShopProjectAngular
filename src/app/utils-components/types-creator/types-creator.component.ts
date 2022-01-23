@@ -10,7 +10,7 @@ import { finalize } from 'rxjs/operators';
     <shop-dialog acceptPhrase="OK" denyPhrase="Anuluj" dialogTitle="Stwórz nowy typ" [(visibility)]="this._visibility"
     (visibilityChange)="this.visibilityChange.emit($event)" (accept)="this.onSubmit()" [busyOverlay]="this.waitingForResponse">
       <form class="content" (ngSubmit)="this.onSubmit()">
-        <input class="content__input" placeholder="nazwa" shopInputText [formControl] = "this.typeControl">
+        <input class="content__input" placeholder="Nazwa" shopInputText [formControl] = "this.typeControl">
       </form>
     </shop-dialog>
   `,

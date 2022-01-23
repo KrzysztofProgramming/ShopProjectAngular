@@ -1,12 +1,12 @@
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Subscription } from 'rxjs';
-import { GetProductsParams, PageableParams, DEFAULT_PRODUCTS_PARAMS, DEFAULT_PAGEABLE } from './../../models/requests';
+import { Subscription, Subject } from 'rxjs';
+import { GetProductsParams, DEFAULT_PRODUCTS_PARAMS, DEFAULT_PAGEABLE } from './../../models/requests';
 import { ProductsService } from 'src/app/services/http/products.service';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { GetProductsResponse } from 'src/app/models/responses';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { PAGE_SIZES, SortOption, SORT_OPTIONS } from 'src/app/models/models';
-import { ProductsFiltersModel } from 'src/app/utils-components/products-filters/products-filters.component';
+import { PAGE_SIZES } from 'src/app/models/models';
 import { FiltersDialogModel } from 'src/app/utils-components/filters-dialog/filters-dialog.component';
 
 @Component({
@@ -30,8 +30,6 @@ import { FiltersDialogModel } from 'src/app/utils-components/filters-dialog/filt
 export class MergeProductsComponent implements OnInit {
 
   public pageOptions: number[] = PAGE_SIZES;
-  // public sortOptions: SortOption[] = SORT_OPTIONS;
-  // public sortOptionModel: SortOption = {name: "Sortowanie: Trafność", code: "none"};
 
   private lastRequest?: Subscription;
   public filtersExpanded: boolean = false;
@@ -46,6 +44,8 @@ export class MergeProductsComponent implements OnInit {
   public hideSearchBar: boolean = false;
   @ViewChild("topBar")
   private topBarElement!: ElementRef<HTMLDivElement>;
+  private searchPhraseSubject: Subject<string> = new Subject();
+  private subscriptions: Subscription[] = [];
 
 
   @HostListener("window:scroll", ["$event"])
@@ -70,6 +70,10 @@ export class MergeProductsComponent implements OnInit {
     this.cd.markForCheck();
   }
 
+  public onSearchPhraseChanged(newValue: string){
+    this.searchPhraseSubject.next(newValue);
+  }
+
   public onParamsModelChange(){
     this.updateRequestParams();
   }
@@ -79,10 +83,14 @@ export class MergeProductsComponent implements OnInit {
 
   ngOnInit(): void {
     // this.refreshProducts();
-    this.activatedRoute.queryParams.subscribe(params  =>{
+    this.activatedRoute.queryParams.subscribe(() =>{
       this.refreshProducts();
       // this.writeParams(params);
     })
+    this.subscriptions.push(this.searchPhraseSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(this.onParamsModelChange.bind(this)));
   }
 
   public writeParams(params: Params){
@@ -107,6 +115,7 @@ export class MergeProductsComponent implements OnInit {
     if(params.pageSize === DEFAULT_PAGEABLE.pageSize) params.pageSize = undefined;
     if(params.pageNumber === DEFAULT_PAGEABLE.pageNumber) params.pageNumber = undefined;
     if(params.sort === "none") params.sort = undefined;
+    if(params.searchPhrase === "") params.searchPhrase = undefined;
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: params,

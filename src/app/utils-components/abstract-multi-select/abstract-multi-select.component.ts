@@ -90,14 +90,17 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   @Input()
   set items(items: ItemModel[]) {
     // items = new Array(1000).fill(0).map(()=>(Math.random() * 10 + 1).toString(36).substring(2));
+    let checkedItemsString :Array<string> = this.checkedItems.map(item=>{
+      return typeof(item.element) === 'string' ? item.element : item.element[this.displayProperty]});
     this.allItems = items.map((item, index) =>
      {return {element: item,
        isDisplay: false,
-       isChecked: false,
+       isChecked: checkedItemsString.includes(typeof(item) === 'string' ? item : item[this.displayProperty]),
        allItemsIndex: index,
       }});
     if(this.sort) this.sortItems();
     this.calcDisplayItems();
+    this.calcCheckedItems();
     this.refreshDisplayInfo();
   }
 
@@ -239,14 +242,6 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
     this.calcDisplayItems();
     this.refreshDisplayInfo();
   }
-
-  // public calcAfterFilterChanged(){
-  //   this.allItems.forEach(item=>{
-  //     item.isDisplay = this.matchFilter(item);
-  //   })
-  //   this.calcDisplayItems();
-  // }
-
   public refreshDisplayInfo() {
     if (this.checkedItems.length === 0) this.selectedItemsString = "";
     else this.selectedItemsString = `${this.checkedItems.length} zaznaczeń`;
