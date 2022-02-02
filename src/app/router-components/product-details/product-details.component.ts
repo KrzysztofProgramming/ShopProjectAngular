@@ -1,11 +1,11 @@
 import { ShoppingCartService } from './../../services/http/shopping-cart.service';
 import { ProductsService } from './../../services/http/products.service';
 import { ShopProduct } from './../../models/models';
-import { Observable, of, Subscription, throwError } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ToastMessageService } from 'src/app/services/utils/toast-message.service';
-import { finalize, mergeMap, tap, catchError } from 'rxjs/operators';
+import { finalize, mergeMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'shop-product-details',
@@ -20,9 +20,10 @@ export class ProductDetailsComponent implements OnInit {
   public product?: ShopProduct;
   public waitingForResponse: boolean = false;
   public maxToSelect: number = 0;
+  public inCartAmount: number = 0;
 
   constructor(private activatedRoute: ActivatedRoute, private productsService: ProductsService,
-     private cd: ChangeDetectorRef, private cartService: ShoppingCartService, private messageService: ToastMessageService ) { }
+     private cd: ChangeDetectorRef, private cartService: ShoppingCartService, private messageService: ToastMessageService,) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -32,18 +33,15 @@ export class ProductDetailsComponent implements OnInit {
           return;
         }
         this.refreshProduct(id);
-        // this.refreshProductObservable(id).subscribe();
       }),
-      this.cartService.cartChanges.subscribe((value)=>{console.log("cartChange"); this.updateMaxSelect.bind(this)();})
+      this.cartService.cartChanges.subscribe(this.onCartChange.bind(this))
     );
   }
 
-  public updateMaxSelect(){
+  public onCartChange(){
     if(!this.product) return;
-    console.log(this.cartService.currentCart);
-    let productCartAmount: number = this.cartService.currentCart.items[this.product.id] || 0;
-    console.log(productCartAmount);
-    this.maxToSelect = Math.max(0, this.product.inStock - productCartAmount);
+    this.inCartAmount = this.cartService.currentCart.items[this.product.id] || 0
+    this.maxToSelect = Math.max(0, this.product.inStock - this.inCartAmount);
     this.selectedCount = Math.min(this.maxToSelect, this.selectedCount);
     this.cd.markForCheck();
   }
@@ -59,11 +57,10 @@ export class ProductDetailsComponent implements OnInit {
         this.cd.markForCheck();
       })
     ).subscribe(()=>{
-      this.messageService.showMessage({severity: "success", summary: "Sukces", detail: "Produkt dodany do koszyka"});
+      this.messageService.showMessage({severity: "success", summary: "Sukces", detail: "Produkt dodany do koszyka", key: 'br'});
     }, error=>{
-      console.log(error);
       this.messageService.showMessage({severity: "error", summary: "Niepowodzenie", detail: error.error.info ? error.error.info
-       : "Produkt nie został dodany do koszyka"});
+       : "Produkt nie został dodany do koszyka", key: 'br'});
     });
   }
 
@@ -79,7 +76,7 @@ export class ProductDetailsComponent implements OnInit {
           if(this.product.inStock <= 0){
             this.selectedCount = 0;
           }
-          this.updateMaxSelect();
+          this.onCartChange();
           this.cd.markForCheck();
         })
       );
@@ -91,6 +88,5 @@ export class ProductDetailsComponent implements OnInit {
 
     return of(null);
   }
-
   
 }

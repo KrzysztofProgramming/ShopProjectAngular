@@ -1,55 +1,56 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { ShoppingCartService } from './../../services/http/shopping-cart.service';
 import { AuthService } from './../../services/auth/auth.service';
-import { EMPTY_CART, ShoppingCart, ShopProduct } from './../../models/models';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ElementRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
+import { EMPTY_DETAILS_CART, ShoppingCartWithDetails, ShoppingCartDetail } from './../../models/models';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ElementRef, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ProductsService } from 'src/app/services/http/products.service';
 import { Router } from '@angular/router';
-
-export interface CartEditorElementModel{
-  product: ShopProduct;
-  amount: number
-}
-
 
 @Component({
   selector: "shop-cart-editor-element",
   template: `
-    <div class="container" *ngIf="this.model">
+    <div class="container" *ngIf="this.item">
       <div class="link" (click)="this.navigateToProduct()">
-        <shop-product-image class="link__image" [productId]="this.model.product.id" imageResolution="small"></shop-product-image>
-        <p class="link__name">{{this.model.product.name}}</p>
+        <shop-product-image class="link__image" [productId]="this.item.product.id" imageResolution="icon"></shop-product-image>
+        <p class="link__name">{{this.item.product.name}}</p>
       </div>
       <div class="modifiers">
-        <p class="modifiers__price modifiers__element">{{this.model.product.price * this.model.amount}} zł</p>
-        <div class="modifiers__delete modifiers__element">
+        <p class="modifiers__price modifiers__element">{{this.item.product.price * this.item.amount | number: '1.2-2'}}  zł</p>
+        <div class="modifiers__delete modifiers__element" (click) = "this.itemRemove.emit()">
           <i class="pi pi-trash" title="usuń z koszyka"></i>
         </div>
         <p-inputNumber class="modifiers__amount modifiers__element" [useGrouping]="false" [max]="this.maxCountModel"
           [min]="1" [step]="1" [showButtons]="true"
-          incrementButtonClass="p-button-secondary" decrementButtonClass="p-button-secondary"
           [formControl]="this.amountControl">
         </p-inputNumber>
       </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['cart-editor-element.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: CartEditorElementComponent,
-    multi: true
-  }],
+  styleUrls: ['cart-editor-element.component.scss']
 })
-export class CartEditorElementComponent implements ControlValueAccessor, OnInit{
+export class CartEditorElementComponent implements OnInit, OnDestroy{
+
+  @Output() itemAmountChange: EventEmitter<number> = new EventEmitter();
+  @Output() itemRemove: EventEmitter<void> = new EventEmitter();
+  item?: ShoppingCartDetail;
+
+  @Input("item")
+  set itemInput(item: ShoppingCartDetail | undefined){
+    if(!item) return;
+    this.item = item;
+    this.amountControl.setValue(this.item?.amount, {emitEvent: false});
+    this.calcMaxCountModel();
+  }
+  get itemInput(): ShoppingCartDetail | undefined{
+    return this.item;
+  }
+
   public amountControl = new FormControl(1);
   public subscriptions: Subscription[] = [];
-  public model?: CartEditorElementModel;
   public maxCountModel: number = Number.MAX_SAFE_INTEGER;
   public areReserved: boolean = false;
-  private onChangeFn: any = ()=>{};
-  private onTouchedFn: any = ()=>{};
   private containerRef!: HTMLElement;
   private readonly COLLAPSE_WIDTH: number = 500;
   public isCollapsed: boolean = false;
@@ -65,29 +66,25 @@ export class CartEditorElementComponent implements ControlValueAccessor, OnInit{
 
   ngOnInit(): void {
     this.containerRef = this.ref.nativeElement;
+    this.subscriptions.push(
+      this.amountControl.valueChanges.pipe(
+        debounceTime(400),
+        distinctUntilChanged()
+      ).subscribe(value=>this.itemAmountChange.emit(value))
+    );
   }
 
-  writeValue(obj: CartEditorElementModel): void {
-    if(!obj) return;
-    this.model = obj;
-    this.amountControl.setValue(obj.amount);
-    this.calcMaxCountModel();
-    this.cd.markForCheck();
-  }
-  registerOnChange(fn: any): void {
-    this.onChangeFn = fn;
-  }
-  registerOnTouched(fn: any): void {
-    this.onTouchedFn = fn;
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub=>sub.unsubscribe());
   }
 
   private calcMaxCountModel(){
-    if(!this.model) return; 
-    this.maxCountModel = this.authService.isLogin() ? this.model.amount + this.model.product.inStock : this.model.product.inStock;
+    if(!this.item) return; 
+    this.maxCountModel = this.item.product.inStock;
   }
 
   public navigateToProduct(){
-    this.router.navigateByUrl(`product/${this.model?.product.id}`);
+    this.router.navigateByUrl(`product/${this.item?.product.id}`);
   }
 
 }
@@ -97,52 +94,74 @@ export class CartEditorElementComponent implements ControlValueAccessor, OnInit{
   selector: 'shop-cart-editor',
   template: `
     <div class="content">
-      <ng-container  *ngFor="let element of elements; let i=index">
-        <shop-cart-editor-element class="element" [(ngModel)]="elements[i]"></shop-cart-editor-element>
+      <div class="top-bar" >
+        <div class="top-bar__remove-all" *ngIf = "this.cart.items.length !== 0"  (click) = "this.deleteCart()">
+          <i class="pi pi-times"></i>
+          <p>Usuń wszystko</p>
+        </div>
+      </div>
+      <ng-container  *ngFor="let element of cart.items; let i=index; trackBy: trackByItem">
+        <shop-cart-editor-element class="element" [item]="cart.items[i]" (itemRemove) = "this.onItemRemove(i)"
+        (itemAmountChange)="this.onItemChange(i, $event)"></shop-cart-editor-element>
       </ng-container>
     </div>
+    <shop-busy-overlay *ngIf = "this.waitingForResponse"></shop-busy-overlay>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./cart-editor.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: CartEditorComponent,
-    multi: true
-  }],
+  styleUrls: ['./cart-editor.component.scss']
 })
-export class CartEditorComponent implements OnInit, ControlValueAccessor {
+export class CartEditorComponent implements OnInit, OnDestroy {
 
-  public cart :ShoppingCart = EMPTY_CART;
-  public lastUpdateRequest?: Subscription;
+  public cart: ShoppingCartWithDetails = EMPTY_DETAILS_CART;
   
-  public elements: CartEditorElementModel[] = [];
+  @Output("cartChange") cartChange: EventEmitter<ShoppingCartWithDetails> = new EventEmitter();
+  
+  public waitingForResponse: boolean = true;
+  private subscriptions: Subscription[] = [];
 
-  private onChangeFn: any = ()=>{};
-  private onTouchedFn: any = ()=>{};
+  constructor(private cd: ChangeDetectorRef, private cartService: ShoppingCartService) { }
 
-  constructor(private cd: ChangeDetectorRef, private productsService: ProductsService) { }
-
-  writeValue(cart: ShoppingCart): void {
-    if(!cart) return;
-    if(this.lastUpdateRequest)
-      this.lastUpdateRequest.unsubscribe();
-    this.lastUpdateRequest = this.productsService.getProducts(Object.keys(cart.items)).subscribe(products=>{
-      this.elements = products.map(product=>{
-        return {"product": product, amount: cart.items[product.id]};
-      })
-      this.cart = cart;
-      this.cd.markForCheck();
-    })
+  onItemRemove(index: number){
+    this.waitingForResponse = true;
+    this.cartService.deleteProductFromCart(this.cart.items[index].product.id).subscribe();
+    this.cd.markForCheck();
+  }
+  
+  onItemChange(index: number, amount: number){
+    console.log("onItemChange");
+    this.waitingForResponse = true;
+    this.cartService.setProductInCart({
+      amount: amount,
+      productId: this.cart.items[index].product.id})
+      .subscribe();
+    this.cd.markForCheck();
   }
 
-  registerOnChange(fn: any): void {
-    this.onChangeFn = fn;
+  deleteCart(){
+    this.cartService.deleteCart().subscribe();
   }
-  registerOnTouched(fn: any): void {
-    this.onTouchedFn = fn;
+
+  trackByItem(index: number, item: ShoppingCartDetail){
+    return item.amount + item.product.id;
   }
 
   ngOnInit(): void {
+    this.subscriptions.push(
+        this.cartService.cartChanges.pipe(
+        switchMap(this.cartService.getDetails.bind(this.cartService)),
+      ).subscribe(value=>{
+        this.cart = value;
+        this.cartChange.emit(this.cart);
+        this.waitingForResponse = false;
+        this.cd.markForCheck();
+      },()=>{
+        this.waitingForResponse = false;
+        this.cd.markForCheck();
+      })
+    )
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub=>sub.unsubscribe());
+  }
 }

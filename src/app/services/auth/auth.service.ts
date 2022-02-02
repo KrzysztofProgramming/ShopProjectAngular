@@ -4,14 +4,13 @@ import { LoginResponse, ErrorResponse } from './../../models/responses';
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { catchError, finalize, first, map, mapTo, shareReplay, tap } from "rxjs/operators"
+import { catchError, finalize, map, mapTo, shareReplay, tap } from "rxjs/operators"
 import jwtDecode from 'jwt-decode';
 import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: "root"
-}
-)
+})
 export class AuthService{
 
   private readonly url = "http://localhost:8080/api/auth/"
@@ -116,6 +115,8 @@ export class AuthService{
 
       if (this.jwtToken != null) {
         localStorage.setItem("jwtToken", this.jwtToken);
+        // this.loginStatusSubject.next(true);
+        // console.log("next login status");
         this.readValuesFromJwt();
       }
       if (this.refreshToken != null) localStorage.setItem("refreshToken", this.refreshToken);
@@ -133,7 +134,6 @@ export class AuthService{
       this.permissionsSubject.next(decodedToken.authorities);
   }
 
-
   private logoutWithNoRequest() {
     this.refreshToken = null;
     this.jwtToken = null;
@@ -144,8 +144,8 @@ export class AuthService{
   }
 
   public logout(){
+    this.http.post(this.url + "logout", {}).subscribe();
     this.logoutWithNoRequest();
-    this.http.post(this.url + "logout", {});
   }
 
 

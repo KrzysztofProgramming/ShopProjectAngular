@@ -67,6 +67,14 @@ export class ProductsService {
       return `${this.url}downloadProductSmallImage/${id}`;
   }
 
+  public downloadProductIcon(id: string): Observable<Blob>{
+    return this.http.get(this.getProductIconUrl(id), {responseType: 'blob'});
+  }
+
+  public getProductIconUrl(id: string): string{
+    return `${this.url}downloadProductIcon/${id}`;
+  }
+
   public deleteProductImage(id: string){
     return this.http.delete(`${this.url}deleteProductImage/${id}`)
   }

@@ -22,8 +22,9 @@
     <shop-products-filters (ngModelChange)="this.onParamsModelChange()" class="main-filters"
       [(ngModel)]="this.productsParams" (startChanging)="this.cancelPreviousRequest()"></shop-products-filters>
     <div class="main-tiles">
+      <shop-busy-overlay *ngIf="this.waitingForResponse" class="main-tiles__overlay"></shop-busy-overlay>
       <ng-container *ngIf="this.httpResponse">
-        <ng-container *ngFor="let product of this.httpResponse.result">
+        <ng-container *ngFor="let product of this.httpResponse.result; trackBy: trackByProductId">
           <shop-product-tile class="main-tiles__tile" [product]="product" (click)="this.navigateToProduct(product.id)">
           </shop-product-tile>
         </ng-container>

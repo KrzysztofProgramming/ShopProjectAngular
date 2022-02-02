@@ -1,39 +1,132 @@
 @import "../../../styling/all.scss";
 
-:host{
-    @include flex-fill-space;
-    padding: 20px;
+:host {
+  @include flex-fill-space;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: $surface-100;
+}
+
+.all {
+  max-width: $max-router-width;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.editor {
+  flex: 1;
+  align-self: stretch;
+  &-wrapper{
+    flex: 3;
     display: flex;
     flex-direction: column;
-    max-width: $max-router-width;
+    padding-right: 15px;
+    margin-right: 15px;
+    border-right: 1.5px solid black;
+  }
 }
 
-.container{
-    position: relative;
-    width: 100%;
+.summary {
+  flex: 2;
+  display: flex;
+  // align-items: center;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+
+
+  &__wrapper {
+    position: sticky;
     flex: 1;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    box-shadow: 0px 0px 2px 1px $box-shadow-color;
+    background-color: $theme-white;
+    border-radius: 3px;
+    padding: 15px;
+  }
+
+  &__element {
+    font-size: 23px;
+    margin-bottom: 10px;
+  }
+
+  &__value {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  &__button {
+    margin-top: 5px;
+  }
+
+  &__header {
+    font-size: 27px;
+    margin-bottom: 15px;
+  }
 }
 
-.header{
-    text-align: center;
-    margin: 10px 0 30px 0;
+@media only screen and(max-width: 930px) {
+  :host {
+    padding: 1.5%;
+  }
+  .content {
+    flex-direction: column;
+  }
+
+  .summary__wrapper{
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+
+  .editor-wrapper{
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
 }
 
-.editor{
-    flex: 3;
-}
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  
+  &__info-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 
-.other{
-    flex: 2;
-}
+  &__header {
+    font-size: min(40px, 8.5vw);
+    color: $theme-color;
+    margin: 15px;
+  }
 
-@media only screen and(max-width: 850px){
-    :host{
-        padding: 1%;
-    }
-    .container{
-        flex-direction: column;
-    }
+  &__subheader {
+    font-size: min(25px, 7vw);
+    margin: 5px;
+  }
+
+  &__button {
+    margin: 5px;
+  }
+
+  & .pi {
+    font-size: min(50px, 8.5vw);
+    color: $theme-color;
+  }
 }

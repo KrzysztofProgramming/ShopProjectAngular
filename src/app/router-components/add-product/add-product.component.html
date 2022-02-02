@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="informations">
-        <shop-product-creator [formControl]="this.requestControl" (onSubmit)="this.onSubmit()"></shop-product-creator>
+        <shop-product-creator #productCreator [formControl]="this.requestControl" (onSubmit)="this.onSubmit()"></shop-product-creator>
         <div class="buttons">
           <button class="buttons__button" [disabled] = "this.requestControl.invalid || this.waitingForResponseMessage
            || this.unchangedAfterSend" shopButton (click)="this.onSubmit()">Prześlij <i class="pi-check-circle pi"></i></button>

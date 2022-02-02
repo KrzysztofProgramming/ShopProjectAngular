@@ -47,7 +47,7 @@ label{
 
     &__button{
         margin-top: 20px;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
     }
 
     &__result-message{
@@ -55,6 +55,17 @@ label{
         font-size: 17px;
         text-align: center;
         margin: 5px 0 5px 0;
+    }
+
+    &__link{
+      font-weight: 600;
+      color: black;
+      text-decoration: none;
+      padding: 2px;
+    }
+
+    &__bottom-text{
+      margin-top: 15px;
     }
 }
 

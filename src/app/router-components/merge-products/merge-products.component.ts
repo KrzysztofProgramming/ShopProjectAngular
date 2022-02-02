@@ -1,3 +1,4 @@
+import { ShopProduct } from './../../models/models';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription, Subject } from 'rxjs';
@@ -39,7 +40,7 @@ export class MergeProductsComponent implements OnInit {
 
   public dialogModel: FiltersDialogModel = {};
 
-
+  public waitingForResponse: boolean = false;
   public lastScrollTop: number = 0;
   public hideSearchBar: boolean = false;
   @ViewChild("topBar")
@@ -93,11 +94,16 @@ export class MergeProductsComponent implements OnInit {
     ).subscribe(this.onParamsModelChange.bind(this)));
   }
 
+  trackByProductId(index: number, product: ShopProduct){
+    return product.id;
+  }
+
   public writeParams(params: Params){
     // this.pageNumberModel = params.pageNumber ? params.pageNumber : this.pageNumberModel
     // this.pageSizeModel = params.pageCount ? params.pageCount : this.pageSizeModel;
 
     this.productsParams = params;
+    console.log(this.productsParams);
     this.cd.markForCheck();
   }
 
@@ -135,6 +141,7 @@ export class MergeProductsComponent implements OnInit {
   public refreshProducts(): void{
     this.isAdminMode();
     this.cancelPreviousRequest();
+    this.waitingForResponse = true;
     this.lastRequest = this.productService.getAllProducts(this.activatedRoute.snapshot.queryParams).subscribe(response=>{
       
       this.httpResponse = Object.assign({}, response);
@@ -146,12 +153,20 @@ export class MergeProductsComponent implements OnInit {
       routerParams.pageSize = this.pageOptions.includes(routerParams.pageSize!) ? routerParams.pageSize
        : this.productsParams.pageSize
 
+      if(routerParams.types && !Array.isArray(routerParams.types))
+        routerParams.types = [(routerParams.types as unknown) as string];
+      if(routerParams.authorsNames && !Array.isArray(routerParams.authorsNames))
+        routerParams.authorsNames = [(routerParams.authorsNames as unknown) as string];
+      
       this.writeParams(routerParams);
       this.updateRequestParams();
+      this.waitingForResponse = false;
       this.cd.markForCheck();
     }, error =>{
        this.writeParams(DEFAULT_PRODUCTS_PARAMS);
        this.updateRequestParams();
+       this.waitingForResponse = false;
+       this.cd.markForCheck();
     });
   }
 

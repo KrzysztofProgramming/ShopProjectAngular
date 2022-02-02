@@ -110,6 +110,11 @@
             color: rgb(255, 70, 45);
         }
     }
+
+    &__in-cart-amount{
+      color: #faa307;
+      font-weight: 600;
+    }
 }
 
 .description{
@@ -128,6 +133,7 @@
     &__info{
         padding: 5px;
     }
+
 }
 
 @media only screen and(max-width: 880px){

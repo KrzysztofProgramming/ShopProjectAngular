@@ -1,3 +1,4 @@
+import { ProductCreatorComponent } from './../../utils-components/product-creator/product-creator.component';
 import { ShopProductRequest, ShopProductRequestWithId } from './../../models/requests';
 import { TypesSelectComponent } from './../../utils-components/types-select/types-select.component';
 import { AuthorsSelectComponent } from './../../utils-components/authors-select/authors-select.component';
@@ -44,6 +45,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
   public waitingForResponseMessage: string = "";
   public requestControl: FormControl = new FormControl(EMPTY_PRODUCT_REQUEST);
 
+  @ViewChild("productCreator")
+  public productCreator?: ProductCreatorComponent;
+
   get isWaitingForResponse(): boolean{
     return this.waitingForResponseMessage.length!==0;
   };
@@ -67,6 +71,9 @@ export class AddProductComponent implements OnInit, OnDestroy {
         this.notRealod = false;
         return;
       }
+      
+      if(this.productCreator)
+        this.productCreator.resetControl();
 
       let id = paramMap.get("id"); 
       if(id==null || id.length === 0){

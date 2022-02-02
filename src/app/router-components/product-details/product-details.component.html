@@ -15,6 +15,7 @@
                 <p  class="content__available--false" *ngIf="this.product.inStock > 0 && this.maxToSelect ===0">
                     Maksymalna ilość tego produktu jest już w koszyku
                 </p>
+                <p class="content__in-cart-amount" *ngIf="this.inCartAmount !== 0">Aktualnie w koszyku: {{this.inCartAmount}}</p>
                 <p class="content__deliver-time">Sugerowany czas dostawy: 2 dni robocze</p>
             </div>
             <p class="content__price-calc">Łącznie: +{{(this.selectedCount * this.product.price) | number: '1.2-2'}} zł</p>

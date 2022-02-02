@@ -16,18 +16,24 @@ export class ProductImageComponent implements OnInit {
   public waitingForImage: boolean = false;
   public _productId = "";
   public imageUrl = this.EMPTY_IMAGE;
-  @Input() imageResolution: "small" | "original" = "original";
+  @Input() imageResolution: "small" | "original" | "icon" = "original";
   @Output() imageLoaded: EventEmitter<void> = new EventEmitter<void>();
 
 
   @Input()
   set productId(value: string){
+    if(value === this._productId) return;
     this._productId = value;
-    if(this.imageResolution === "original"){
-      this.imageUrl = this.productsService.getProductOriginalImageUrl(this._productId);
-    }
-    else{
-      this.imageUrl = this.productsService.getProductSmallImageUrl(this._productId);
+    switch(this.imageResolution){
+      case 'original':
+        this.imageUrl = this.productsService.getProductOriginalImageUrl(this._productId);
+        break;
+      case 'small':
+        this.imageUrl = this.productsService.getProductSmallImageUrl(this._productId);
+        break;
+      default:
+        this.imageUrl = this.productsService.getProductIconUrl(this._productId);
+
     }
     this.waitingForImage = true;
     this.cd.markForCheck();

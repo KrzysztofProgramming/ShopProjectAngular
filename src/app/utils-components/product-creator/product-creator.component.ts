@@ -64,6 +64,9 @@ export class ProductCreatorComponent implements OnInit, ControlValueAccessor, Va
     this.subscriptions.forEach(sub=>sub.unsubscribe());
   }
   
+  public resetControl(){
+    this.formGroup.reset();
+  }
 
   validate(control: AbstractControl): ValidationErrors | null {
     return this.formGroup.valid ? null : {invalid: true};

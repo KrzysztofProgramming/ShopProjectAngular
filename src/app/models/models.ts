@@ -27,7 +27,19 @@ export interface ShoppingCart{
     expireDate?: Date;
 }
 
+export interface ShoppingCartDetail{
+  amount: number;
+  product: ShopProduct;
+}
+
+export interface ShoppingCartWithDetails{
+    ownerUsername?: string;
+    items: ShoppingCartDetail[];
+    expireDate?: Date;
+}
+
 export const EMPTY_CART = {items: {}};
+export const EMPTY_DETAILS_CART = {items: []};
 
 export interface ShopProduct{
     id: string;

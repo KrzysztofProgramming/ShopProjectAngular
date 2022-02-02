@@ -30,7 +30,7 @@
   font-size: $font-size3;
 
   &__element{
-    padding-bottom: 8px;
+    margin-bottom: 8px;
 
     &:last-child{
       padding-bottom: 0;
@@ -39,6 +39,7 @@
 
   &__label{
     font-weight: 600;
+    margin-right: 5px;
 
     // &--price{
     //   margin-right: 5px;

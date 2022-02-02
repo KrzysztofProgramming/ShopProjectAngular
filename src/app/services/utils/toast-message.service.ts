@@ -14,7 +14,10 @@ export class ToastMessageService {
   }
 
   public showMessage(message: Message){
-    this.actualMessage.next(message)
+    if(!message.key){
+      message.key = 'br';
+    }
+    this.actualMessage.next(message);
   }
 
   constructor() { }

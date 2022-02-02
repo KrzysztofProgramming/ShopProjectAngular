@@ -15,6 +15,37 @@
     }
 }
 
+.top-bar{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 5px 10px 5px 10px;
+
+  &__remove-all{
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    padding: 6px;
+    border-radius: 3px;
+    transition-duration: 200ms;
+
+    & .pi{
+      color: red;
+      font-size: 26px;
+      margin-right: 6px;
+    }
+
+    &:hover{
+      background-color: $surface-300;
+    }
+  }
+}
+
 .content{
-    padding: 5px 0 5px 0;
+  // padding: 10px;
+  // box-shadow: 0 0 2px 1px $box-shadow-color;
+  // border-radius: 3px;
+  // background-color: $surface-200;
+  position: relative;
 }

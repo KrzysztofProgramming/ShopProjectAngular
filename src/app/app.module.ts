@@ -1,7 +1,8 @@
+import { AuthService } from './services/auth/auth.service';
 import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
 import { NavButtonDirective } from './directives/nav-button/nav-button.directive';
 import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/dropdown-multi-select/dropdown-multi-select.component';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -66,7 +67,9 @@ import { RadioButtonModule } from "primeng/radiobutton";
 import { SingleSelectComponent } from './utils-components/single-select/single-select.component';
 import { SortSelectComponent } from './utils-components/sort-select/sort-select.component';
 import { ProductCreatorComponent } from './utils-components/product-creator/product-creator.component';
-
+import localeFr from '@angular/common/locales/fr';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localeFr);
 
 @NgModule({
   declarations: [
@@ -142,7 +145,8 @@ import { ProductCreatorComponent } from './utils-components/product-creator/prod
     RadioButtonModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: LOCALE_ID, useValue: 'fr'}
   ],
   bootstrap: [AppComponent]
 })
