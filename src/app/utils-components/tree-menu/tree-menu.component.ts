@@ -1,12 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 
 export interface TreeItem{
   label: string,
   routerLink?: string,
   link?: string,
   items?: TreeItem[]
+  visible? :boolean,
 }
 
 
@@ -14,16 +16,12 @@ export interface TreeItem{
   selector: 'shop-tree-menu',
   template: `
     <ng-container *ngFor = "let item of items; let i = index">
-      <div class="label" *ngIf = item.routerLink [routerLink]="item.routerLink" (click) = "this.toggle(i)">
-        <i *ngIf="item.items" class="pi pi-angle-right" [@rotateIcon] = "this.expandedItems[i] ? 'expanded' : 'collapsed'"></i>
-        {{item.label}}
-      </div>
-      <div class="label" *ngIf = !item.routerLink (click) = "this.toggle(i)">
+      <div class="label" (click) = "this.toggle(i)" *ngIf="item.visible !== false">
         <i *ngIf="item.items" class="pi pi-angle-right" [@rotateIcon] = "this.expandedItems[i] ? 'expanded' : 'collapsed'"></i>
         {{item.label}}
       </div>
       <div class="child" 
-      *ngIf = "item.items && this.expandedItems[i]"
+      *ngIf = "item.items && this.expandedItems[i] && item.visible !== false"
       @slowExpansion>
         <shop-tree-menu #children [items] = "item.items"></shop-tree-menu>
       </div>
@@ -65,6 +63,9 @@ export class TreeMenuComponent {
 
   public toggle(index: number){
     this.expandedItems[index] = !this.expandedItems[index];
+    if(this.items[index].routerLink){
+      this.router.navigate([this.items[index].routerLink]);
+    }
   }
 
   public collapseAll(): void{
@@ -83,7 +84,7 @@ export class TreeMenuComponent {
     this.cd.markForCheck();
   }
 
-  constructor(private cd: ChangeDetectorRef) { }
+  constructor(private cd: ChangeDetectorRef, private router: Router) { }
 
 
 }

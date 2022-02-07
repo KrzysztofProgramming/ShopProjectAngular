@@ -1,6 +1,6 @@
 import { ShoppingCartService } from './../../services/http/shopping-cart.service';
 import { ShoppingCartWithDetails } from './../../models/models';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -36,7 +36,7 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./cart.component.scss'],
 })
-export class CartComponent implements OnInit, OnDestroy {
+export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
   public isCartEmpty: boolean = true;
   public totalPrice: number = 0;
   public totalAmount: number = 0;
@@ -57,6 +57,12 @@ export class CartComponent implements OnInit, OnDestroy {
         this.cd.markForCheck();
       })
     );
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.cd.markForCheck();
+    }, 0);
   }
 
   public updateSummary(cart: ShoppingCartWithDetails){

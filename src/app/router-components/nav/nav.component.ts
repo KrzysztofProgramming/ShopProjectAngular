@@ -1,7 +1,12 @@
 import { TreeMenuComponent } from './../../utils-components/tree-menu/tree-menu.component';
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService, Permissions } from '../../services/auth/auth.service';
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { TreeItem } from 'src/app/utils-components/tree-menu/tree-menu.component';
+
+interface NavItem extends TreeItem{
+  permission?: number;
+  items?: NavItem[]
+}
 
 @Component({
   selector: 'shop-nav',
@@ -11,24 +16,14 @@ import { TreeItem } from 'src/app/utils-components/tree-menu/tree-menu.component
 })
 export class NavComponent implements OnInit {
 
-  private productsItem: TreeItem = {
-    label: "Produkty",
-    items: [
-      {
-        label: "Przegląd produktów",
-        routerLink: "products"
-      },
-      {
-        label: "Dodaj produkt",
-        routerLink: "manageProduct/new"
-      }
-    ]
-  }
+  // private productsItem: TreeItem = { 
 
-  private initializeNavItems: TreeItem[] = [
+  // }
+
+  public navItems: NavItem[] = [
     {
       label: "Strona Główna",
-      routerLink: "home"
+      routerLink: "home",
     },
     {
       label: "Oferta",
@@ -41,9 +36,44 @@ export class NavComponent implements OnInit {
     {
       label: "O nas"
     },
+    {
+      label: "Produkty",
+      permission: Permissions.PRODUCTS_WRITE.value,
+      items: [
+        {
+          label: "Przegląd produktów",
+          routerLink: "products",
+        },
+        {
+          label: "Dodaj produkt",
+          routerLink: "manageProduct/new",
+        }
+      ]
+    },
+    {
+      label: "Użytkownicy",
+      permission: Permissions.USERS_READ.value | Permissions.USERS_WRITE.value,
+      items: [
+        {
+          label: "Przegląd użytkowników",
+          // routerLink: "products",
+          permission: Permissions.USERS_READ.value
+        },
+        {
+          label: "Dodaj użytkownika",
+          permission: Permissions.USERS_WRITE.value
+          // routerLink: "manageProduct/new",
+        },
+        {
+          label: "Edytuj role",
+          permission: Permissions.ROLES_WRITE.value,
+          routerLink: "roles"
+        }
+      ]
+    },
   ];
 
-  public navItems: TreeItem[] = [];
+  // public navItems: TreeItem[] = [];
 
   public isLogin: boolean = false;
   public isExpanded: boolean = false;
@@ -55,18 +85,22 @@ export class NavComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.permissions.subscribe(_val=>{
-      let items: TreeItem[] = this.initializeNavItems.slice();
-
-      if(this.authService.hasPermission(this.authService.PRODUCTS_MODIFY)){
-        items.push(this.productsItem);
-      }
-
-      this.navItems = items;
+    this.authService.permissions.subscribe(val=>{
+      this.updateVisibility(val, this.navItems);
+      console.log(this.navItems);
       this.refreshNavItems();
     })
 
     this.authService.loginStatus.subscribe(val=> this.isLogin = val);
+  }
+
+  public updateVisibility(permission: number, items: NavItem[]){
+    items.forEach(item=>{
+      item.visible = item.permission ? this.authService.hasOnePermission(item.permission) : true;
+      if(item.items)
+        this.updateVisibility(permission, item.items);
+    })
+    this.cd.markForCheck();
   }
 
   private refreshNavItems(){
@@ -79,14 +113,6 @@ export class NavComponent implements OnInit {
 
   public expand(){
     this.isExpanded = true;
-  }
-
-  public hasUsersPermissions(): boolean{
-    return this.authService.hasPermission(this.authService.USERS_GET | this.authService.USERS_MODIFY);
-  }
-
-  public hasProductsPermissions(): boolean{
-    return this.authService.hasPermission(this.authService.PRODUCTS_MODIFY);
   }
 
   public logout(){

@@ -12,6 +12,7 @@ export class AbstractListItemComponent {
   @Input() displayProperty: string = "name";
   private _isChecked: boolean = false;
   private _isHighlighted: boolean = false;
+  private _isDisabled: boolean = false;
 
   @Input()
   set isHighlighted(value: boolean) {
@@ -29,6 +30,14 @@ export class AbstractListItemComponent {
     return this._isChecked;
   }
 
+  @Input()
+  set isDisabled(value: boolean){
+    this._isDisabled = value;
+  }
+  get isDisabled(): boolean{
+    return this._isDisabled;
+  }
+
   constructor(public eref: ElementRef<HTMLElement>) { }
 
   public getLabel(): string{
@@ -36,7 +45,10 @@ export class AbstractListItemComponent {
   }
 }
 
-export type ItemModel = string | {[key: string]: any};
+export type ItemModel = string | 
+{
+  [key: string]: any
+};
 
 export interface ItemOptions {
   element: ItemModel;
@@ -57,6 +69,7 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   @Input() labelOverflowSize: number = 3;
   @Input() invalid: boolean = false;
   @Input() displayProperty: string = "name";
+  @Input() disableProperty: string = "disabled"; 
   @Input() waitingForDataFlag: boolean = false;
   @Output() blur: EventEmitter<void> = new EventEmitter<void>();
   
@@ -77,6 +90,7 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   protected clickCooldown: number = 100;
   private lastKeyCode: string = "";
   private lastClickedTime: number = 0;
+
 
   get highlightedItem(): ItemOptions | undefined{
     return this._highlightedItem;
@@ -117,6 +131,7 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
     this.displayItems = this.allItems
       .filter(item => item.isDisplay = this.matchFilter(item.element));
     this.displayItems.forEach((item, index)=>item.displayItemsIndex = index);
+    console.log(this.displayItems);
   }
 
   public calcCheckedItems(){
@@ -204,6 +219,7 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   }
 
   public onItemClick(item: ItemOptions) {
+    if(typeof(item.element)==='object' && item.element[this.disableProperty]) return;
     this.switchItemChecked(item);
   }
 
@@ -217,6 +233,12 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
     }
     this.highlightedItem = item;
     this.onItemCheckedChange();
+  }
+
+  public isItemDisabled(item: ItemModel){
+    if(typeof(item) === 'string')
+      return false;
+    return item[this.disableProperty];
   }
 
   protected onItemCheckedChange(){

@@ -69,6 +69,13 @@ import { SortSelectComponent } from './utils-components/sort-select/sort-select.
 import { ProductCreatorComponent } from './utils-components/product-creator/product-creator.component';
 import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common';
+import { ForgotPasswordDialogComponent } from './utils-components/forgot-password-dialog/forgot-password-dialog.component';
+import { ResetPasswordComponent } from './router-components/reset-password/reset-password.component';
+import { WildcartComponent } from './utils-components/wildcart/wildcart.component';
+import { NotFoundComponent } from './router-components/not-found/not-found.component';
+import { RolesManagementComponent } from './router-components/roles-management/roles-management.component';
+import { RolesSelectComponent } from './utils-components/roles-select/roles-select.component';
+import { PermsSelectComponent } from './utils-components/perms-select/perms-select.component';
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -117,7 +124,14 @@ registerLocaleData(localeFr);
     TypesCreatorComponent,
     SingleSelectComponent,
     SortSelectComponent,
-    ProductCreatorComponent
+    ProductCreatorComponent,
+    ForgotPasswordDialogComponent,
+    ResetPasswordComponent,
+    WildcartComponent,
+    NotFoundComponent,
+    RolesManagementComponent,
+    RolesSelectComponent,
+    PermsSelectComponent
   ],
   imports: [
     BrowserModule,

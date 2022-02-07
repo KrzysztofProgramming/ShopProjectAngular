@@ -29,7 +29,7 @@
         </div>
     </div>
     <shop-sidebar class="sidebar" [(visible)] = "this.isExpanded" (onHide) = "this.markForCheck()" (onShow) = "this.markForCheck()">
-        <shop-tree-menu #sidebarMenu class="sidebar__menu" [items] = "this.navItems" ></shop-tree-menu>
+        <shop-tree-menu *ngIf="this.refreshFlag" #sidebarMenu class="sidebar__menu" [items] = "this.navItems" ></shop-tree-menu>
     </shop-sidebar>
 </nav>
 

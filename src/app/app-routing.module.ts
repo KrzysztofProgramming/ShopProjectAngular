@@ -1,3 +1,6 @@
+import { RolesManagementComponent } from './router-components/roles-management/roles-management.component';
+import { NotFoundComponent } from './router-components/not-found/not-found.component';
+import { ResetPasswordComponent } from './router-components/reset-password/reset-password.component';
 import { HomeComponent } from './router-components/home/home.component';
 import { CartComponent } from './router-components/cart/cart.component';
 import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
@@ -25,11 +28,14 @@ const routes: Routes = [
     {path: "orders", component: ProfileOrdersComponent},
     {path: "opinions", component: ProfileOpinionsComponent}
   ]},
+  {path: "resetPassword/:id", component: ResetPasswordComponent},
   {path: "manageProduct/:id", component: AddProductComponent, canActivate: [RouterGuard]},
   {path: "products", component: MergeProductsComponent, canActivate: [RouterGuard]},
   {path: "offert", component: MergeProductsComponent},
   {path: "product/:id", component: ProductDetailsComponent},
-  {path: "cart", component: CartComponent}
+  {path: "cart", component: CartComponent},
+  {path: "roles", component: RolesManagementComponent, canActivate: [RouterGuard]},
+  {path: "**", component: NotFoundComponent}
 ];
 
 @NgModule({

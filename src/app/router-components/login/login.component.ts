@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
   public loginFailed: boolean = false;
   public waitingForLogin: boolean = false;
   public unchangedAfterError: boolean = false;
+  public forgotPasswordVisibility: boolean = false;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private cd: ChangeDetectorRef,
      private messageService: ToastMessageService) { }
@@ -57,5 +58,10 @@ export class LoginComponent implements OnInit {
 
   public getErrorsMessage(control: AbstractControl){
     return getErrorsMessage(control);
+  }
+
+  public openForgotDialog(){
+    this.forgotPasswordVisibility = true;
+    this.cd.markForCheck();
   }
 }

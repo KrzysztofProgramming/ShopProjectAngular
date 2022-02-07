@@ -1,0 +1,5 @@
+@import "../../../styling/all.scss";
+
+:host{
+  @include flex-fill-space;
+}

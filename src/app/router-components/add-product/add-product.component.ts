@@ -1,15 +1,12 @@
 import { ProductCreatorComponent } from './../../utils-components/product-creator/product-creator.component';
 import { ShopProductRequest, ShopProductRequestWithId } from './../../models/requests';
-import { TypesSelectComponent } from './../../utils-components/types-select/types-select.component';
-import { AuthorsSelectComponent } from './../../utils-components/authors-select/authors-select.component';
 import { ToastMessageService } from './../../services/utils/toast-message.service';
 
 import { catchError, finalize, switchMap, mapTo, tap } from 'rxjs/operators';
 import { ConfirmationService } from 'primeng/api';
 import { ShopProduct, EMPTY_PRODUCT_REQUEST } from './../../models/models';
-import { notEmptyListValidator } from './../../models/shop-validators';
-import { AbstractControl, Validators, FormControl } from '@angular/forms';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
 import { ProductsService } from 'src/app/services/http/products.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';

@@ -22,7 +22,9 @@
         </div>
 
         <div class ="login__bottom-text">
-          <a class="login__link" href="../forgotPassword">Nie pamiętasz hasła?</a> 
+          <p class="login__link" (click) = "this.openForgotDialog()">Nie pamiętasz hasła?</p> 
         </div>
     </form>
 </div>
+
+<shop-forgot-password-dialog [(visibility)] = "this.forgotPasswordVisibility"></shop-forgot-password-dialog>

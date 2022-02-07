@@ -78,6 +78,12 @@ export interface SortOption{
   code: string
 }
 
+export interface Role{
+  name: string;
+  authorities: number;
+  order: number;
+}
+
 export const SORT_OPTIONS: SortOption[] = [
   {name: "Sortowanie: Trafność", code: "none"},
   {name: "Cena: rosnąco", code: "price_asc"},

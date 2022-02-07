@@ -1,40 +1,65 @@
-import { JwtToken } from './../../models/models';
-import { LoginRequest, RegisterRequest, RefreshRequest } from './../../models/requests';
+import { JwtToken, Role } from './../../models/models';
+import { LoginRequest, RegisterRequest, RefreshRequest, CheckResetTokenRequest, ForgotPasswordRequest, ResetPasswordRequest } from './../../models/requests';
 import { LoginResponse, ErrorResponse } from './../../models/responses';
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { catchError, finalize, map, mapTo, shareReplay, tap } from "rxjs/operators"
+import { catchError, distinctUntilChanged, finalize, map, mapTo, shareReplay, tap } from "rxjs/operators";
 import jwtDecode from 'jwt-decode';
 import { Router } from '@angular/router';
+
+export class Permission{
+  constructor(public readonly value: number, public readonly name: string) {}
+}
+
+export class Permissions{
+  static readonly NO_PERMISSION = new Permission(0, "");
+  static readonly PRODUCTS_WRITE = new Permission(1, "products:write");
+  static readonly USERS_WRITE = new Permission(1 << 1, "users:write");
+  static readonly USERS_READ = new Permission(1 << 2, "users:read");
+  static readonly ROLES_WRITE = new Permission(1 << 3, "roles:write");
+  static readonly ALL_PERMS = (1 << 5) - 1;
+
+  public static fromNumber(value: number): Permission[]{
+    let perms: Permission[] = Object.values(Permissions);
+    return perms.filter((perm) => (value & perm.value) > 0);
+  }
+
+  public static toNumber(permissions: Permission[]): number{
+    return permissions.map(perm => perm.value).reduce((previous, current) => (previous | current));
+  }
+
+  public static asArray(): Permission[]{
+    return Object.values(Permissions);
+  }
+}
 
 @Injectable({
   providedIn: "root"
 })
 export class AuthService{
 
-  private readonly url = "http://localhost:8080/api/auth/"
-
-  readonly NO_PERMISSION = 0;
-  readonly PRODUCTS_MODIFY = 1;
-  readonly USERS_MODIFY = 1 << 1;
-  readonly USERS_GET = 1 << 2;
-
+  private readonly url = "http://localhost:8080/api/auth/";
 
   private jwtToken?: string | null;
   private refreshToken?: string | null;
   
-  private permissionsSubject: BehaviorSubject<number> = new BehaviorSubject(0);
+  private permissionsSubject: BehaviorSubject<number> = new BehaviorSubject(Permissions.NO_PERMISSION.value);
   private loginStatusSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   private refreshingProcess: Observable<string | null> | null = null;
+  private rolesSubject: BehaviorSubject<Role[]> = new BehaviorSubject<Role[]>([]);
   
 
   public get permissions(): Observable<number> {
-    return this.permissionsSubject;
+    return this.permissionsSubject.pipe(distinctUntilChanged());
+  }
+
+  public get rolesChange(): Observable<Role[]>{
+    return this.rolesSubject;
   }
 
   public get loginStatus(): Observable<boolean> {
-    return this.loginStatusSubject;
+    return this.loginStatusSubject.pipe(distinctUntilChanged());
   }
 
   public getJwtToken(): string | null | undefined{
@@ -110,16 +135,18 @@ export class AuthService{
   private tapToLogin() {
     return (response: LoginResponse): void => {
       console.log("tap to login");
+      console.log(response);
       this.jwtToken = response.jwtToken;
       this.refreshToken = response.refreshToken;
+      if(response.roles) this.rolesSubject.next(response.roles)
 
-      if (this.jwtToken != null) {
+      if (this.jwtToken) {
         localStorage.setItem("jwtToken", this.jwtToken);
         // this.loginStatusSubject.next(true);
         // console.log("next login status");
         this.readValuesFromJwt();
       }
-      if (this.refreshToken != null) localStorage.setItem("refreshToken", this.refreshToken);
+      if (this.refreshToken) localStorage.setItem("refreshToken", this.refreshToken);
     }
   }
 
@@ -153,16 +180,46 @@ export class AuthService{
     return this.jwtToken != null;
   }
 
-  public hasPermission(permission: number) {
-    return (this.permissionsSubject.value & permission) > 0;
-  }
-
   public navigateToLogin(){
-    this.router.navigateByUrl("/login");
+    this.router.navigate(['/login']);
+    // this.router.navigateByUrl("/login");
   }
 
   public navigateToProfile(){
-    this.router.navigateByUrl("/profile/settings");
+    this.router.navigate(["/profile/settings"]);
+    // this.router.navigateByUrl("/profile/settings");
+  }
+
+  public hasOnePermission(permissions: number | Permission) {
+    return (this.permissionsSubject.value & (typeof(permissions) === 'number' ? permissions : permissions.value)) > 0;
+  }
+
+  public hasAllPermissions(permissions: number | Permission){
+    return (this.permissionsSubject.value & (typeof(permissions) === 'number' ? permissions : permissions.value)) === permissions;
+  }
+
+  public isResetTokenValid(token: string): Observable<boolean>{
+    let request: CheckResetTokenRequest = {token: token};
+    return this.http.post<unknown>(`${this.url}isResetTokenValid`, request).pipe(
+      mapTo(true),
+      catchError(()=>of(false)),
+    );
+  }
+
+  public sendForgotPasswordRequest(email: string): Observable<string | null>{
+    let request: ForgotPasswordRequest = {email: email};
+    return this.http.post<unknown>(`${this.url}forgotPassword`, request,).pipe(
+      mapTo(null),
+      catchError((error)=>of(error.error ? error.error.info : "Nie udało się wysłać emaila"))
+    );
+  }
+
+  public resetPassword(request: ResetPasswordRequest): Observable<string | null>{
+    return this.http.post<unknown>(`${this.url}resetPassword`, request).pipe(
+      mapTo(null),
+      catchError((error)=>of(error.error ? error.error.info : "Nie udało zmienić hasła"))
+    );
   }
 
 }
+

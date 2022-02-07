@@ -2,24 +2,29 @@
 
 :host{
     @include flex-fill-space;
-    flex-direction: column;
+    align-self: center;
     position: relative;
-    align-items: center;
     justify-content: center;
+    background-color: $surface-100;
+    border-radius: 3px;
+    box-shadow: 0 0 2px 1px $box-shadow-color;
+    padding: min(20px, 2%);
+    max-width: 1000px;
 }
 
 .content{
     flex: 1;
-    padding: 10px 10px 10px 40px;
+    // padding: min(10px, 1%);
+    // padding-left: min(40px, 1%);
     
     h2{
         font-size: $font-size9;
         margin-top: 0;
-        margin-bottom: 50px;
+        margin-bottom: 20px;
     }
 
     &__element{
-        margin-top: 40px;
+        margin-top: 25px;
 
         &:first-child{
             margin-top: 0;
@@ -49,10 +54,34 @@
             max-width: unset;
             min-width: unset;
             width: min(100%, 400px);
+            background-color: $surface-200;
         }
 
         &__button{
             margin-left: 10px;
+            white-space: nowrap;
         }
     }
+
+    &__password-button{
+      white-space: nowrap;
+    }
+}
+
+@media only screen and (max-width: 400px){
+  .email{
+    &-wrapper{
+      flex-direction: column;
+      align-items: stretch;
+
+      &__button{
+        margin-left: 0;
+        margin-top: 10px;
+      }
+    }
+  }
+
+  .content__password-button{
+    width: 100%;
+  }
 }

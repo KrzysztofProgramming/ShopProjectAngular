@@ -7,8 +7,9 @@ import { AbstractMultiSelectComponent, ItemOptions } from '../abstract-multi-sel
 @Component({
   selector: 'shop-dropdown-multi-select-item',
   template: `
-    <div class="content" [class.selected] = "this.isChecked" [class.highlighted] = "this.isHighlighted">
-        <p-checkbox #checkbox [readonly] = "true" [ngModel] = "this.isChecked" class="checkbox" [binary] = "true"></p-checkbox>
+    <div class="content" [class.selected] = "this.isChecked" [class.highlighted] = "this.isHighlighted"
+    [ngClass]="{'content--disabled': this.isDisabled}">
+        <p-checkbox [disabled]="this.isDisabled" #checkbox [readonly] = "true" [ngModel] = "this.isChecked" class="checkbox" [binary] = "true"></p-checkbox>
         <div class="label"> {{this.getLabel()}} </div>
     </div>
   `,
@@ -34,6 +35,16 @@ import { AbstractMultiSelectComponent, ItemOptions } from '../abstract-multi-sel
       border-radius: 3px;
       cursor: pointer;
       transition-duration: 150ms;
+
+      &--disabled{
+        cursor: unset;
+        background-color: $surface-100;
+        color: $surface-600;
+        &:hover{
+          z-index: unset !important;
+          background-color: $surface-100 !important;
+        }
+      }
 
       &:hover{
         background-color: $theme-border;
@@ -94,10 +105,9 @@ export class MultiSelectItemComponent extends AbstractListItemComponent{
   
             <!-- <div class="expansion__list"> -->
               <cdk-virtual-scroll-viewport #cdkViewport class="expansion__viewport" itemSize="32"
-               [ngStyle] = "{'height': this.displayItems.length * 33 + 8 + 'px'}"
-               >
+               [ngStyle] = "{'height': this.displayItems.length * 33 + 8 + 'px'}">
                 <shop-dropdown-multi-select-item *cdkVirtualFor="let item of displayItems" #item [element] = "item.element"
-                [displayProperty] = "this.displayProperty"
+                [displayProperty] = "this.displayProperty" [isDisabled] = "this.isItemDisabled(item.element)"
                  [isChecked] = "item.isChecked" [isHighlighted] = "this.isHighlighted(item)"
                  (click) = "this.onItemClick(item)"></shop-dropdown-multi-select-item>
               </cdk-virtual-scroll-viewport>

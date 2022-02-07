@@ -86,3 +86,21 @@ export interface TypeRequest{
   name: string;
 }
 
+export interface ForgotPasswordRequest{
+  email: string;
+}
+
+export interface CheckResetTokenRequest{
+  token: string;
+}
+
+export interface ResetPasswordRequest{
+  token: string;
+  newPassword: string;
+}
+
+export interface RoleRequest{
+  name: string;
+  order: number;
+  authorities: number;
+}
