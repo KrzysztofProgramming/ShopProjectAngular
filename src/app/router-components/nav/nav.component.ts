@@ -56,7 +56,7 @@ export class NavComponent implements OnInit {
       items: [
         {
           label: "Przegląd użytkowników",
-          // routerLink: "products",
+          routerLink: "users",
           permission: Permissions.USERS_READ.value
         },
         {

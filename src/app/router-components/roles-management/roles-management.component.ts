@@ -1,3 +1,4 @@
+import { PermsService } from './../../services/http/perms.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RolesManagementComponent implements OnInit {
 
-  constructor() { }
+  constructor(private permsService: PermsService) { }
 
   ngOnInit(): void {
   }

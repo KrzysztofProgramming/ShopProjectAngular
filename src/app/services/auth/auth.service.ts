@@ -15,8 +15,8 @@ export class Permission{
 export class Permissions{
   static readonly NO_PERMISSION = new Permission(0, "");
   static readonly PRODUCTS_WRITE = new Permission(1, "products:write");
-  static readonly USERS_WRITE = new Permission(1 << 1, "users:write");
-  static readonly USERS_READ = new Permission(1 << 2, "users:read");
+  static readonly USERS_READ = new Permission(1 << 1, "users:read");
+  static readonly USERS_WRITE = new Permission(1 << 2, "users:write");
   static readonly ROLES_WRITE = new Permission(1 << 3, "roles:write");
   static readonly ALL_PERMS = (1 << 5) - 1;
 

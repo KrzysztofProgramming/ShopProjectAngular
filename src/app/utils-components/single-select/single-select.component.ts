@@ -1,4 +1,4 @@
-import { ItemModel } from './../abstract-multi-select/abstract-multi-select.component';
+import { ItemModel } from '../multi-selects/abstract-multi-select/abstract-multi-select.component';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';

@@ -1,4 +1,4 @@
-import { TypeRequest, ShopProductRequestWithId } from './../../models/requests';
+import { TypeRequest, ShopProductRequestWithId, GetProductsParams } from './../../models/requests';
 import { TypeResponse, TypesResponse } from './../../models/responses';
 import { ShopProductRequest } from '../../models/requests';
 import { catchError, switchMap, map } from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class ProductsService {
   constructor(private http: HttpClient) {  }
 
 
-  public getAllProducts(queryParams?: Params): Observable<GetProductsResponse>{
+  public getAllProducts(queryParams?: GetProductsParams): Observable<GetProductsResponse>{
     return this.http.get<GetProductsResponse>(`${this.url}getAll`, {params: queryParams});
   }
 

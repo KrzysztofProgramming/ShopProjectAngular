@@ -4,6 +4,7 @@
     @include flex-fill-space;
     background-color: $surface-color-2;
     max-width: $max-router-width;
+    box-shadow: 0 0 1px 0 $box-shadow-color;
 }
 
 .header{

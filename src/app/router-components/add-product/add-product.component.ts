@@ -1,4 +1,4 @@
-import { ProductCreatorComponent } from './../../utils-components/product-creator/product-creator.component';
+import { ProductCreatorComponent } from '../../utils-components/products-utils/product-creator/product-creator.component';
 import { ShopProductRequest, ShopProductRequestWithId } from './../../models/requests';
 import { ToastMessageService } from './../../services/utils/toast-message.service';
 

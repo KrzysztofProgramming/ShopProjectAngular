@@ -8,6 +8,10 @@ export interface JwtToken{
 }
 
 export interface ShopUser{
+  username: string;
+  email: string;
+  authorities: number;
+  roles: string[];
 }
 
 export interface Author extends SimpleAuthor{

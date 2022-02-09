@@ -1,3 +1,5 @@
+import { Params } from "@angular/router";
+
 export interface LoginRequest{
     usernameOrEmail: string,
     password: string
@@ -62,14 +64,14 @@ export interface getAuthorsParams extends PageableParams{
   searchPhrase: string
 }
 
-export type SortType = "none" | "price_asc" | "price_desc" | "alphabetic_asc" | "alphabetic_desc";
+export type ProductsSortType = "none" | "price_asc" | "price_desc" | "alphabetic_asc" | "alphabetic_desc";
 
-export interface GetProductsParams extends PageableParams{
+export interface GetProductsParams extends PageableParams, Params{
   searchPhrase?: string;
   minPrice?: number;
   maxPrice?: number;
   types?: string[];
-  sort?: SortType;
+  sort?: ProductsSortType;
   authorsNames?: string[];
   minInStock?: number;
   maxInStock?: number;
@@ -103,4 +105,19 @@ export interface RoleRequest{
   name: string;
   order: number;
   authorities: number;
+}
+
+export type UsersSortType = 'none' | "alphabetic_asc" | "alphabetic_desc" | "order_asc" | "order_desc";
+
+export interface UserRequest{
+  username: string;
+  email: string;
+  password: string;
+  roles: string[];
+}
+
+export interface GetUsersParams extends PageableParams, Params{
+  searchPhrase: string;
+  rolesNames: string[];
+  sort: string;
 }

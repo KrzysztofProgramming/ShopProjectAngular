@@ -1,0 +1,27 @@
+@import "../../../../styling/all.scss";
+
+.content{
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  width: 500px;
+  padding: 10px;
+
+  &__name{
+    text-align: center;
+  }
+
+  &__description{
+    resize: none;
+    height: 300px;
+  }
+
+  &__element{
+
+    margin-bottom: 15px;
+
+    &:last-child{
+      margin-bottom: 0;
+    }
+  }
+}

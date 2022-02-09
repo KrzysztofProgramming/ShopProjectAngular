@@ -1,7 +1,7 @@
 import { AuthService } from './services/auth/auth.service';
 import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
 import { NavButtonDirective } from './directives/nav-button/nav-button.directive';
-import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/dropdown-multi-select/dropdown-multi-select.component';
+import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/multi-selects/dropdown-multi-select/dropdown-multi-select.component';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -33,12 +33,12 @@ import { AuthInterceptor } from './services/auth/auth.interceptor';
 import { AuthImgPipe } from './pipes/auth-img.pipe';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MergeProductsComponent } from './router-components/merge-products/merge-products.component';
-import { ProductTileComponent } from './utils-components/product-tile/product-tile.component';
+import { ProductTileComponent } from './utils-components/products-utils/product-tile/product-tile.component';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { ProductsFiltersComponent } from './utils-components/products-filters/products-filters.component';
+import { ProductsFiltersComponent } from './utils-components/products-utils/products-filters/products-filters.component';
 import { ButtonModule } from 'primeng/button';
 import { ProductDetailsComponent } from './router-components/product-details/product-details.component';
-import { ProductImageComponent } from './utils-components/product-image/product-image.component';
+import { ProductImageComponent } from './utils-components/products-utils/product-image/product-image.component';
 import { ProfileSettingsComponent } from './router-components/profile/profile-settings/profile-settings.component';
 import { ProfileOpinionsComponent } from './router-components/profile/profile-opinions/profile-opinions.component';
 import { BusyOverlayComponent } from './utils-components/busy-overlay/busy-overlay.component';
@@ -46,7 +46,7 @@ import { TreeMenuComponent } from './utils-components/tree-menu/tree-menu.compon
 import { AccordionModule } from 'primeng/accordion';
 import { SidebarComponent } from './utils-components/sidebar/sidebar.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { DialogComponent } from './utils-components/dialog/dialog.component';
+import { DialogComponent } from './utils-components/dialogs/dialog/dialog.component';
 import { ChangeEmailComponent } from './router-components/profile/profile-settings/change-email/change-email.component';
 import { ChangePasswordComponent } from './router-components/profile/profile-settings/change-password/change-password.component';
 import { PasswordInputComponent } from './utils-components/password-input/password-input.component';
@@ -56,26 +56,28 @@ import { CartComponent } from './router-components/cart/cart.component';
 import { CartEditorComponent, CartEditorElementComponent } from './utils-components/cart-editor/cart-editor.component';
 import { HomeComponent } from './router-components/home/home.component';
 import { AuthorsSelectComponent } from './utils-components/authors-select/authors-select.component';
-import { TypesSelectComponent } from './utils-components/types-select/types-select.component';
-import { AuthorCreatorComponent } from './utils-components/author-creator/author-creator.component';
+import { TypesSelectComponent } from './utils-components/multi-selects/types-select/types-select.component';
+import { AuthorCreatorComponent } from './utils-components/dialogs/author-creator/author-creator.component';
 import { PageSelectComponent } from './utils-components/page-select/page-select.component';
-import { FiltersDialogComponent } from './utils-components/filters-dialog/filters-dialog.component';
-import { AccordionMultiSelectComponent } from './utils-components/accordion-multi-select/accordion-multi-select.component';
-import { AbstractMultiSelectComponent } from './utils-components/abstract-multi-select/abstract-multi-select.component';
-import { TypesCreatorComponent } from './utils-components/types-creator/types-creator.component';
+import { FiltersDialogComponent } from './utils-components/dialogs/filters-dialog/filters-dialog.component';
+import { AccordionMultiSelectComponent } from './utils-components/multi-selects/accordion-multi-select/accordion-multi-select.component';
+import { AbstractMultiSelectComponent } from './utils-components/multi-selects/abstract-multi-select/abstract-multi-select.component';
+import { TypesCreatorComponent } from './utils-components/dialogs/types-creator/types-creator.component';
 import { RadioButtonModule } from "primeng/radiobutton";
 import { SingleSelectComponent } from './utils-components/single-select/single-select.component';
-import { SortSelectComponent } from './utils-components/sort-select/sort-select.component';
-import { ProductCreatorComponent } from './utils-components/product-creator/product-creator.component';
+import { SortSelectComponent } from './utils-components/multi-selects/sort-select/sort-select.component';
+import { ProductCreatorComponent } from './utils-components/products-utils/product-creator/product-creator.component';
 import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common';
-import { ForgotPasswordDialogComponent } from './utils-components/forgot-password-dialog/forgot-password-dialog.component';
+import { ForgotPasswordDialogComponent } from './utils-components/dialogs/forgot-password-dialog/forgot-password-dialog.component';
 import { ResetPasswordComponent } from './router-components/reset-password/reset-password.component';
 import { WildcartComponent } from './utils-components/wildcart/wildcart.component';
 import { NotFoundComponent } from './router-components/not-found/not-found.component';
 import { RolesManagementComponent } from './router-components/roles-management/roles-management.component';
-import { RolesSelectComponent } from './utils-components/roles-select/roles-select.component';
+import { RolesSelectComponent } from './utils-components/multi-selects/roles-select/roles-select.component';
 import { PermsSelectComponent } from './utils-components/perms-select/perms-select.component';
+import { UsersManagementComponent } from './router-components/users-management/users-management.component';
+import { UsersEditorComponent } from './utils-components/users-editor/users-editor.component';
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -131,7 +133,9 @@ registerLocaleData(localeFr);
     NotFoundComponent,
     RolesManagementComponent,
     RolesSelectComponent,
-    PermsSelectComponent
+    PermsSelectComponent,
+    UsersManagementComponent,
+    UsersEditorComponent
   ],
   imports: [
     BrowserModule,

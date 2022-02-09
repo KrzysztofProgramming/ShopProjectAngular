@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, HostList
 import { GetProductsResponse } from 'src/app/models/responses';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { PAGE_SIZES } from 'src/app/models/models';
-import { FiltersDialogModel } from 'src/app/utils-components/filters-dialog/filters-dialog.component';
+import { FiltersDialogModel } from 'src/app/utils-components/dialogs/filters-dialog/filters-dialog.component';
 
 @Component({
   selector: 'app-merge-products',

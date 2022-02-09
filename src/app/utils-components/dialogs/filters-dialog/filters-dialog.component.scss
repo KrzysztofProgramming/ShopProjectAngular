@@ -1,0 +1,48 @@
+@import "../../../../styling/all.scss";
+
+.content{
+  padding: min(25px, 5%);
+  // overflow: auto;
+  // height: 500px;
+
+  &__radios{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: min(10px, 2%);
+    padding-bottom: 0;
+    padding-top: 0px;
+  }
+
+  &__radio{
+    margin-left: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &:first-child{
+      margin-left: 0;
+    }
+
+    &-label{
+      cursor: pointer;
+      padding: 5px;
+      padding-left: 10px;
+      font-size: $font-size5;
+      flex: 1;
+    }
+  }
+
+  &__element{
+    margin-top: 15px;
+    &:first-child{
+      margin-top: 0;
+    }
+  }
+
+  &__subheader{
+    margin-bottom: 10px;
+  }
+}

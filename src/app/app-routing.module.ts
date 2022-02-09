@@ -1,3 +1,4 @@
+import { UsersManagementComponent } from './router-components/users-management/users-management.component';
 import { RolesManagementComponent } from './router-components/roles-management/roles-management.component';
 import { NotFoundComponent } from './router-components/not-found/not-found.component';
 import { ResetPasswordComponent } from './router-components/reset-password/reset-password.component';
@@ -35,6 +36,7 @@ const routes: Routes = [
   {path: "product/:id", component: ProductDetailsComponent},
   {path: "cart", component: CartComponent},
   {path: "roles", component: RolesManagementComponent, canActivate: [RouterGuard]},
+  {path: "users", component: UsersManagementComponent, canActivate: [RouterGuard]},
   {path: "**", component: NotFoundComponent}
 ];
 
