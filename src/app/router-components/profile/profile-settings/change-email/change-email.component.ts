@@ -1,3 +1,4 @@
+import { emailValidator } from './../../../../models/shop-validators';
 import { AbstractControl } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
@@ -41,7 +42,7 @@ export class ChangeEmailComponent implements OnInit {
   @Output() emailSelected: EventEmitter<UpdateEmailRequest> = new EventEmitter<UpdateEmailRequest>();
 
   formGroup: FormGroup = this.fb.group({
-    email: ['', [Validators.email, Validators.required]],
+    email: ['', [emailValidator, Validators.required]],
     repeatEmail: ['', [Validators.email, Validators.required]],
     password: ['', [Validators.required]]
   }, {validators: sameValueValidator("email", "repeatEmail")});

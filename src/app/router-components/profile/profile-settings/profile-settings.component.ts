@@ -26,6 +26,7 @@ export class ProfileSettingsComponent implements OnInit {
     this.emailControl.setValue(val.email);
     this.cd.markForCheck();
   }
+  
 
   ngOnInit(): void {
     this.profileService.getProfileInfo().subscribe(val =>{

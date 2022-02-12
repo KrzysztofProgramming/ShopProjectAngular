@@ -29,12 +29,6 @@ export class RouterGuard implements CanActivate {
       case "products":{
         return this.authService.hasOnePermission(Permissions.PRODUCTS_WRITE);
       }
-      case "roles":{
-        return this.authService.hasOnePermission(Permissions.ROLES_WRITE);
-      }
-      case "users":{
-        return this.authService.hasOnePermission(Permissions.USERS_READ);
-      }
     }
     return true;
   }

@@ -73,11 +73,7 @@ import { ForgotPasswordDialogComponent } from './utils-components/dialogs/forgot
 import { ResetPasswordComponent } from './router-components/reset-password/reset-password.component';
 import { WildcartComponent } from './utils-components/wildcart/wildcart.component';
 import { NotFoundComponent } from './router-components/not-found/not-found.component';
-import { RolesManagementComponent } from './router-components/roles-management/roles-management.component';
-import { RolesSelectComponent } from './utils-components/multi-selects/roles-select/roles-select.component';
-import { PermsSelectComponent } from './utils-components/perms-select/perms-select.component';
-import { UsersManagementComponent } from './router-components/users-management/users-management.component';
-import { UsersEditorComponent } from './utils-components/users-editor/users-editor.component';
+import {InputMaskModule} from 'primeng/inputmask';
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -130,12 +126,7 @@ registerLocaleData(localeFr);
     ForgotPasswordDialogComponent,
     ResetPasswordComponent,
     WildcartComponent,
-    NotFoundComponent,
-    RolesManagementComponent,
-    RolesSelectComponent,
-    PermsSelectComponent,
-    UsersManagementComponent,
-    UsersEditorComponent
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -160,7 +151,8 @@ registerLocaleData(localeFr);
     ButtonModule,
     AccordionModule,
     LayoutModule,
-    RadioButtonModule
+    RadioButtonModule,
+    InputMaskModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

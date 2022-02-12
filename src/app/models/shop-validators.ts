@@ -1,7 +1,9 @@
+
 import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from "@angular/forms"
 
 export const usernameValidators: ValidatorFn[] = [Validators.pattern("\\w+"), Validators.minLength(4), Validators.maxLength(20), Validators.required];
 export const passwordValidators: ValidatorFn[] = [Validators.minLength(4), Validators.maxLength(40), Validators.required];
+export const emailValidator: ValidatorFn = Validators.pattern("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$");
 export const notEmptyListValidator: ValidatorFn = (control: AbstractControl) =>{
   return (control.value != null && control.value.length > 0) ? null : {empty: true};
 }
@@ -9,7 +11,7 @@ export const notEmptyListValidator: ValidatorFn = (control: AbstractControl) =>{
 
 export const usernameOrEmailValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null =>{
     let usernameValid: boolean = usernameValidators.every((validator: ValidatorFn) => validator(control) === null);
-    let emailValid: boolean = Validators.email(control) === null;
+    let emailValid: boolean = emailValidator(control) === null;
     return (usernameValid || emailValid) && control.value !=null ? null : {notEmailOrUsername: true};
 }
 
@@ -39,7 +41,7 @@ export function getErrorsMessage(control: AbstractControl, customErrorFactory?: 
     if(control.errors.email)
       return "Niewłaściwy email";
     if(control.errors.pattern)
-      return "Zawiera niedozwolone znaki";
+      return "Niewłaściwy format";
     if(control.errors.notEmailOrUsername)
       return "Niewłaściwa nazwa użytkownika lub email";
     return "Zła wartość";

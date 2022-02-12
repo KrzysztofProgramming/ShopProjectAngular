@@ -47,30 +47,15 @@ export class NavComponent implements OnInit {
         {
           label: "Dodaj produkt",
           routerLink: "manageProduct/new",
-        }
-      ]
-    },
-    {
-      label: "Użytkownicy",
-      permission: Permissions.USERS_READ.value | Permissions.USERS_WRITE.value,
-      items: [
-        {
-          label: "Przegląd użytkowników",
-          routerLink: "users",
-          permission: Permissions.USERS_READ.value
         },
         {
-          label: "Dodaj użytkownika",
-          permission: Permissions.USERS_WRITE.value
-          // routerLink: "manageProduct/new",
+          label: "Edytuj typy"
         },
         {
-          label: "Edytuj role",
-          permission: Permissions.ROLES_WRITE.value,
-          routerLink: "roles"
+         label: "Edytuj autorów" 
         }
       ]
-    },
+    }
   ];
 
   // public navItems: TreeItem[] = [];
@@ -87,7 +72,6 @@ export class NavComponent implements OnInit {
   ngOnInit(): void {
     this.authService.permissions.subscribe(val=>{
       this.updateVisibility(val, this.navItems);
-      console.log(this.navItems);
       this.refreshNavItems();
     })
 

@@ -135,7 +135,6 @@ export class AuthService{
   private tapToLogin() {
     return (response: LoginResponse): void => {
       console.log("tap to login");
-      console.log(response);
       this.jwtToken = response.jwtToken;
       this.refreshToken = response.refreshToken;
       if(response.roles) this.rolesSubject.next(response.roles)

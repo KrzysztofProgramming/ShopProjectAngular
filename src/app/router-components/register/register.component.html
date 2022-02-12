@@ -3,29 +3,31 @@
         <h2 class="register__header">Rejestracja:</h2>
         <div class="register__sector register__username">
             <div>Nazwa użytkownika:</div>
-            <input type="text" pTooltip [pTooltip] = "this.getErrorsMessage(this.username)"
+            <input type="text" pTooltip [pTooltip] = "this.usernameTooltip"
              shopInputText placeholder="nazwa użytkownika" class="register__input register__username-input" formControlName = "username"
-            [invalid] = "this.username.invalid && this.username.touched">
+            [invalid] = "this.username.invalid && this.username.touched" (blur)="this.updateUsernameTooltip()">
         </div>
         <div class="register__sector register__email">
              <div>Email:</div>
-             <input placeholder="email" pTooltip [pTooltip] = "this.getErrorsMessage(this.email)" shopInputText type="email"
+             <input placeholder="email" pTooltip [pTooltip] = "this.emailTooltip" shopInputText type="email"
               class="register__input register__email-input" formControlName = "email"
-             [invalid] = "this.email.invalid && this.email.touched">
+             [invalid] = "this.email.invalid && this.email.touched" (blur)="this.updateEmailTooltip()">
         </div>
         <div class="register__sector register__password">
             <div >Hasło:</div>
-            <shop-password-input placeholder="hasło" pTooltip [pTooltip] = "this.getErrorsMessage(this.password, true)" type="password"
+            <shop-password-input placeholder="hasło" pTooltip [pTooltip] = "this.passwordTooltip" type="password"
              class="register__input register__password-input" formControlName = "password"
             [invalid] = "this.password.touched && (this.password.invalid
-             || (this.form.errors?.notTheSameError && this.repeatPassword.touched))"></shop-password-input>
+             || (this.form.errors?.notTheSameError && this.repeatPassword.touched))" (blur)="this.updatePasswordsTooltips()">
+            </shop-password-input>
         </div>
         <div class="register__sector register__repeat-password">
             <div>Powtórz Hasło:</div>
-            <shop-password-input placeholder="powtórz hasło" pTooltip [pTooltip] = "this.getErrorsMessage(this.repeatPassword, true)"
+            <shop-password-input placeholder="powtórz hasło" pTooltip [pTooltip] = "this.repeatPasswordTooltip"
              class="register__input register__repeat-password-input"
              formControlName = "repeatPassword" [invalid] = "this.repeatPassword.touched
-              && (this.repeatPassword.invalid || (this.form.errors?.notTheSameError && this.password.touched))"></shop-password-input>
+             && (this.repeatPassword.invalid || (this.form.errors?.notTheSameError && this.password.touched))"
+             (blur)="this.updatePasswordsTooltips()"></shop-password-input>
         </div>
         <div class="register__sector register__regulations">
             <p-checkbox formControlName = "regulations" [binary]="true"></p-checkbox>

@@ -100,24 +100,3 @@ export interface ResetPasswordRequest{
   token: string;
   newPassword: string;
 }
-
-export interface RoleRequest{
-  name: string;
-  order: number;
-  authorities: number;
-}
-
-export type UsersSortType = 'none' | "alphabetic_asc" | "alphabetic_desc" | "order_asc" | "order_desc";
-
-export interface UserRequest{
-  username: string;
-  email: string;
-  password: string;
-  roles: string[];
-}
-
-export interface GetUsersParams extends PageableParams, Params{
-  searchPhrase: string;
-  rolesNames: string[];
-  sort: string;
-}

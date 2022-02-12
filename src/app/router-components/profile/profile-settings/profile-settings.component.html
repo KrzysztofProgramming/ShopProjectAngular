@@ -11,6 +11,25 @@
         </div>
     </div>
     <button shopButton class="content__element content__password-button" (click)="this.openPasswordDialog()">Zmień hasło</button>
+    <form class="additional-info">
+      <div class="additional-info__names">
+        <input class="additional-info__firstname" shopInputText placeholder="Firstname">
+        <input class="additional-info__lastname" shopInputText placeholder="Lastname">
+      </div>
+      <div class="additional-info__phone&street">
+        <p-inputMask #phoneInput class="additional-info__phone" mask="999 999 999" slotChar="-"
+         placeholder="Number telefonu"></p-inputMask>
+        <input shopInputText class="additional-info__street" placeholder="Nazwa ulicy">
+      </div>
+      <div class="additional-info__numbers">
+        <p-inputNumber class="additional-info__house-number" [min] = "1" placeholder="Numer budynku"></p-inputNumber>
+        <p-inputNumber class="additional-info__local-number" [min] = "1" placeholder="Numer lokalu"></p-inputNumber>
+      </div>
+      <div class="additional-info__city&zip-code">
+        <input shopInputText class="additional-info__city" placeholder="Miasto">
+        <p-inputMask mask="99 999" class="additional-info__zip-code" placeholder="Kod pocztowy"></p-inputMask>
+      </div>
+    </form>
 </div>
 <shop-busy-overlay *ngIf = "this.profileInfo == null || this.waitingForResponse"></shop-busy-overlay>
 <shop-change-email [(visibility)] = this.emailDialogVisibility (emailSelected)="this.emailChangeConfirmed($event)">

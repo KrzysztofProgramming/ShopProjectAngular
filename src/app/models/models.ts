@@ -12,6 +12,7 @@ export interface ShopUser{
   email: string;
   authorities: number;
   roles: string[];
+  userInfo: UserInfo;
 }
 
 export interface Author extends SimpleAuthor{
@@ -86,6 +87,22 @@ export interface Role{
   name: string;
   authorities: number;
   order: number;
+}
+
+export interface Address{
+  street: string,
+  houseNumber: number,
+  localNumber?: number,
+  city: string,
+  zipCode: number
+}
+
+export interface UserInfo{
+  firstname: string,
+  lastname: string,
+  email: string,
+  phoneNumber: number,
+  address: Address
 }
 
 export const SORT_OPTIONS: SortOption[] = [

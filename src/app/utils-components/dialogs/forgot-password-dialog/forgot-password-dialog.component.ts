@@ -1,3 +1,4 @@
+import { emailValidator } from './../../../models/shop-validators';
 import { ToastMessageService } from '../../../services/utils/toast-message.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { FormControl, Validators } from '@angular/forms';
@@ -42,7 +43,7 @@ export class ForgotPasswordDialogComponent implements OnInit {
     return this._visibility;
   }
 
-  emailControl: FormControl = new FormControl('', [Validators.email, Validators.required]);
+  emailControl: FormControl = new FormControl('', [emailValidator, Validators.required]);
 
   // private subscriptions: Subscription[] = [];
 
