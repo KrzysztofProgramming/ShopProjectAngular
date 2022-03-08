@@ -25,7 +25,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.router.events.subscribe(event=>{
         if(event instanceof NavigationEnd && this.route.firstChild?.snapshot.routeConfig?.path){
             this.selectedChildRoute = this.route.firstChild.snapshot.routeConfig.path;
-            console.log(this.selectedChildRoute);
             this.cd.markForCheck();
         }
       })

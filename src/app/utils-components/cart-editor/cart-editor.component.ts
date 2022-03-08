@@ -1,5 +1,5 @@
 import { switchMap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { ShoppingCartService } from './../../services/http/shopping-cart.service';
+import { ShoppingCartService } from '../../services/http/shopping-cart.service';
 import { AuthService } from './../../services/auth/auth.service';
 import { EMPTY_DETAILS_CART, ShoppingCartWithDetails, ShoppingCartDetail } from './../../models/models';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ElementRef, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
@@ -93,9 +93,12 @@ export class CartEditorElementComponent implements OnInit, OnDestroy{
 @Component({
   selector: 'shop-cart-editor',
   template: `
-    <div class="content">
+    <!-- <div class="header">
+      Produkty w koszyku:
+    </div> -->
+    <div class="content" *ngIf="!this.waitingForResponse">
       <div class="top-bar" >
-        <div class="top-bar__remove-all" *ngIf = "this.cart.items.length !== 0"  (click) = "this.deleteCart()">
+        <div class="top-bar__remove-all" *ngIf = "this.cart.items.length !== 0"  (click) = "this.openDeleteDialog()">
           <i class="pi pi-times"></i>
           <p>Usuń wszystko</p>
         </div>
@@ -106,6 +109,12 @@ export class CartEditorElementComponent implements OnInit, OnDestroy{
       </ng-container>
     </div>
     <shop-busy-overlay *ngIf = "this.waitingForResponse"></shop-busy-overlay>
+    <shop-dialog class="dialog" acceptPhrase="Tak" cancelPhrase="Anuluj" (accept)="this.deleteCart()"
+    [(visibility)] = "deleteDialogVisibility" dialogTitle="Potwierdź">
+      <p class="dialog__text">Czy na pewno chcesz usunąć wszystkie elementy z koszyka?
+        Ta operacja jest nieodwracalna
+      </p>
+    </shop-dialog>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./cart-editor.component.scss']
@@ -113,7 +122,9 @@ export class CartEditorElementComponent implements OnInit, OnDestroy{
 export class CartEditorComponent implements OnInit, OnDestroy {
 
   public cart: ShoppingCartWithDetails = EMPTY_DETAILS_CART;
-  
+  public deleteDialogVisibility: boolean = false;
+
+
   @Output("cartChange") cartChange: EventEmitter<ShoppingCartWithDetails> = new EventEmitter();
   
   public waitingForResponse: boolean = true;
@@ -127,8 +138,13 @@ export class CartEditorComponent implements OnInit, OnDestroy {
     this.cd.markForCheck();
   }
   
+  public openDeleteDialog(){
+    this.deleteDialogVisibility = true;
+    this.cd.markForCheck();
+  }
+
   onItemChange(index: number, amount: number){
-    console.log("onItemChange");
+    // console.log("onItemChange");
     this.waitingForResponse = true;
     this.cartService.setProductInCart({
       amount: amount,
@@ -138,6 +154,8 @@ export class CartEditorComponent implements OnInit, OnDestroy {
   }
 
   deleteCart(){
+    this.deleteDialogVisibility = false;
+    this.cd.markForCheck();
     this.cartService.deleteCart().subscribe();
   }
 

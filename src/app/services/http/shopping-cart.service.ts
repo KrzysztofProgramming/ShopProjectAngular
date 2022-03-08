@@ -1,6 +1,6 @@
-import { AuthService } from './../auth/auth.service';
+import { AuthService } from '../auth/auth.service';
 import { ProductsService } from './products.service';
-import { EMPTY_CART, ShoppingCartWithDetails } from './../../models/models';
+import { EMPTY_CART, ShoppingCartWithDetails } from '../../models/models';
 import { CartProductRequest, SetCartRequest } from '../../models/requests';
 import { ShoppingCart } from '../../models/models';
 import { map, tap, distinctUntilChanged } from 'rxjs/operators';

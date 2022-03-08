@@ -131,7 +131,6 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
     this.displayItems = this.allItems
       .filter(item => item.isDisplay = this.matchFilter(item.element));
     this.displayItems.forEach((item, index)=>item.displayItemsIndex = index);
-    console.log(this.displayItems);
   }
 
   public calcCheckedItems(){

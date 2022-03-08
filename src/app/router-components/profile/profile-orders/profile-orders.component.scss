@@ -1,0 +1,18 @@
+@import "../../../../styling/all.scss";
+
+:host{
+  @include flex-fill-space;
+  display: flex;
+  flex-direction: row;
+}
+
+.filters{
+  flex: 1;
+  max-width: 400px;
+}
+
+.orders{
+  flex: 3;
+}
+
+

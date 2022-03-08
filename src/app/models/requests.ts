@@ -1,3 +1,4 @@
+import { UserInfo, ShoppingCart } from './models';
 import { Params } from "@angular/router";
 
 export interface LoginRequest{
@@ -53,7 +54,7 @@ export interface UpdateEmailRequest{
     password: string;
 }
 
-export interface PageableParams{
+export interface PageableParams extends Params{
     pageSize?: number,
     pageNumber?: number
 }
@@ -66,7 +67,7 @@ export interface getAuthorsParams extends PageableParams{
 
 export type ProductsSortType = "none" | "price_asc" | "price_desc" | "alphabetic_asc" | "alphabetic_desc";
 
-export interface GetProductsParams extends PageableParams, Params{
+export interface GetProductsParams extends PageableParams{
   searchPhrase?: string;
   minPrice?: number;
   maxPrice?: number;
@@ -99,4 +100,22 @@ export interface CheckResetTokenRequest{
 export interface ResetPasswordRequest{
   token: string;
   newPassword: string;
+}
+
+export interface NewOrderRequest{
+  email: string
+  info: UserInfo,
+  products: {[key: string]: number},
+}
+
+export interface PayOrderRequest{
+  id: string
+}
+
+export interface GetOrdersParams extends PageableParams{
+  maxPrice?: number;
+  minPrice?: number;
+  maxDate?: Date;
+  minDate?: Date;
+  status?: number;
 }

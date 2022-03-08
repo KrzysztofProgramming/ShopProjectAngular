@@ -1,0 +1,19 @@
+<h2 class="title">Dane do zamówienia:</h2>
+<div class="content">
+  <form [formGroup]="this.formGroup" class="form">
+    <label class="form__email-label">Email:</label>
+    <input class="form__email-input" placeholder="Email" shopInputText formControlName="email"
+    [pTooltip]="this.getErrorMessage(this.emailControl)">
+    <shop-user-info-form formControlName="info"></shop-user-info-form>
+  </form>
+  <div class="remember" *ngIf="this.userLoggedIn">
+    <p-checkbox inputId="remember__checkbox" class="remember__checkbox" [(ngModel)]="this.saveAsDefault"></p-checkbox>
+    <label for="remember__checkbox" class="remember__label">Zapisz powyższe dane jako domyśle</label>
+  </div>
+  <div class="buttons">
+    <button shopButton padding="medium" class="buttons__button" [disabled]="this.formGroup.invalid"
+    (click)="this.onConfirm()">Potwierdź zamówienie</button>
+    <button shopButton padding="medium" class="buttons__button" color="red">Anuluj zamówienie</button>
+  </div>
+  <shop-busy-overlay *ngIf="this.waitingForResponse"></shop-busy-overlay>
+</div>

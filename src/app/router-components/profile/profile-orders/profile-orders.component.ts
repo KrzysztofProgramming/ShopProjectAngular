@@ -1,71 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { TreeItem } from 'src/app/utils-components/tree-menu/tree-menu.component';
+import { GetOrdersResponse } from './../../../models/responses';
+import { ProfileInfoService } from 'src/app/services/http/profile-info.service';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-profile-orders',
   templateUrl: './profile-orders.component.html',
-  styleUrls: ['./profile-orders.component.scss']
+  styleUrls: ['./profile-orders.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileOrdersComponent implements OnInit {
   
-  public treeItems: TreeItem[] =[
-    {
-      label: "siema",
-    },
-    {
-      label: "elo",
-      items: [
-        {
-          label: "bounjour",
-          items: [
-            {label: "asdasd"},
-            {label: "asdadsas"}
-          ]
-        },
-        {
-          label: "aloha"
-        }
-      ]
-    },
-    {
-      label:"zajebiscie"
-    },{
-      label: "kozak",
-      items: [
-        {
-          label: "OP",
-          items:[
-            {
-              label: "busted",
-              items:[
-                {label: "insane"},
-                {label: "best"},
-                {label: "invincible"}
-              ]
-            },
-          ]
-        },
-        {
-          label: "great",
-          items:[
-            {
-              label: "awesome",
-            },
-            {
-              label: "perfect"
-            }
-          ]
-        },
-        {
-          label: "Overpowered"
-        }
-      ]
-    }
-  ]
+  public response?: GetOrdersResponse;
+  public waitingForResponse: boolean = false;
+  public isError: boolean = false;
 
-  constructor() { }
+
+  constructor(private profileService: ProfileInfoService, private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    this.waitingForResponse = true;
+    this.profileService.getOrders({}).subscribe(result=>{
+      this.response = result;
+        this.waitingForResponse = false;
+        this.cd.markForCheck();
+    }, error=>{
+      this.waitingForResponse = false;
+      this.isError = true;
+      this.cd.markForCheck();
+    });
   }
 
 }

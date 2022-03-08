@@ -1,5 +1,5 @@
 import { ToastMessageService } from './../../services/utils/toast-message.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from './../../services/auth/auth.service';
 import { sameValueValidator, getErrorsMessage } from 'src/app/models/shop-validators';
 import { passwordValidators } from './../../models/shop-validators';
@@ -65,7 +65,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   }
 
   constructor(private fb: FormBuilder, private cd: ChangeDetectorRef, private authService: AuthService,
-     private routes: ActivatedRoute, private messageService: ToastMessageService) { }
+     private routes: ActivatedRoute, private messageService: ToastMessageService, private router: Router) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -75,10 +75,17 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         this.isTokenValid = false;
         if(!params.id){
           this.redirectToLogin();
+          // this.isTokenChecked = true;
           return;
         }
         this.token = params.id;
         this.authService.isResetTokenValid(this.token!).subscribe(value=>{
+          if(!value){
+            // console.log("invalid token");
+            this.redirectToLogin();
+            this.cd.markForCheck();
+            return;
+          }
           this.isTokenChecked = true;
           this.isTokenValid = value;
           this.cd.markForCheck();
@@ -88,11 +95,13 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   }
 
   private redirectToLogin(){
-    setTimeout(()=>{
+    console.log("redirecting");
+    // setTimeout(()=>{
       this.messageService.showMessage({severity: "error", summary:"Zły token", detail: "Spróbuj jeszcze raz zresetować hasło"});
-      this.authService.navigateToLogin();
-    },0);
+      this.router.navigateByUrl('/notFound', {skipLocationChange: true});
+    // }, 0);
   }
+
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub=>sub.unsubscribe());

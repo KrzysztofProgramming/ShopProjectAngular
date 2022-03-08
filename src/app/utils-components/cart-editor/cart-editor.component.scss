@@ -4,15 +4,11 @@
     position: relative !important;
     display: flex;
     flex-direction: column;
-
 }
 
-.element{
-    margin-top: 10px;
-
-    &:first-child{
-        margin-top: 0;
-    }
+.header{
+  font-size: $font-size6;
+  margin-bottom: 10px;
 }
 
 .top-bar{
@@ -42,10 +38,21 @@
   }
 }
 
+.dialog{
+  &__text{
+    padding: 30px;
+    max-width: 500px;
+  }
+}
+
 .content{
   // padding: 10px;
   // box-shadow: 0 0 2px 1px $box-shadow-color;
   // border-radius: 3px;
   // background-color: $surface-200;
   position: relative;
+  // flex: 1;
+  border: 1px solid $box-shadow-color;
+  // border-bottom: 0;
+  box-shadow: 0 0 1px 0 $box-shadow-color, inset 0 0 1px 0 $box-shadow-color;
 }

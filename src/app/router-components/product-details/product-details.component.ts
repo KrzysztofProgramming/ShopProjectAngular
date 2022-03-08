@@ -1,5 +1,5 @@
-import { ShoppingCartService } from './../../services/http/shopping-cart.service';
-import { ProductsService } from './../../services/http/products.service';
+import { ShoppingCartService } from '../../services/http/shopping-cart.service';
+import { ProductsService } from '../../services/http/products.service';
 import { ShopProduct } from './../../models/models';
 import { Observable, of, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';

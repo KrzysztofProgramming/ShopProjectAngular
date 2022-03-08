@@ -74,6 +74,12 @@ import { ResetPasswordComponent } from './router-components/reset-password/reset
 import { WildcartComponent } from './utils-components/wildcart/wildcart.component';
 import { NotFoundComponent } from './router-components/not-found/not-found.component';
 import {InputMaskModule} from 'primeng/inputmask';
+import { UserInfoFormComponent } from './utils-components/user-info-form/user-info-form.component';
+import { OrderMakerComponent } from './router-components/order-maker/order-maker.component';
+import { OrderTileComponent } from './utils-components/order-tile/order-tile.component';
+import { OrdersFiltersComponent } from './utils-components/orders-filters/orders-filters.component';
+import {CalendarModule} from 'primeng/calendar';
+import { LinkTileComponent } from './utils-components/link-tile/link-tile.component';
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -126,7 +132,12 @@ registerLocaleData(localeFr);
     ForgotPasswordDialogComponent,
     ResetPasswordComponent,
     WildcartComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    UserInfoFormComponent,
+    OrderMakerComponent,
+    OrderTileComponent,
+    OrdersFiltersComponent,
+    LinkTileComponent
   ],
   imports: [
     BrowserModule,
@@ -152,7 +163,8 @@ registerLocaleData(localeFr);
     AccordionModule,
     LayoutModule,
     RadioButtonModule,
-    InputMaskModule
+    InputMaskModule,
+    CalendarModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},

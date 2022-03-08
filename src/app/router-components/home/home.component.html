@@ -1,16 +1,17 @@
 <div class="intro">
+    <div class="intro__background"></div>
     <div class="intro__content">
         <p class="intro__text">Zamów swoją książkę już dziś!</p>
         <button routerLink="/offert" shopButton class="intro__button">Oferta</button>
     </div>
 </div>
 <div class="tiles">
-    <div class="tiles__first-line">
-        <div>
-            
-        </div>
+    <div class="tiles__line">
+        <shop-link-tile class="tiles__tile" imgName="history.png"><p class="tiles__text">Historyczne</p> </shop-link-tile>
+        <shop-link-tile class="tiles__tile" imgName="science.png"><p class="tiles__text">Naukowe</p> </shop-link-tile>
     </div>
-    <div class="tiles__second-line">
-
+    <div class="tiles__line">
+      <shop-link-tile class="tiles__tile" imgName="fantasy.png"><p class="tiles__text">Fantasy</p> </shop-link-tile>
+      <shop-link-tile class="tiles__tile" imgName="adventures.png"><p class="tiles__text">Przygodowe</p> </shop-link-tile>
     </div>
 </div>

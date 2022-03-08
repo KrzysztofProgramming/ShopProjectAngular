@@ -25,4 +25,8 @@
     &--invalid{
         @include invalid-field;
     }
+
+    &--invalid-default.ng-invalid.ng-touched{
+      @include invalid-field;
+    }
 }

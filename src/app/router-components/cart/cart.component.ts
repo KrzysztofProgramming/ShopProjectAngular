@@ -1,4 +1,5 @@
-import { ShoppingCartService } from './../../services/http/shopping-cart.service';
+import { Router } from '@angular/router';
+import { ShoppingCartService } from '../../services/http/shopping-cart.service';
 import { ShoppingCartWithDetails } from './../../models/models';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -8,19 +9,16 @@ import { Subscription } from 'rxjs';
   template: `
     <div class="all">
       <div *ngIf="!this.isCartEmpty" class="content">
-        <!-- <shop-busy-overlay *ngIf="!this.cart"></shop-busy-overlay>
-        <p *ngIf="this.isCartEmpty()">Twój koszyk jest pusty</p> -->
-        <div class="editor-wrapper">
-          <shop-cart-editor class="editor" (cartChange)="this.updateSummary($event)"></shop-cart-editor>
-        </div>
-  
         <div class="summary" #summary>
           <div class="summary__wrapper" [ngStyle]="{'top': this.summary!.offsetTop + 'px'}">
             <p class="summary__header">Podsumowanie:</p>
             <p class="summary__element">Łączna liczba produktów: <span class="summary__value">{{this.totalAmount}}</span></p>
             <p class="summary__element">Do zapłaty: <span class="summary__value"> {{ this.totalPrice | number: "1.2-2"}} zł</span></p>
-            <button shopButton class="summary__button">Zapłać</button>
+            <button shopButton class="summary__button" (click) = "this.navigateToOrder()">Zapłać</button>
           </div>
+        </div>
+        <div class="editor-wrapper">
+          <shop-cart-editor class="editor" (cartChange)="this.updateSummary($event)"></shop-cart-editor>
         </div>
       </div>
       <div *ngIf="this.isCartEmpty" class="empty">
@@ -47,7 +45,8 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private cd: ChangeDetectorRef,
-    private cartService: ShoppingCartService
+    private cartService: ShoppingCartService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +56,10 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
         this.cd.markForCheck();
       })
     );
+  }
+
+  public navigateToOrder(){
+    this.router.navigate(["/make-order"])
   }
 
   ngAfterViewInit(): void {

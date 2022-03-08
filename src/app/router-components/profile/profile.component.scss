@@ -2,6 +2,7 @@
 
 :host{
     @include flex-fill-space;
+    max-width: $max-router-width;
 }
 
 .content{

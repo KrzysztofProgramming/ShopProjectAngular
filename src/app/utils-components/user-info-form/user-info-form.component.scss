@@ -1,0 +1,60 @@
+@import "../../../styling/all.scss";
+
+.additional-info{
+  display: flex;
+  flex-direction: column;
+
+  &__group{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__wrapper{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 10px 5px 10px 5px
+  }
+
+  &__input{
+    width: 100%;
+    max-width: 300px;
+  }
+
+  &__label{
+    padding: 2px;
+    align-self: flex-start;
+  }
+}
+
+:host::ng-deep{
+
+  & .p-inputtext{
+    width: 100%;
+    min-width: 0;
+  }
+  & .p-inputnumber{
+    width: 100%;
+    min-width: 0;
+  }
+
+  & .ng-touched.ng-invalid > .p-inputtext{
+    @include invalid-field;;
+  }
+}
+
+@media only screen and (max-width: 500px){
+  .additional-info{
+    &__group{
+      flex-direction: column;
+    }
+
+    &__wrapper{
+      width: 100%;
+    }
+    &__input{
+      max-width: unset;
+    }
+  }
+}

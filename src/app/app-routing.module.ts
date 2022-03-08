@@ -1,3 +1,4 @@
+import { OrderMakerComponent } from './router-components/order-maker/order-maker.component';
 import { NotFoundComponent } from './router-components/not-found/not-found.component';
 import { ResetPasswordComponent } from './router-components/reset-password/reset-password.component';
 import { HomeComponent } from './router-components/home/home.component';
@@ -33,6 +34,7 @@ const routes: Routes = [
   {path: "offert", component: MergeProductsComponent},
   {path: "product/:id", component: ProductDetailsComponent},
   {path: "cart", component: CartComponent},
+  {path: "make-order", component: OrderMakerComponent},
   {path: "**", component: NotFoundComponent}
 ];
 

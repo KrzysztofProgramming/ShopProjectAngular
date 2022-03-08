@@ -146,6 +146,7 @@ export class SingleSelectComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit(): void {
+
   }
 
   public handleKeyPress(event: KeyboardEvent){

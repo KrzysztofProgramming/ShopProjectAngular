@@ -1,46 +1,94 @@
 @import "../../../styling/all.scss";
 
-:host{
-    @include flex-fill-space;
-    padding: min(20px, 1%);
-    align-items: center;
-    max-width: $max-router-width;
+:host {
+  @include flex-fill-space;
+  align-items: center;
+  max-width: $max-router-width;
+  display: flex;
+  flex-direction: column;
 }
 
-.intro{
+.intro {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex: 1;
+  max-height: 800px;
+  flex-direction: column;
+  margin: min(20px, 1%);
+
+  &__background {
     background-image: url("../../../assets/img/books-background.jpg");
     background-repeat: no-repeat;
     background-size: cover;
+    position: absolute;
+    z-index: -1;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+
+  &__button {
+    font-size: $font-size7;
+    letter-spacing: 1px;
+    margin: 15px;
+  }
+
+  &__text {
+    color: white;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: clamp(25px, 5vw, 50px);
+    padding: 30px;
+    text-align: center;
+  }
+
+  &__content {
     width: 100%;
+    padding: min(150px, 10%) 0 min(150px, 10%) 0;
+    flex: 1;
+    background-color: rgba(black, 0.3);
     display: flex;
-    max-height: 500px;
     flex-direction: column;
-
-    &__button{
-        font-size: $font-size7;
-        letter-spacing: 1px;
-        margin: 15px;
-    }
-
-    &__text{
-        color: white;
-        font-weight: bold;
-        letter-spacing: 2px;
-        font-size: clamp(25px, 5vw, 50px);
-        padding: 30px;
-        text-align: center;
-    }
-
-    &__content{
-        width: 100%;
-        padding: min(150px, 10%) 0 min(150px, 10%) 0;
-        flex: 1;
-        background-color: rgba(black, 0.2);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        font-size: 30px;
-    }
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+  }
 }
 
+.tiles{
+  width: 100%;
+  // overflow: unset;
+  &__text{
+    font-size: 30px;
+  }
+
+  &__line{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-bottom: 15px;
+  }
+
+  &__tile{
+    width: 48%;
+    height: 500px;
+  }
+}
+
+@media only screen and (max-width: 650px){
+  .tiles{
+
+    &__line{
+      flex-direction: column;
+      margin-bottom: 0;
+    }
+    &__tile{
+      margin-bottom: 15px;
+      width: 96%;
+    }
+  }
+}

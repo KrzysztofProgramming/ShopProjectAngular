@@ -1,5 +1,5 @@
-import { TypeRequest, ShopProductRequestWithId, GetProductsParams } from './../../models/requests';
-import { TypeResponse, TypesResponse } from './../../models/responses';
+import { TypeRequest, ShopProductRequestWithId, GetProductsParams } from '../../models/requests';
+import { TypeResponse, TypesResponse } from '../../models/responses';
 import { ShopProductRequest } from '../../models/requests';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { mapTo } from 'rxjs/operators';

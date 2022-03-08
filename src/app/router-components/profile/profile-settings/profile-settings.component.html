@@ -1,5 +1,5 @@
 <div class="content">
-    <h2>Twoje dane:</h2>
+    <h2 class="data-header">Twoje dane:</h2>
     <p class="content__element content__login">Login: {{this.profileInfo?.username}}</p>
     <div class="email content__element">
         <p class="email__header">Email:</p>
@@ -11,25 +11,15 @@
         </div>
     </div>
     <button shopButton class="content__element content__password-button" (click)="this.openPasswordDialog()">Zmień hasło</button>
-    <form class="additional-info">
-      <div class="additional-info__names">
-        <input class="additional-info__firstname" shopInputText placeholder="Firstname">
-        <input class="additional-info__lastname" shopInputText placeholder="Lastname">
-      </div>
-      <div class="additional-info__phone&street">
-        <p-inputMask #phoneInput class="additional-info__phone" mask="999 999 999" slotChar="-"
-         placeholder="Number telefonu"></p-inputMask>
-        <input shopInputText class="additional-info__street" placeholder="Nazwa ulicy">
-      </div>
-      <div class="additional-info__numbers">
-        <p-inputNumber class="additional-info__house-number" [min] = "1" placeholder="Numer budynku"></p-inputNumber>
-        <p-inputNumber class="additional-info__local-number" [min] = "1" placeholder="Numer lokalu"></p-inputNumber>
-      </div>
-      <div class="additional-info__city&zip-code">
-        <input shopInputText class="additional-info__city" placeholder="Miasto">
-        <p-inputMask mask="99 999" class="additional-info__zip-code" placeholder="Kod pocztowy"></p-inputMask>
-      </div>
-    </form>
+    <h2 class="info-header">Dane osobowe i adres:</h2>
+    <p class="info-subheader">(Używane przy składaniu zamówienia)</p>
+    <shop-user-info-form [formControl]="this.infoControl" (submit)="this.editConfirmClick()"></shop-user-info-form>
+    <div class="bottom-buttons">
+      <button class="bottom-buttons__edit" shopButton (click) = "editConfirmClick()"
+       [disabled]="this.infoControl.invalid && this.infoEditingMode"> {{this.infoEditingMode ? 'Potwierdź' : 'Edytuj'}}</button>
+      <button class="bottom-buttons__cancel" shopButton color="red" [disabled]="!this.infoEditingMode"
+      (click) = "this.editingCancelled()">Anuluj</button>
+    </div>
 </div>
 <shop-busy-overlay *ngIf = "this.profileInfo == null || this.waitingForResponse"></shop-busy-overlay>
 <shop-change-email [(visibility)] = this.emailDialogVisibility (emailSelected)="this.emailChangeConfirmed($event)">

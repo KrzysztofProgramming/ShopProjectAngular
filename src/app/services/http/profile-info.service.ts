@@ -1,3 +1,6 @@
+import { GetOrdersResponse } from './../../models/responses';
+import { PageableParams, GetOrdersParams } from './../../models/requests';
+import { UserInfo } from './../../models/models';
 import { ProfileInfo } from '../../models/models';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -23,5 +26,13 @@ export class ProfileInfoService {
   
   public updatePassword(request: UpdatePasswordRequest): Observable<any>{
     return this.http.put(`${this.url}updatePassword`, request);
+  }
+
+  public updateUserInfo(info: UserInfo): Observable<any>{
+    return this.http.put(`${this.url}updateUserInfo`, info);
+  }
+
+  public getOrders(params: GetOrdersParams): Observable<GetOrdersResponse>{
+    return this.http.get<GetOrdersResponse>(`${this.url}orders`, {params: params});
   }
 }

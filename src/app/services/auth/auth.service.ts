@@ -184,6 +184,11 @@ export class AuthService{
     // this.router.navigateByUrl("/login");
   }
 
+  public redirectToNotFound(){
+    console.log("redirect to notFound");
+    this.router.navigate(['/notFound'], {skipLocationChange: true});
+  }
+
   public navigateToProfile(){
     this.router.navigate(["/profile/settings"]);
     // this.router.navigateByUrl("/profile/settings");

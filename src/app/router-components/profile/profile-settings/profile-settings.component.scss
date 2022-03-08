@@ -12,19 +12,20 @@
     max-width: 1000px;
 }
 
+.data-header{
+    font-size: $font-size8;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
 .content{
     flex: 1;
     // padding: min(10px, 1%);
     // padding-left: min(40px, 1%);
-    
-    h2{
-        font-size: $font-size9;
-        margin-top: 0;
-        margin-bottom: 20px;
-    }
+  
 
     &__element{
-        margin-top: 25px;
+        margin-top: 20px;
 
         &:first-child{
             margin-top: 0;
@@ -66,6 +67,24 @@
     &__password-button{
       white-space: nowrap;
     }
+}
+
+.info-header{
+  font-size: 27px;
+  margin: 50px 0 0 0;
+}
+
+.info-subheader{
+  font-size: 13px;
+  transform: translateY(-5px);
+}
+
+.bottom-buttons{
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 @media only screen and (max-width: 400px){

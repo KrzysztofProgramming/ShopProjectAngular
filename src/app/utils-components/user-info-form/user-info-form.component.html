@@ -1,0 +1,57 @@
+<form class="additional-info" [formGroup] = "this.formGroup">
+  <div class="additional-info__names additional-info__group">
+    <div class="additional-info__wrapper">
+      <label for="firstname-input" class="additional-info__label">Imię:</label>
+      <input id="firstname-input" class="additional-info__firstname additional-info__input" formControlName="firstname" 
+       shopInputText placeholder="Imię" [pTooltip]="this.getErrorMessage(this.firstnameControl)"
+        (keydown.enter)="this.emitSubmit()">
+    </div>
+    <div class="additional-info__wrapper">
+      <label for="lastname-input" class="additional-info__label">Nazwisko:</label>
+      <input id="lastname-input" class="additional-info__lastname additional-info__input" formControlName="lastname" 
+       shopInputText placeholder="Nazwisko" (blur)="this.onTouche()" [pTooltip]="this.getErrorMessage(this.lastnameControl)"
+       (keydown.enter)="this.emitSubmit()">
+    </div>
+  </div>
+  <div class="additional-info__phone&street additional-info__group">
+    <div class="additional-info__wrapper">
+      <label for="phone-input" class="additional-info__label">Numer telefonu:</label>
+      <p-inputMask inputId="phone-input" #phoneNumberInput class="additional-info__phone additional-info__input"
+       (onFocus)="this.onPhoneInputFocus()" mask="999 999 999" slotChar="-" placeholder="Number telefonu"
+      formControlName="phoneNumber" (blur)="this.onTouche()" (keydown.enter)="this.emitSubmit()"></p-inputMask>
+    </div>
+    <div class="additional-info__wrapper">
+      <label for="street-input" class="additional-info__label">Nazwa ulicy:</label>
+      <input id="street-input" shopInputText class="additional-info__street additional-info__input" formControlName="street" 
+       placeholder="Nazwa ulicy" (blur)="this.onTouche()" [pTooltip]="this.getErrorMessage(this.streetControl)" 
+       (keydown.enter)="this.emitSubmit()">
+    </div>
+  </div>
+  <div class="additional-info__numbers additional-info__group">
+    <div class="additional-info__wrapper">
+      <label for="house-number-input" class="additional-info__label">Number budynku:</label>
+      <p-inputNumber inputId="house-number-input" class="additional-info__house-number additional-info__input" [min]="1"
+       placeholder="Numer budynku" formControlName="houseNumber" (blur)="this.onTouche()" 
+       (keydown.enter)="this.emitSubmit()"></p-inputNumber>
+    </div>
+    <div class="additional-info__wrapper">
+      <label for="local-number-input" class="additional-info__label">Number lokalu:</label>
+      <p-inputNumber inputId="local-number-input" class="additional-info__local-number additional-info__input" [min] = "1"
+       placeholder="Numer lokalu" formControlName="localNumber" (blur)="this.onTouche()" (keydown.enter)="this.emitSubmit()"></p-inputNumber>
+    </div>
+  </div>
+  <div class="additional-info__city&zip-code additional-info__group">
+    <div class="additional-info__wrapper">
+      <label for="city-input" class="additional-info__label">Miasto:</label>
+      <input id="city-input" shopInputText class="additional-info__city additional-info__input"
+       placeholder="Miasto" formControlName="city" (blur)="this.onTouche()" [pTooltip]="this.getErrorMessage(this.cityControl)"
+       (keydown.enter)="this.emitSubmit()">
+    </div>
+    <div class="additional-info__wrapper">
+      <label for="zip-code-input" class="additional-info__label">Kod pocztowy:</label>
+      <p-inputMask inputId="zip-code-input" #zipCodeInput mask="99-999" class="additional-info__zip-code additional-info__input"
+       placeholder="Kod pocztowy" formControlName="zipCode" slotChar=" " (onFocus)="this.onZipCodeInputFocus()"
+        (blur)="this.onTouche()" (keydown.enter)="this.emitSubmit()"></p-inputMask>
+    </div>
+  </div>
+</form>

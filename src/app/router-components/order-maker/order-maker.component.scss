@@ -1,0 +1,84 @@
+@import "../../../styling/all.scss";
+
+:host{
+  @include flex-fill-space;
+  max-width: $max-router-width;
+  display: flex;
+  flex-direction: column;
+  background-color: $surface-100;
+  box-shadow: 0 0 1px 0 $box-shadow-color;
+}
+
+.content{
+  width: 800px;
+  max-width: 100%;
+  align-self: center;
+  background-color: $surface-200;
+  padding: 20px;
+  padding-left: min(40px, 5vw);
+  border-radius: 3px;
+  box-shadow: 0 0 2px 1px $box-shadow-color;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.title{
+  text-align: center;
+  background-color: $theme-white;
+  padding: 10px;
+}
+
+.form{
+  &__email{
+
+    &-label{
+      margin-right: 5px;
+    }
+
+    &-input{
+      width: 300px;
+      max-width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.remember{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px 10px 10px 10px;
+
+  &__checkbox{
+    margin-right: 10px;
+  }
+
+  &__label{
+    cursor: pointer;
+  }
+}
+
+.buttons{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-top: 20px;
+}
+
+
+@media only screen and (max-width: 500px) {
+  .buttons{
+    margin-top: 5px;
+    flex-direction: column;
+
+    &__button{
+      margin-top: 15px;
+    }
+  }
+
+  .content{
+    margin-bottom: 0;
+  }
+}
+ 
