@@ -1,0 +1,240 @@
+@import "../../../styling/all.scss";
+
+:host{
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.filters{
+  width: 300px;
+  margin-right: 5px;
+}
+
+.data{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.table{
+  display: flex;
+  flex-direction: column;
+  // padding: 10px;
+  border: 2px solid $box-shadow-color;
+}
+
+.top-bar{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+
+  &__authors{
+    font-size: $font-size5;
+    white-space: nowrap;i
+    &-count{
+      font-weight: 600;
+    }
+  }
+
+  &__dropdown{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & p{
+      margin-right: 5px;
+    }
+  }
+
+  &__new{
+    padding: 10px;
+    background-color: $theme-color;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition-duration: 200ms;
+
+    &:hover{
+      background-color: $theme-color-light-1;
+    }
+
+    & .pi{
+      font-size: $font-size4;
+    }
+  }
+
+  &__filters-button{
+    display: none;
+  }
+}
+
+.item{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  font-size: 20px;;
+  padding: 5px;
+  flex-wrap: wrap;
+
+  &:nth-child(2n){
+    background-color: $surface-200;
+  }
+
+  &:first-child{
+    border-bottom: 1.5px solid $box-shadow-color;
+  }
+
+  &__name{
+    flex: 3;
+  }
+
+  &__written-books{
+    flex: 1;
+    text-align: center;
+  }
+
+  &__informations{
+    flex: 4;
+    display: flex;
+    align-items: center;
+  }
+
+  &__button{
+    font-size: 18px;
+    padding: 0.4em;
+    // flex: 1;
+
+    &:first-child{
+      margin-left: 0;
+    }
+  }
+
+  &__buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    min-width: 315px;
+    text-align: center;
+
+    &-label{
+      flex: 1;
+    }
+
+    &-wrapper{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      // flex: 1;
+    }
+  }
+}
+
+.bottom-bar{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.delete-confirm{
+  padding: 20px;
+  font-size: $font-size4; 
+}
+
+.scroller{
+  display: none;
+}
+
+
+
+@media only screen and(max-width: 1000px) {
+  .filters{
+    display: none;
+  }
+
+  .top-bar{
+    &__dropdown{
+      display: none;
+    }
+
+    &__filters-button{
+      display: unset;
+    }
+  }
+}
+
+@media only screen and(max-width: 650px){
+  .item{
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    border-bottom: 1px solid $box-shadow-color;
+
+    &:last-child{
+      border-bottom: none;
+    }
+
+    &--top{
+      flex-direction: row;
+    }
+
+    &__informations{
+      justify-content: space-evenly;
+    }
+
+    &__buttons{
+      justify-content: space-evenly;
+
+      &--top{
+        display: none;
+      }
+    }
+  }
+
+  .scroller{
+    display: unset;
+  }
+}
+
+@media only screen and(max-width: 450px) {
+  .top-bar{
+    &__page-select{
+      display: none;
+    }
+  }
+}
+
+@media only screen and(max-width: 360px){
+  .item{
+    &__buttons{
+      flex-wrap: wrap;
+      min-width: unset;
+      justify-content: center;
+    }
+
+    &__button{
+      margin: 10px 3px 0 3px;
+    }
+
+    &__informations{
+      margin-bottom: -10px;
+    }
+  }
+}
+
+@media only screen and(max-width: 260px) {
+  .top-bar{
+    &__authors{
+      display: none;
+    }
+  }
+}

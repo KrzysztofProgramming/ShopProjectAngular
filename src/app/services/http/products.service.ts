@@ -1,4 +1,5 @@
-import { TypeRequest, ShopProductRequestWithId, GetProductsParams } from '../../models/requests';
+import { GetTypesResponse } from './../../models/responses';
+import { TypeRequest, ShopProductRequestWithId, GetProductsParams, GetTypesParams } from '../../models/requests';
 import { TypeResponse, TypesResponse } from '../../models/responses';
 import { ShopProductRequest } from '../../models/requests';
 import { catchError, switchMap, map } from 'rxjs/operators';
@@ -81,12 +82,19 @@ export class ProductsService {
 
   public getTypes(): Observable<TypesResponse>{
     return this.http.get<TypesResponse>(`${this.url}getTypes`);
-    // .pipe(
-    //   switchMap(response=>{
-    //     response.types = response.types.sort((a, b)=>a.localeCompare(b));
-    //     return of(response);
-    //   })
-    // );
+  }
+
+  public getTypesDetails(params: GetTypesParams): Observable<GetTypesResponse>{
+    return this.http.get<GetTypesResponse>(`${this.url}getTypesDetails`, {params: params});
+  }
+
+  public updateType(name: string, newName: string): Observable<any>{
+    const request: TypeRequest = {name: newName};
+    return this.http.put<any>(`${this.url}updateType/${name}`, request);
+  }
+
+  public deleteType(name: string): Observable<any>{
+    return this.http.delete<any>(`${this.url}deleteType/${name}`);
   }
 
   public addType(name: string): Observable<string>{

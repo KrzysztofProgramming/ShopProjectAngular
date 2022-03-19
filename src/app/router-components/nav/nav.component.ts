@@ -49,10 +49,12 @@ export class NavComponent implements OnInit {
           routerLink: "manageProduct/new",
         },
         {
-          label: "Edytuj typy"
+          label: "Edytuj typy",
+          routerLink: "types"
         },
         {
-         label: "Edytuj autorów" 
+         label: "Edytuj autorów",
+         routerLink: "authors" 
         }
       ]
     }

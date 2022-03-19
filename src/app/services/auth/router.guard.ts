@@ -1,4 +1,4 @@
-import { AuthService, Permissions } from './auth.service';
+import { AuthService, Permission, Permissions } from './auth.service';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -27,6 +27,12 @@ export class RouterGuard implements CanActivate {
         return this.authService.hasOnePermission(Permissions.PRODUCTS_WRITE);
       }
       case "products":{
+        return this.authService.hasOnePermission(Permissions.PRODUCTS_WRITE);
+      }
+      case "authors":{
+        return this.authService.hasOnePermission(Permissions.PRODUCTS_WRITE);
+      }
+      case "types":{
         return this.authService.hasOnePermission(Permissions.PRODUCTS_WRITE);
       }
     }

@@ -2,12 +2,11 @@ import { ShopProduct } from './../../models/models';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription, Subject } from 'rxjs';
-import { GetProductsParams, DEFAULT_PRODUCTS_PARAMS, DEFAULT_PAGEABLE } from './../../models/requests';
+import { GetProductsParams, DEFAULT_PRODUCTS_PARAMS, DEFAULT_PAGEABLE, PAGE_SIZES } from './../../models/requests';
 import { ProductsService } from 'src/app/services/http/products.service';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { GetProductsResponse } from 'src/app/models/responses';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { PAGE_SIZES } from 'src/app/models/models';
 import { FiltersDialogModel } from 'src/app/utils-components/dialogs/filters-dialog/filters-dialog.component';
 
 @Component({
@@ -20,11 +19,6 @@ import { FiltersDialogModel } from 'src/app/utils-components/dialogs/filters-dia
       state("hidden", style({"transform": "translateY(-100%)"})),
       state("showed", style("*")),
       transition("hidden <=> showed", animate("200ms ease"))
-    ]),
-    trigger("opacityEntry", [
-      state("void", style({"opacity": 0})),
-      state("*", style("*")),
-      transition("void <=> *", animate("200ms ease"))
     ])
   ]
 })
@@ -167,13 +161,6 @@ export class MergeProductsComponent implements OnInit {
        this.updateRequestParams();
        this.waitingForResponse = false;
        this.cd.markForCheck();
-    });
-  }
-
-  public scrollUp(){
-    window.scroll({
-      top: 0,
-      behavior: "smooth",
     });
   }
 

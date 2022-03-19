@@ -1,10 +1,10 @@
+import { PAGE_SIZES } from './../../../models/requests';
 import { ProductsFiltersComponent } from '../../products-utils/products-filters/products-filters.component';
 import { DEFAULT_PAGEABLE } from '../../../models/requests';
 import { SortOption, SORT_OPTIONS, SORT_OPTION_DEFAULT } from '../../../models/models';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { ProductsFiltersModel } from '../../products-utils/products-filters/products-filters.component';
-
 
 
 export interface FiltersDialogModel extends ProductsFiltersModel{
@@ -51,6 +51,7 @@ export class FiltersDialogComponent implements OnInit, ControlValueAccessor {
   }
 
   sortOptions: SortOption[] = SORT_OPTIONS;  
+  public pageSizes = PAGE_SIZES;
 
   public dialogModel: FiltersDialogModel = {};
   public dialogModelPrimal: FiltersDialogModel = {

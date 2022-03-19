@@ -1,0 +1,12 @@
+<div class="filters">
+  <p class="header">Filtry</p>
+  <input class="search" shopInputText [formControl] = "this.searchControl" placeholder="wyszukiwanie" (blur)="this.onTouche()">
+  <p class="subheader">Ilość książek:</p>
+  <div class="written-books">
+    <p-inputNumber [min]="0" placeholder="min" class="written-books__input" [(ngModel)]="this.model.minBooks"
+    (blur)="this.onTouche()" (ngModelChange)="this.onModelChange()"></p-inputNumber>
+    <p class="written-books__separator">-</p>
+    <p-inputNumber [min]="0" placeholder="max" class="written-books__input" [(ngModel)]="this.model.maxBooks"
+    (blur)="this.onTouche()" (ngModelChange)="this.onModelChange()"></p-inputNumber>
+  </div>
+</div>

@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs';
 import { ShopProductRequest } from '../../../models/requests';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator, ValidationErrors } from '@angular/forms';
-import { notEmptyListValidator } from 'src/app/models/shop-validators';
+import { notBlankValidator, notEmptyListValidator } from 'src/app/models/shop-validators';
 import { AuthorsSelectComponent } from '../../authors-select/authors-select.component';
 import { TypesSelectComponent } from '../../multi-selects/types-select/types-select.component';
 import { deepCopy, EMPTY_PRODUCT_REQUEST } from 'src/app/models/models';
@@ -46,10 +46,10 @@ export class ProductCreatorComponent implements OnInit, ControlValueAccessor, Va
   private subscriptions: Subscription[] = [];
 
   public formGroup: FormGroup = this.fb.group({
-    name: ['', [Validators.required]],
+    name: ['', [Validators.required, notBlankValidator]],
     price: [0, [Validators.required, Validators.min(0)]],
     categories: [[], notEmptyListValidator],
-    description: ['', Validators.required],
+    description: ['', Validators.required, notBlankValidator],
     inStock: [0, [Validators.required, Validators.min(0)]],
     authors: [[], notEmptyListValidator]
   })
@@ -74,9 +74,9 @@ export class ProductCreatorComponent implements OnInit, ControlValueAccessor, Va
 
   get currentProduct(): ShopProductRequest{
     return {
-      name: this.nameControl.value,
+      name: this.nameControl.value.trim(),
       price: this.priceControl.value,
-      description: this.descriptionControl.value,
+      description: this.descriptionControl.value.trim(),
       types: this.categoriesControl.value,
       inStock: this.inStockControl.value,
       authorsNames: this.authorsControl.value
@@ -84,9 +84,9 @@ export class ProductCreatorComponent implements OnInit, ControlValueAccessor, Va
   }
 
   public callOnChange(){
-    this.model.name = this.nameControl.value;
+    this.model.name = this.nameControl.value.trim();
     this.model.price = this.priceControl.value;
-    this.model.description = this.descriptionControl.value;
+    this.model.description = this.descriptionControl.value.trim();
     this.model.types = this.categoriesControl.value;
     this.model.inStock = this.inStockControl.value;
     this.model.authorsNames = this.authorsControl.value;

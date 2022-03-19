@@ -17,7 +17,7 @@ import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } 
       incrementButtonIcon="pi pi-chevron-right"
       decrementButtonIcon="pi pi-chevron-left"
       [(ngModel)]="this.model"
-      (ngModelChange)="this.onChangeFn.emit($event)"
+      (ngModelChange)="this.onChangeFn($event)"
       (onBlur) = "this.onTouchedFn()"
     >
     </p-inputNumber>

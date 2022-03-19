@@ -3,25 +3,7 @@
 <div class="content">
   <div class="content__element">
     <p class="content__subheader">Produkty na stronie:</p>
-    <form class="content__radios">
-      <div class="content__radio">
-        <p-radioButton class="content__radio-button" name="element-count" [value]='10' [(ngModel)]="this.dialogModel.pageSize"
-        inputId="radio10" (ngModelChange)="this.onInternalChange()" (onBlur) = "this.callOnTouche()"></p-radioButton>
-        <label for="radio10" class="content__radio-label">10</label>
-      </div>
-
-      <div class="content__radio">
-        <p-radioButton class="content__radio-button" name="element-count" [value]='25' [(ngModel)]="this.dialogModel.pageSize"
-        inputId="radio25" (ngModelChange)="this.onInternalChange()" (onBlur) = "this.callOnTouche()"></p-radioButton>
-        <label for="radio25" class="content__radio-label">25</label>
-      </div>
-
-      <div class="content__radio">
-        <p-radioButton class="content__radio-button" name="element-count" [value]='50' [(ngModel)]="this.dialogModel.pageSize"
-        inputId="radio50" (ngModelChange)="this.onInternalChange()" (onBlur) = "this.callOnTouche()"></p-radioButton>
-        <label for="radio50" class="content__radio-label">50</label>
-      </div>
-    </form>
+    <shop-page-size-select [(ngModel)]="this.dialogModel.pageSize"></shop-page-size-select>
   </div>
   <div class="content__element">
     <p class="content__subheader">Sortowanie:</p>

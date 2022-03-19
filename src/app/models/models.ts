@@ -17,6 +17,7 @@ export interface ShopUser {
 
 export interface Author extends SimpleAuthor {
   description: string;
+  writtenBooks: number;
 }
 
 export interface SimpleAuthor {
@@ -113,12 +114,16 @@ export interface ProfileInfo {
   info?: UserInfo;
 }
 
+export interface CommonType{
+  name: string;
+  productsCount: number;
+}
+
 export const EMPTY_PROFILE_INFO: ProfileInfo = {
   username: "",
   email: "",
   info: EMPTY_USER_INFO
 }
-
 
 export class ShopOrderStatuses{
   static readonly PAID: number = 1;
@@ -144,8 +149,6 @@ export const SORT_OPTIONS: SortOption[] = [
   { name: 'Alfabetycznie: A-Z', code: 'alphabetic_asc' },
   { name: 'Alfabatycznie: Z-A', code: 'alphabetic_desc' },
 ];
-
-export const PAGE_SIZES: number[] = [10, 25, 50];
 
 export const SORT_OPTION_DEFAULT: SortOption = {
   name: 'Sortowanie: Trafność',

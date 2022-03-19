@@ -1,0 +1,44 @@
+@import "../../../styling/all.scss";
+
+.content{
+  padding: 15px 10px 15px 10px;
+}
+
+.searcher{
+  width: 100%;
+}
+
+.subheader{
+  width: 100%;
+  text-align: center;
+  margin: 15px 0 10px 0;
+  font-size: $font-size5;
+}
+
+.written-books{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  & p{
+    margin: 0 2px 0 2px;
+  }
+
+  &__input{
+    flex: 1;
+  }
+}
+
+:host ::ng-deep{
+  & .p-inputnumber{
+    width: 100%;
+    max-width: unset;
+    min-width: 0;
+  }
+
+  & .p-inputnumber-input{
+    width: 100%;
+    max-width: unset;
+    min-width: 0;
+  }
+}

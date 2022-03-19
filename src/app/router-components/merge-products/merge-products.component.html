@@ -45,7 +45,5 @@
   <shop-filters-dialog [(visibility)]="this.filtersExpanded" [(ngModel)] = "this.productsParams"
    (ngModelChange)="this.onParamsModelChange()"></shop-filters-dialog>
   
-  <div class="scroll-button" @opacityEntry *ngIf="this.lastScrollTop > 50" (click)="this.scrollUp()">
-    <i class="pi pi-arrow-up"></i>
-  </div>
+  <shop-scroller></shop-scroller>
 </div>

@@ -1,4 +1,3 @@
-
 import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from "@angular/forms"
 
 export const usernameValidators: ValidatorFn[] = [Validators.pattern("\\w+"), Validators.minLength(4), Validators.maxLength(20), Validators.required];
@@ -8,6 +7,12 @@ export const notEmptyListValidator: ValidatorFn = (control: AbstractControl) =>{
   return (control.value != null && control.value.length > 0) ? null : {empty: true};
 }
 
+export const notBlankValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null =>{
+  let value = control.value;
+  if(typeof(value) !== 'string') return {error: "not a string"};
+  if(value.trim().length === 0) return {blankError: true};
+  return null;
+}
 
 export const usernameOrEmailValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null =>{
     let usernameValid: boolean = usernameValidators.every((validator: ValidatorFn) => validator(control) === null);
@@ -44,6 +49,8 @@ export function getErrorsMessage(control: AbstractControl, customErrorFactory?: 
       return "Niewłaściwy format";
     if(control.errors.notEmailOrUsername)
       return "Niewłaściwa nazwa użytkownika lub email";
+    if(control.errors.blankError)
+      return "Same znaki białe";
     return "Zła wartość";
   }
 

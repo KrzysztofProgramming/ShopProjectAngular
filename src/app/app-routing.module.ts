@@ -1,3 +1,5 @@
+import { TypesComponent } from './router-components/types/types.component';
+import { AuthorsComponent } from './router-components/authors/authors.component';
 import { OrderMakerComponent } from './router-components/order-maker/order-maker.component';
 import { NotFoundComponent } from './router-components/not-found/not-found.component';
 import { ResetPasswordComponent } from './router-components/reset-password/reset-password.component';
@@ -35,8 +37,10 @@ const routes: Routes = [
   {path: "product/:id", component: ProductDetailsComponent},
   {path: "cart", component: CartComponent},
   {path: "make-order", component: OrderMakerComponent},
+  {path: "authors", component: AuthorsComponent, canActivate: [RouterGuard]},
+  {path: "types", component: TypesComponent, canActivate: [RouterGuard]},
   {path: "**", component: NotFoundComponent}
-];
+]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {

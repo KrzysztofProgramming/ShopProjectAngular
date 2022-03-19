@@ -80,6 +80,14 @@ import { OrderTileComponent } from './utils-components/order-tile/order-tile.com
 import { OrdersFiltersComponent } from './utils-components/orders-filters/orders-filters.component';
 import {CalendarModule} from 'primeng/calendar';
 import { LinkTileComponent } from './utils-components/link-tile/link-tile.component';
+import { AuthorsComponent } from './router-components/authors/authors.component';
+import { AuthorsListComponent } from './utils-components/authors-list/authors-list.component';
+import { AuthorsFiltersComponent } from './utils-components/authors-filters/authors-filters.component';
+import { PageSizeSelectComponent } from './utils-components/page-size-select/page-size-select.component';
+import { AuthorsFiltersDialogComponent } from './utils-components/authors-filters-dialog/authors-filters-dialog.component';
+import { ScrollerComponent } from './utils-components/scroller/scroller.component';
+import { TypesComponent } from './router-components/types/types.component';
+import { TypesListComponent } from './utils-components/types-list/types-list.component';
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -137,7 +145,15 @@ registerLocaleData(localeFr);
     OrderMakerComponent,
     OrderTileComponent,
     OrdersFiltersComponent,
-    LinkTileComponent
+    LinkTileComponent,
+    AuthorsComponent,
+    AuthorsListComponent,
+    AuthorsFiltersComponent,
+    PageSizeSelectComponent,
+    AuthorsFiltersDialogComponent,
+    ScrollerComponent,
+    TypesComponent,
+    TypesListComponent
   ],
   imports: [
     BrowserModule,

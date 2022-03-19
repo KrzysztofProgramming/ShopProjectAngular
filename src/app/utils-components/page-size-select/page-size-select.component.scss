@@ -1,0 +1,28 @@
+@import "../../../styling/all.scss";
+
+:host{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: min(10px, 2%);
+  padding-bottom: 0;
+  padding-top: 0px;
+}
+
+.radio{
+  margin-left: 5%;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &-label{
+    cursor: pointer;
+    padding: 5px;
+    padding-left: 10px;
+    font-size: $font-size5;
+    flex: 1;
+  }
+}

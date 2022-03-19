@@ -59,10 +59,19 @@ export interface PageableParams extends Params{
     pageNumber?: number
 }
 
-export const DEFAULT_PAGEABLE: PageableParams = {pageSize: 25, pageNumber: 1};
+export const DEFAULT_PAGEABLE: PageableParams = {pageSize: 20, pageNumber: 1};
 
-export interface getAuthorsParams extends PageableParams{
-  searchPhrase: string
+export const PAGE_SIZES: number[] = [10, 20, 35, 50];
+
+export interface GetAuthorsParams extends PageableParams{
+  searchPhrase?: string
+  minBooks?: number;
+  maxBooks?: number;
+}
+
+export const DEFAULT_AUTHORS_PARAMS = {
+  pageSize: DEFAULT_PAGEABLE.pageSize,
+  pageNumber: DEFAULT_PAGEABLE.pageNumber
 }
 
 export type ProductsSortType = "none" | "price_asc" | "price_desc" | "alphabetic_asc" | "alphabetic_desc";
@@ -118,4 +127,10 @@ export interface GetOrdersParams extends PageableParams{
   maxDate?: Date;
   minDate?: Date;
   status?: number;
+}
+
+export interface GetTypesParams extends PageableParams{
+  minProducts?: number;
+  maxProducts?: number;
+  searchPhrase?: string;
 }
