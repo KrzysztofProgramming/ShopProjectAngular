@@ -67,11 +67,11 @@ export class FiltersDialogComponent implements OnInit, ControlValueAccessor {
   constructor(private cd: ChangeDetectorRef) {}
 
   writeValue(obj: FiltersDialogModel): void {
+    this.dialogModel = {};
     this.dialogModel.pageSize = DEFAULT_PAGEABLE.pageSize;
     this.dialogModel.sort = SORT_OPTION_DEFAULT.code;
-    this.resetDialogModel();
-    Object.assign(this.dialogModel, obj);
-    Object.assign(this.dialogModelPrimal, this.dialogModel);
+    this.dialogModel = Object.assign(this.dialogModel, obj);
+    this.dialogModelPrimal = Object.assign({}, this.dialogModel);
     this.cd.markForCheck();
   }
 
@@ -101,7 +101,7 @@ export class FiltersDialogComponent implements OnInit, ControlValueAccessor {
   public dialogAccepted(){
     this.visibility = false;
     this.onChangeFn(this.dialogModel);
-    Object.assign(this.dialogModelPrimal, this.dialogModel);
+    this.dialogModelPrimal = Object.assign({}, this.dialogModel);
     this.cd.markForCheck();
   }
 

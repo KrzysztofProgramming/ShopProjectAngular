@@ -30,7 +30,7 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
   @Output("startChanging") filtersStartChanging: EventEmitter<void> = new EventEmitter<void>();
   @Input() showHeader: boolean = true;
   @Input() adminView: boolean = false;
-  @Input() selectsType: 'dropdown' | 'accordion'= 'dropdown';
+  @Input() selectsType: 'dropdown' | 'accordion' = 'dropdown';
   @Input() debounceTime: boolean = true;
   
   private model: ProductsFiltersModel = {};

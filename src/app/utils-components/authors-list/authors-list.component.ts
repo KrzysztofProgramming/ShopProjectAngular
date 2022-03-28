@@ -18,7 +18,7 @@ export class AuthorsListComponent implements OnInit {
   response?: GetAuthorsResponse;
   waitingForResponse: boolean = true;
   currentRequest?: Subscription;
-  params: GetAuthorsParams = DEFAULT_AUTHORS_PARAMS;
+  params: GetAuthorsParams = Object.assign({}, DEFAULT_AUTHORS_PARAMS);
   authorToDelete?: Author;
   deleteDialogVisibility: boolean = false;
   editingAuthor?: Author;
@@ -29,8 +29,6 @@ export class AuthorsListComponent implements OnInit {
   constructor(private authorsService: AuthorsService, private cd: ChangeDetectorRef, private router: Router,
      private route: ActivatedRoute, private messageService: ToastMessageService) { }
 
-  @ViewChildren("buttons")
-  buttonsCell!: QueryList<HTMLDivElement>;
 
   ngOnInit(): void {
     this.onQueryParamsChange(this.route.snapshot.queryParams);
@@ -52,6 +50,7 @@ export class AuthorsListComponent implements OnInit {
 
   public newAuthorClicked(){
     this.creatorVisibility = true;
+    this.cd.markForCheck();
   }
 
   public onAuthorChanged(changedAuthor: Author){

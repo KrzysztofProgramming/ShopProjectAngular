@@ -1,3 +1,4 @@
+import { CommonType } from './../../../models/models';
 import { FormControl, Validators } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { ProductsService } from 'src/app/services/http/products.service';
@@ -24,6 +25,23 @@ export class TypesCreatorComponent implements OnInit {
   @Output() typeAdded: EventEmitter<string> = new EventEmitter<string>();
   public waitingForResponse: boolean = false;
 
+  public type?: string;
+
+  @Input("type")
+  public set authorInput(value: string | undefined){
+    if(value==undefined){
+      this.typeControl.reset();
+      this.cd.markForCheck();
+      return;
+    }
+    this.type = value;
+    this.typeControl.setValue(value);
+    this.cd.markForCheck();
+  }
+  public get authorInput(): string | undefined{
+    return this.type;
+  }
+
   public get visibility(): boolean{
     return this._visibility;
   }
@@ -46,14 +64,22 @@ export class TypesCreatorComponent implements OnInit {
 
   private sendRequest(){
     this.waitingForResponse = true;
-    this.productsService.addType(this.typeControl.value).pipe(
-      finalize(this.requestFinished.bind(this))
-    ).subscribe(this.requestSuccess.bind(this), this.requestFailed.bind(this));
+    if(this.type){
+      this.productsService.updateType(this.type, this.typeControl.value.trim()).pipe(
+        finalize(this.requestFinished.bind(this))
+      ).subscribe(this.requestSuccess.bind(this), this.requestFailed.bind(this));
+    }
+    else{
+      this.productsService.addType(this.typeControl.value.trim()).pipe(
+        finalize(this.requestFinished.bind(this))
+      ).subscribe(this.requestSuccess.bind(this), this.requestFailed.bind(this));
+    }
     this.cd.markForCheck();
   }
 
   private requestSuccess(typeName: string){
-    this.messageService.showMessage({severity: "success", summary:"Sukces", detail: "Typ został dodany"});
+    let details = this.type ? "Type został zmieniony" : "Typ został dodany"
+    this.messageService.showMessage({severity: "success", summary:"Sukces", detail: details});
     this.typeAdded.emit(typeName);
     this.visibility = false;
     this.typeControl.reset();

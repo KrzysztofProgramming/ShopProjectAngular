@@ -1,1 +1,56 @@
-<p>types-list works!</p>
+<shop-types-filters class="filters" [(ngModel)]="this.params" (modelStartChanging)="this.cancelRequest()"
+ (ngModelChange)="this.onModelChange()"></shop-types-filters>
+<div class="data" *ngIf="this.response">
+  <div class="top-bar">
+    <div class="top-bar__new" title="Nowy typ" (click)="this.newTypeClicked()">
+        <i class="pi pi-plus"></i>
+    </div>
+    <div class="top-bar__types">Typy: <span class="top-bar__types-count">{{this.response.totalElements}}</span></div>
+    <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
+    (ngModelChange)="this.onModelChange()" class="top-bar__page-select"></shop-page-select>
+    <div class="top-bar__dropdown">
+      <p>Na stronie:</p>
+      <p-dropdown [(ngModel)] = "this.params.pageSize" [options] = "this.pageSizes"
+       (ngModelChange)="this.navigateToParams()"></p-dropdown>
+    </div>
+    <button class="top-bar__filters-button" shopButton padding="medium" (click)="this.showFilters()">Filtry</button>
+  </div>
+  <div class="table">
+    <div class="item item--top">
+      <div class="item__informations">
+        <p class="item__name">Nazwa</p>
+        <p class="item__products-count">Książki</p>
+      </div>
+      <div class="item__buttons item__buttons--top">
+       <p class="item__buttons-label">Akcje</p> 
+      </div>  
+    </div>
+    <div class="item" *ngFor="let type of this.response.result; trackBy: trackByName; let i = index">
+      <div class="item__informations">
+        <p class="item__name">{{type.name}}</p>
+        <p class="item__products-count">{{type.productsCount}}</p>
+      </div>
+      <div class="item__buttons">
+        <button shopButton class="item__button" [disabled] = "type.productsCount < 1" (click)="this.navigateToType(type)">Zobacz Produkty</button>
+        <button shopButton class="item__button" color="gray" (click)="this.setEditingType(type)">Szczegóły</button>
+        <button shopButton class="item__button" color="red" [disabled] = "type.productsCount > 0"
+          (click) = "this.deleteClicked(type)">Usuń</button>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-bar">
+    <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
+    (ngModelChange)="this.onModelChange()"></shop-page-select>
+  </div>
+</div>
+
+<shop-scroller class="scroller"></shop-scroller>
+<shop-types-filters-dialog [(visibility)]="this.filtersVisibility" [(ngModel)]="this.params"
+ (ngModelChange)="this.onModelChange()"></shop-types-filters-dialog>
+<shop-busy-overlay *ngIf="this.waitingForResponse"></shop-busy-overlay>
+<shop-types-creator [type]="this.editingType ? this.editingType.name : undefined" [(visibility)]="this.editorVisibility" (typeAdded)="this.onTypeChange($event)"></shop-types-creator>
+<shop-types-creator [(visibility)]="this.creatorVisibility" (typeAdded)="this.reloadTypes()"></shop-types-creator>
+<shop-dialog [exitButton]="false" cancelPhrase="Anuluj" acceptPhrase="Tak" dialogTitle="Potwierdź"
+ [(visibility)]="this.deleteDialogVisibility" (accept)="this.deleteSelectedType()">
+  <p class="delete-confirm">Czy na pewno chcesz usunąć ten typ? Ta operacja jest nieodwracalna.</p>
+</shop-dialog>

@@ -11,7 +11,6 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
     :host{
       @include flex-fill-space;
       display: flex;
-      flex-direction: row;
       max-width: $max-router-width;
       padding: 10px;
     }

@@ -9,6 +9,7 @@
 .filters{
   width: 300px;
   margin-right: 5px;
+  min-height: 500px;
 }
 
 .data{
@@ -32,7 +33,7 @@
 
   &__authors{
     font-size: $font-size5;
-    white-space: nowrap;i
+    white-space: nowrap;
     &-count{
       font-weight: 600;
     }
@@ -103,6 +104,7 @@
     flex: 4;
     display: flex;
     align-items: center;
+    min-height: 2em;
   }
 
   &__button{
@@ -189,6 +191,7 @@
 
     &__informations{
       justify-content: space-evenly;
+      min-height: 3em;
     }
 
     &__buttons{

@@ -1,0 +1,16 @@
+<shop-dialog [(visibility)]="this._visibility" (visibilityChange)="this.onVisibilityChange($event)" dialogTitle="Filtry"
+acceptPhrase="OK" cancelPhrase="Anuluj" (accept)="this.onAccept()" (cancel)="this.onCancel()" maxContentHeigh="500px">
+  <form class="content" (ngSubmit)="this.onAccept()">
+    <input shopInputText placeholder="wyszukiwanie" class="searcher" [(ngModel)]="this.model.searchPhrase" name="search">
+    <p class="subheader">Typy na stronie:</p>
+    <shop-page-size-select [(ngModel)]="this.model.pageSize" name="page-size"></shop-page-size-select>
+    <p class="subheader">Ilość produktów:</p>
+    <div class="products-count">
+      <p-inputNumber class="written-books__min products-count__input" placeholder="min" [(ngModel)]="this.model.minBooks"
+      name="products-min"></p-inputNumber>
+      <p>-</p>
+      <p-inputNumber  class="written-books__max products-count__input" placeholder="max" [(ngModel)]="this.model.maxBooks"
+      name="products-max"></p-inputNumber>
+    </div>
+  </form>
+</shop-dialog>

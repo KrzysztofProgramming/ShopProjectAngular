@@ -24,7 +24,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./author-creator.component.scss']
 })
 export class AuthorCreatorComponent implements OnInit, OnDestroy {
-  // @Input("visibility")
   public author?: Author;
 
   @Input("author")

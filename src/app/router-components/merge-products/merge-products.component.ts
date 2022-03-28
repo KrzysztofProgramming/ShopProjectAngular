@@ -97,7 +97,6 @@ export class MergeProductsComponent implements OnInit {
     // this.pageSizeModel = params.pageCount ? params.pageCount : this.pageSizeModel;
 
     this.productsParams = params;
-    console.log(this.productsParams);
     this.cd.markForCheck();
   }
 

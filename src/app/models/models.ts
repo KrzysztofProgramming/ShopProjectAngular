@@ -167,7 +167,7 @@ export function deepCopy<T>(source: T): T {
           prop,
           Object.getOwnPropertyDescriptor(source, prop)!
         );
-        o[prop] = deepCopy((source as { [key: string]: any })[prop]);
+        o[prop] = deepCopy((source as unknown as { [key: string]: any })[prop]);
         return o;
       }, Object.create(Object.getPrototypeOf(source)))
     : (source as T);

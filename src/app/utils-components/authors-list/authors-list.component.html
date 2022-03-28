@@ -17,24 +17,24 @@
   </div>
   <div class="table">
     <div class="item item--top">
-      <div class="item__name">Nazwa</div>
-      <div class="item__written-books">Książki</div>
+      <div class="item__informations">
+        <p class="item__name">Nazwa</p>
+        <p class="item__written-books">Książki</p>
+      </div>
       <div class="item__buttons item__buttons--top">
        <p class="item__buttons-label">Akcje</p> 
       </div>  
     </div>
     <div class="item" *ngFor="let author of this.response.result; trackBy: trackAuthorById; let i = index">
       <div class="item__informations">
-        <div class="item__name">{{author.name}}</div>
-        <div class="item__written-books">{{author.writtenBooks}}</div>
+        <p class="item__name">{{author.name}}</p>
+        <p class="item__written-books">{{author.writtenBooks}}</p>
       </div>
-      <div class="item__buttons" #buttons>
+      <div class="item__buttons">
         <button shopButton class="item__button" [disabled] = "author.writtenBooks < 1" (click)="this.navigateToProducts(author)">Zobacz Produkty</button>
-        <!-- <div class="item__buttons-wrapper"> -->
-          <button shopButton class="item__button" color="gray" (click)="this.setEditingAuthor(author)">Szczegóły</button>
-          <button shopButton class="item__button" color="red" [disabled] = "author.writtenBooks > 0"
-           (click) = "this.deleteClicked(author)">Usuń</button>
-        <!-- </div> -->
+        <button shopButton class="item__button" color="gray" (click)="this.setEditingAuthor(author)">Szczegóły</button>
+        <button shopButton class="item__button" color="red" [disabled] = "author.writtenBooks > 0"
+          (click) = "this.deleteClicked(author)">Usuń</button>
       </div>
     </div>
   </div>
@@ -43,6 +43,7 @@
     (ngModelChange)="this.onModelChange()"></shop-page-select>
   </div>
 </div>
+
 <shop-scroller class="scroller"></shop-scroller>
 <shop-authors-filters-dialog [(visibility)]="this.filtersVisibility" [(ngModel)]="this.params"
  (ngModelChange)="this.onModelChange()"></shop-authors-filters-dialog>

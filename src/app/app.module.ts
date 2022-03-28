@@ -88,6 +88,8 @@ import { AuthorsFiltersDialogComponent } from './utils-components/authors-filter
 import { ScrollerComponent } from './utils-components/scroller/scroller.component';
 import { TypesComponent } from './router-components/types/types.component';
 import { TypesListComponent } from './utils-components/types-list/types-list.component';
+import { TypesFiltersComponent } from './utils-components/types-filters/types-filters.component';
+import { TypesFiltersDialogComponent } from './utils-components/types-filters-dialog/types-filters-dialog.component';
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -153,7 +155,9 @@ registerLocaleData(localeFr);
     AuthorsFiltersDialogComponent,
     ScrollerComponent,
     TypesComponent,
-    TypesListComponent
+    TypesListComponent,
+    TypesFiltersComponent,
+    TypesFiltersDialogComponent
   ],
   imports: [
     BrowserModule,
