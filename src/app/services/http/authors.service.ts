@@ -1,3 +1,4 @@
+import { debounceTime, shareReplay, tap } from 'rxjs/operators';
 import { Author } from '../../models/models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -12,11 +13,17 @@ import { AuthorRequest } from 'src/app/models/requests';
 export class AuthorsService {
 
   private readonly url: string = 'http://localhost:8080/api/authors/';
-
   constructor(private http: HttpClient) { }
+  currentSimpleListObservable?: Observable<SimpleAuthorsResponse>
 
   public getSimpleAuthors(): Observable<SimpleAuthorsResponse>{
-    return this.http.get<SimpleAuthorsResponse>(`${this.url}getSimpleList`);
+    return this.currentSimpleListObservable ||
+      (this.currentSimpleListObservable = this.http.get<SimpleAuthorsResponse>(`${this.url}getSimpleList`).pipe(
+        shareReplay(),
+        tap(()=>{setTimeout(() => {
+          this.currentSimpleListObservable = undefined
+        }, 10000);})
+    ))
   }
 
   public getAuthors(authorsParams: Params): Observable<GetAuthorsResponse>{

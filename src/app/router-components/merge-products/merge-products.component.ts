@@ -78,8 +78,8 @@ export class MergeProductsComponent implements OnInit {
 
   ngOnInit(): void {
     // this.refreshProducts();
-    this.activatedRoute.queryParams.subscribe(() =>{
-      this.refreshProducts();
+    this.activatedRoute.queryParams.subscribe((params) =>{
+      this.refreshProducts(params);
       // this.writeParams(params);
     })
     this.subscriptions.push(this.searchPhraseSubject.pipe(
@@ -131,26 +131,27 @@ export class MergeProductsComponent implements OnInit {
     };
   }
 
-  public refreshProducts(): void{
-    this.isAdminMode();
+  public refreshProducts(params: Params = this.activatedRoute.snapshot.queryParams): void{
+    // this.isAdminMode();
     this.cancelPreviousRequest();
     this.waitingForResponse = true;
-    this.lastRequest = this.productService.getAllProducts(this.activatedRoute.snapshot.queryParams).subscribe(response=>{
-      
+    this.lastRequest = this.productService.getAllProducts(params).subscribe(response=>{
       this.httpResponse = Object.assign({}, response);
       this.httpResponse.totalPages = Math.max(1, response.totalPages);
       let routerParams: GetProductsParams = Object.assign({}, DEFAULT_PRODUCTS_PARAMS);
-      Object.assign(routerParams, this.activatedRoute.snapshot.queryParams);
+      Object.assign(routerParams, params);
       routerParams.pageNumber = Math.min(this.httpResponse.totalPages, response.pageNumber);
 
-      routerParams.pageSize = this.pageOptions.includes(routerParams.pageSize!) ? routerParams.pageSize
-       : this.productsParams.pageSize
+      if(routerParams.pageSize)
+        routerParams.pageSize = this.pageOptions.includes(+routerParams.pageSize) ? +routerParams.pageSize
+         : this.productsParams.pageSize
 
       if(routerParams.types && !Array.isArray(routerParams.types))
         routerParams.types = [(routerParams.types as unknown) as string];
       if(routerParams.authorsNames && !Array.isArray(routerParams.authorsNames))
         routerParams.authorsNames = [(routerParams.authorsNames as unknown) as string];
-      
+        
+      console.log(routerParams);
       this.writeParams(routerParams);
       this.updateRequestParams();
       this.waitingForResponse = false;

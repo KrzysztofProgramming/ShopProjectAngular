@@ -96,7 +96,7 @@ export class CartEditorElementComponent implements OnInit, OnDestroy{
     <!-- <div class="header">
       Produkty w koszyku:
     </div> -->
-    <div class="content" *ngIf="!this.waitingForResponse">
+    <div class="content">
       <div class="top-bar" >
         <div class="top-bar__remove-all" *ngIf = "this.cart.items.length !== 0"  (click) = "this.openDeleteDialog()">
           <i class="pi pi-times"></i>

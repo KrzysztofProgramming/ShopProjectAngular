@@ -1,0 +1,21 @@
+@import "../../../../styling/all.scss";
+
+:host{
+  display: flex;
+  flex-direction: row;
+}
+
+.informations{
+  display: flex;
+  flex-direction: column;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
+  & p{
+    width: 50%;
+  }
+}

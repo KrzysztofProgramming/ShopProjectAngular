@@ -23,14 +23,25 @@
                 <p-inputNumber [(ngModel)]="this.selectedCount" class="content__buy-count" [min]="0" [showButtons]="true"
                 [max]="this.maxToSelect"></p-inputNumber>
                 <button shopButton class="content__buy-button" [disabled]="this.product.inStock <=0 || this.waitingForResponse
-                 || this.maxToSelect === 0"
+                 || this.maxToSelect === 0" padding="medium"
                 (click)="this.addToCart()"><i class="pi pi-shopping-cart"></i> Dodaj do koszyka</button>
             </div>
         </div>
     </div>
-    <div class="description">
-        <h3 class="description__title">Opis produktu: </h3>
-        <p class="description__info">{{this.product.description}}</p>
+    <div class="informations">
+      <h3 class="informations__title">Informacje:</h3>
+        <div class="informations__table">
+          <div class="informations__row informations__types">
+            <p class="informations__header-cell">Typy:</p>
+            <p class="informations__content-cell">{{this.product.types.join(", ")}}</p>
+          </div>
+          <div class="informations__authors informations__row">
+            <p class="informations__header-cell">Autorzy:</p>
+            <p class="informations__content-cell">{{this.authorsString}}</p>
+          </div> 
+        </div>
+        <h4 class="informations__description-header">Opis produktu: </h4>
+        <p class="informations__description">{{this.product.description}}</p>
     </div>
 </div>
 <!-- <div class="overlay" *ngIf="!this.product">

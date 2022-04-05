@@ -1,6 +1,6 @@
 import { GetOrdersResponse } from './../../models/responses';
 import { PageableParams, GetOrdersParams } from './../../models/requests';
-import { UserInfo } from './../../models/models';
+import { ShopOrder, UserInfo } from './../../models/models';
 import { ProfileInfo } from '../../models/models';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -34,5 +34,9 @@ export class ProfileInfoService {
 
   public getOrders(params: GetOrdersParams): Observable<GetOrdersResponse>{
     return this.http.get<GetOrdersResponse>(`${this.url}orders`, {params: params});
+  }
+
+  public getOrder(id: string):Observable<ShopOrder>{
+    return this.http.get<ShopOrder>(`${this.url}order/${id}`);
   }
 }

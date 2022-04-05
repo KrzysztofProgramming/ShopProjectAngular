@@ -190,8 +190,19 @@ export class AuthService{
   }
 
   public navigateToProfile(){
+    if(!this.isLogin()){
+      this.router.navigate(['/home']);
+      return;
+    }
     this.router.navigate(["/profile/settings"]);
-    // this.router.navigateByUrl("/profile/settings");
+  }
+
+  public navigateToOrders(){
+    if(!this.isLogin()){
+      this.router.navigate(['/home']);
+      return;
+    }
+    this.router.navigate(['/profile/orders']);
   }
 
   public hasOnePermission(permissions: number | Permission) {

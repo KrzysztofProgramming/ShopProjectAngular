@@ -1,0 +1,28 @@
+<ng-container *ngIf="this.order">
+  <div class="informations">
+    <h2 class="header">Zamówienie z dnia: {{this.order.issuedDate | date: 'dd.MM.yyyy'}}</h2>
+    <div class="row">
+      <p>Status: {{this.order.status}}</p>
+      <p>Cena: {{this.order.totalPrice}}</p>
+    </div>
+    <h3 class="subheader">Dane odbiorcy:</h3>
+    <div  class="row">
+      <p>Email: {{this.order.status}}</p>
+      <p>Numer telefonu: {{this.order.info.phoneNumber}}</p>
+    </div>
+    <div  class="row">
+      <p>Imię: {{this.order.info.firstname}}</p>
+      <p>Nazwisko: {{this.order.info.lastname}}</p>
+    </div>
+    <div class="row">
+      <p>Adres: {{this.order.info.address.street}} {{this.order.info.address.houseNumber}}
+        {{this.order.info.address.localNumber ? '/' + this.order.info.address.localNumber : ''}} 
+        {{this.order.info.address.city}} {{this.order.info.address.zipCode}}</p>
+    </div>
+  </div>
+  <div class="items">
+    <div class="item" *ngFor="let item of this.products; trackBy: this.trackProductById">
+        {{item.id}}
+    </div>
+  </div>
+</ng-container>

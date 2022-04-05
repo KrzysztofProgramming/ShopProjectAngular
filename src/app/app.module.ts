@@ -90,6 +90,9 @@ import { TypesComponent } from './router-components/types/types.component';
 import { TypesListComponent } from './utils-components/types-list/types-list.component';
 import { TypesFiltersComponent } from './utils-components/types-filters/types-filters.component';
 import { TypesFiltersDialogComponent } from './utils-components/types-filters-dialog/types-filters-dialog.component';
+import { PayOrderComponent } from './router-components/pay-order/pay-order.component';
+import { OrdersFiltersDialogComponent } from './utils-components/orders-filters-dialog/orders-filters-dialog.component';
+import { ProfileOrderDetailComponent } from './router-components/profile/profile-order-detail/profile-order-detail.component';
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -157,7 +160,10 @@ registerLocaleData(localeFr);
     TypesComponent,
     TypesListComponent,
     TypesFiltersComponent,
-    TypesFiltersDialogComponent
+    TypesFiltersDialogComponent,
+    PayOrderComponent,
+    OrdersFiltersDialogComponent,
+    ProfileOrderDetailComponent
   ],
   imports: [
     BrowserModule,

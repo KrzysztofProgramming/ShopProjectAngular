@@ -1,10 +1,9 @@
 import { getErrorsMessage } from 'src/app/models/shop-validators';
-import { debounceTime } from 'rxjs/operators';
-import { UserInfo, flattenObject, ProfileInfo, EMPTY_PROFILE_INFO, EMPTY_USER_INFO } from './../../models/models';
+import { UserInfo, EMPTY_USER_INFO } from './../../models/models';
 import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR, ValidationErrors, Validator, NG_VALIDATORS } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, Input, OnDestroy, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { InputMask } from 'primeng/inputmask';
 
 
@@ -36,7 +35,7 @@ export class UserInfoFormComponent implements OnInit, OnDestroy, ControlValueAcc
     phoneNumber: ['', [Validators.required]],
     street: ['', [Validators.required]],
     houseNumber: [0, [Validators.required, Validators.min(1)]],
-    localNumber: [0, [Validators.required, Validators.min(1)]],
+    localNumber: [0, [Validators.min(0)]],
     city: ['', [Validators.required]],
     zipCode: ['', [Validators.required]]
   });

@@ -1,13 +1,12 @@
 import { AuthService } from './../../services/auth/auth.service';
 import { ToastMessageService } from './../../services/utils/toast-message.service';
 import { ShoppingCartService } from './../../services/http/shopping-cart.service';
-import { NewOrderRequest } from './../../models/requests';
 import { OrdersService } from './../../services/http/orders.service';
 import { getErrorsMessage } from 'src/app/models/shop-validators';
 import { emailValidator } from './../../models/shop-validators';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ProfileInfo, EMPTY_PROFILE_INFO, EMPTY_USER_INFO, UserInfo } from './../../models/models';
+import { ProfileInfo, EMPTY_USER_INFO } from './../../models/models';
 import { ProfileInfoService } from './../../services/http/profile-info.service';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
@@ -78,9 +77,9 @@ export class OrderMakerComponent implements OnInit, OnDestroy {
       products: this.cartService.currentCart.items
     }).subscribe(order=>{
       this.cartService.deleteCart().subscribe();
-      this.messageService.showMessage({severity: 'success', summary: "Sukces", detail: "Złożono zamówienie"});
+      this.messageService.showMessage({severity: 'success', summary: "Sukces", detail: "Złożono zamówienie, potwierdzenie wysłano emailem"});
       this.waitingForResponse = false;
-      this.authService.navigateToProfile();
+      this.authService.navigateToOrders();
       this.cd.markForCheck();
     }, error=>{
       let errorInfo: string = error.error.info || "Nie udało się złożyć zamówienia";

@@ -1,0 +1,28 @@
+<shop-dialog [(visibility)]="this._visibility" (visibilityChange)="this.onVisibilityChange($event)" dialogTitle="Filtry"
+acceptPhrase="OK" cancelPhrase="Anuluj" (accept)="this.onAccept()" (cancel)="this.onCancel()" maxContentHeigh="500px">
+  <form class="content" (ngSubmit)="this.onAccept()">
+    <p class="subheader">Zamówienia na stronie:</p>
+    <shop-page-size-select [(ngModel)]="this.model.pageSize" name="page-size"></shop-page-size-select>
+    <p class="subheader">Cena:</p>
+    <div class="price line-inputs">
+      <p-inputNumber class="price__min price__input" placeholder="min" [(ngModel)]="this.model.minPrice"
+      name="price-min"></p-inputNumber>
+      <p>-</p>
+      <p-inputNumber class="price__max price__input" placeholder="max" [(ngModel)]="this.model.maxPrice"
+      name="price-max"></p-inputNumber>
+    </div>
+    <p class="subheader">Data:</p>
+    <div class="date line-inputs">
+      <p-calendar appendTo="body" class="date__input date__min" placeholder="od" name="date-min" [(ngModel)]="this.minDate">
+      </p-calendar>
+      <p>-</p>
+      <p-calendar appendTo="body" class="date__input date__max" placeholder="do" name="date-max" [(ngModel)]="this.maxDate">
+      </p-calendar>
+    </div>
+    <div class="status">
+      <p class="status__label">Status:</p>
+      <p-dropdown class="status__dropdown" optionLabel="name" optionValue="code" [options] = "this.statusOptions"
+      [(ngModel)]="this.model.status" name="status-dropdown"></p-dropdown>
+    </div>
+  </form>
+</shop-dialog>

@@ -1,53 +1,55 @@
 <shop-authors-filters class="filters" [(ngModel)]="this.params" (modelStartChanging)="this.cancelRequest()"
  (ngModelChange)="this.onModelChange()"></shop-authors-filters>
-<div class="data" *ngIf="this.response">
-  <div class="top-bar">
-    <div class="top-bar__new" title="Nowy autor" (click)="this.newAuthorClicked()">
-        <i class="pi pi-plus"></i>
-    </div>
-    <div class="top-bar__authors">Autorzy: <span class="top-bar__authors-count">{{this.response.totalElements}}</span></div>
-    <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
-    (ngModelChange)="this.onModelChange()" class="top-bar__page-select"></shop-page-select>
-    <div class="top-bar__dropdown">
-      <p>Na stronie:</p>
-      <p-dropdown [(ngModel)] = "this.params.pageSize" [options] = "this.pageSizes"
-       (ngModelChange)="this.navigateToParams()"></p-dropdown>
-    </div>
-    <button class="top-bar__filters-button" shopButton padding="medium" (click)="this.showFilters()">Filtry</button>
-  </div>
-  <div class="table">
-    <div class="item item--top">
-      <div class="item__informations">
-        <p class="item__name">Nazwa</p>
-        <p class="item__written-books">Książki</p>
+<div class="data" >
+  <shop-busy-overlay *ngIf="this.waitingForResponse"></shop-busy-overlay>
+  <ng-container *ngIf="this.response">
+    <div class="top-bar">
+      <div class="top-bar__new" title="Nowy autor" (click)="this.newAuthorClicked()">
+          <i class="pi pi-plus"></i>
       </div>
-      <div class="item__buttons item__buttons--top">
-       <p class="item__buttons-label">Akcje</p> 
-      </div>  
-    </div>
-    <div class="item" *ngFor="let author of this.response.result; trackBy: trackAuthorById; let i = index">
-      <div class="item__informations">
-        <p class="item__name">{{author.name}}</p>
-        <p class="item__written-books">{{author.writtenBooks}}</p>
+      <div class="top-bar__authors">Autorzy: <span class="top-bar__authors-count">{{this.response.totalElements}}</span></div>
+      <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
+      (ngModelChange)="this.onModelChange()" class="top-bar__page-select"></shop-page-select>
+      <div class="top-bar__dropdown">
+        <p>Na stronie:</p>
+        <p-dropdown [(ngModel)] = "this.params.pageSize" [options] = "this.pageSizes"
+        (ngModelChange)="this.navigateToParams()"></p-dropdown>
       </div>
-      <div class="item__buttons">
-        <button shopButton class="item__button" [disabled] = "author.writtenBooks < 1" (click)="this.navigateToProducts(author)">Zobacz Produkty</button>
-        <button shopButton class="item__button" color="gray" (click)="this.setEditingAuthor(author)">Szczegóły</button>
-        <button shopButton class="item__button" color="red" [disabled] = "author.writtenBooks > 0"
-          (click) = "this.deleteClicked(author)">Usuń</button>
+      <button class="top-bar__filters-button" shopButton padding="medium" (click)="this.showFilters()">Filtry</button>
+    </div>
+    <div class="table">
+      <div class="item item--top">
+        <div class="item__informations">
+          <p class="item__name">Nazwa</p>
+          <p class="item__written-books">Książki</p>
+        </div>
+        <div class="item__buttons item__buttons--top">
+        <p class="item__buttons-label">Akcje</p> 
+        </div>  
+      </div>
+      <div class="item" *ngFor="let author of this.response.result; trackBy: trackAuthorById; let i = index">
+        <div class="item__informations">
+          <p class="item__name">{{author.name}}</p>
+          <p class="item__written-books">{{author.writtenBooks}}</p>
+        </div>
+        <div class="item__buttons">
+          <button shopButton class="item__button" [disabled] = "author.writtenBooks < 1" (click)="this.navigateToProducts(author)">Zobacz Produkty</button>
+          <button shopButton class="item__button" color="gray" (click)="this.setEditingAuthor(author)">Szczegóły</button>
+          <button shopButton class="item__button" color="red" [disabled] = "author.writtenBooks > 0"
+            (click) = "this.deleteClicked(author)">Usuń</button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="bottom-bar">
-    <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
-    (ngModelChange)="this.onModelChange()"></shop-page-select>
-  </div>
+    <div class="bottom-bar">
+      <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
+      (ngModelChange)="this.onModelChange()"></shop-page-select>
+    </div>
+  </ng-container>
 </div>
 
 <shop-scroller class="scroller"></shop-scroller>
 <shop-authors-filters-dialog [(visibility)]="this.filtersVisibility" [(ngModel)]="this.params"
  (ngModelChange)="this.onModelChange()"></shop-authors-filters-dialog>
-<shop-busy-overlay *ngIf="this.waitingForResponse"></shop-busy-overlay>
 <shop-author-creator [author]="this.editingAuthor" [(visibility)]="this.editorVisibility" (authorAdded)="this.onAuthorChanged($event)"></shop-author-creator>
 <shop-author-creator [(visibility)]="this.creatorVisibility" (authorAdded)="this.reloadAuthors()"></shop-author-creator>
 <shop-dialog [exitButton]="false" cancelPhrase="Anuluj" acceptPhrase="Tak" dialogTitle="Potwierdź"

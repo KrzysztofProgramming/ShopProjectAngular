@@ -1,0 +1,42 @@
+@import "../../../styling/all.scss";
+
+
+:host{
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.waiting{
+  font-size: 27px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  & .pi{
+    font-size: 25px;
+  }
+}
+
+.success{
+  font-size: 27px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 600px;
+  padding: 10px;
+
+  & .pi{
+    font-size: 35px;
+    color: $theme-color;
+  }
+
+  & p{
+    margin: 10px 0 20px 0;
+  }
+}

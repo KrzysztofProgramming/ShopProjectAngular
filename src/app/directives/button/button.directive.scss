@@ -7,6 +7,7 @@
     cursor: pointer;
     transition-duration: 200ms;
     text-align: center;
+    text-decoration: none;
 
     &:disabled{
         cursor: not-allowed;
@@ -27,7 +28,7 @@
     }
 
     &--primary{
-
+        color: black;
         &:hover{
             background-color: $theme-color-light-1;
         }
@@ -39,6 +40,7 @@
 
     &--red{
         background-color: $theme-color2;
+        color: black;
 
         &:hover{
             background-color: $theme-color2-hover;

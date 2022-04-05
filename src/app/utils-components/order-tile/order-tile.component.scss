@@ -1,37 +1,60 @@
 @import "../../../styling/all.scss";
 
 :host{
-  height: 200px;
+  height: 180px;
   display: flex;
-  flex-direction: column;
-  padding: 5px;
+  flex-direction: row;
   border-radius: 3px;
   box-shadow: 0 0 2px 1px $box-shadow-color;
-  background-color: $surface-200;
+  background-color: $surface-100;
+  cursor: pointer;
+  transition-duration: 150ms;
+
+
+  &:hover{
+    transform: scale(1.005);
+    z-index: 1;
+    // box-shadow: 0 0 2px 1.5px $box-shadow-color;
+  }
 }
 
-.content{
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-
-
-}
+// .content{
+//   flex: 1;
+//   display: flex;
+//   flex-direction: row;
+// }
 
 .info{
   display: flex;
-  flex-direction: row;
+  font-size: 19px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  min-width: 150px;
+  padding: 10px 0 10px 0;
+  border-radius: 3px 0 0 3px;
+  width: 30%;
+  background-color: $surface-300;
 
-  &__row{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex: 1;
-    white-space: nowrap;
+  &__date{
+    letter-spacing: 1px;
+    font-size: 21px;
+    margin-bottom: 1px;
+  }
 
-    & p{
-      flex: 1;
-      padding: 2px;
+  &__status{
+    font-weight: 500;
+
+    &--paid{
+      color: green;
+    }
+
+    &--unpaid{
+      color: $theme-color2;
+    }
+
+    &--cancelled{
+      color: blue;
     }
   }
 }
@@ -43,4 +66,22 @@
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
+  flex-wrap: wrap;
+  overflow: hidden;
+
+  &__image{
+    width: 25%;
+    min-width: 100px;
+  }
+}
+
+@media only screen and (max-width: 300px){
+  .images{
+    display: none;
+  }
+
+  .info{
+    width: 100%;
+    min-width: unset;
+  }
 }

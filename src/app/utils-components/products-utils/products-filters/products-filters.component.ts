@@ -111,7 +111,10 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
   }
 
   writeValue(obj: ProductsFiltersModel): void {
-    if(!obj) return;
+    if(!obj){
+      this.formGroup.reset({}, {emitEvent: false});
+      return;
+    };
     this.model = obj;
     this.minPriceControl.setValue(obj.minPrice, {emitEvent: false});
     this.maxPriceControl.setValue(obj.maxPrice, {emitEvent: false});

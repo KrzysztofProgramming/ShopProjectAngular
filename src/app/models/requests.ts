@@ -123,13 +123,28 @@ export interface PayOrderRequest {
   id: string;
 }
 
+export type OrdersSortType = 
+  | 'price_asc'
+  | 'price_desc'
+  | 'date_asc'
+  | 'date_desc';
+
+
 export interface GetOrdersParams extends PageableParams {
   maxPrice?: number;
   minPrice?: number;
-  maxDate?: Date;
-  minDate?: Date;
+  maxDate?: string; //yyyy-MM-dd
+  minDate?: string;
   status?: number;
+  sort?: OrdersSortType;
 }
+
+
+export const DEFAULT_ORDERS_PARAMS: GetOrdersParams = {
+  pageSize: DEFAULT_PAGEABLE.pageSize,
+  pageNumber: DEFAULT_PAGEABLE.pageNumber,
+  sort: 'date_desc'
+} 
 
 export interface GetTypesParams extends PageableParams {
   minProducts?: number;

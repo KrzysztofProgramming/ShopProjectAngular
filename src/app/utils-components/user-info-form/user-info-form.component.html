@@ -30,7 +30,7 @@
   <div class="additional-info__numbers additional-info__group">
     <div class="additional-info__wrapper">
       <label for="house-number-input" class="additional-info__label">Number budynku:</label>
-      <p-inputNumber inputId="house-number-input" class="additional-info__house-number additional-info__input" [min]="1"
+      <p-inputNumber inputId="house-number-input" class="additional-info__house-number additional-info__input" [min]="0"
        placeholder="Numer budynku" formControlName="houseNumber" (blur)="this.onTouche()" 
        (keydown.enter)="this.emitSubmit()"></p-inputNumber>
     </div>

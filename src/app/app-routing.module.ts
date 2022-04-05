@@ -1,3 +1,5 @@
+import { ProfileOrderDetailComponent } from './router-components/profile/profile-order-detail/profile-order-detail.component';
+import { PayOrderComponent } from './router-components/pay-order/pay-order.component';
 import { TypesComponent } from './router-components/types/types.component';
 import { AuthorsComponent } from './router-components/authors/authors.component';
 import { OrderMakerComponent } from './router-components/order-maker/order-maker.component';
@@ -21,14 +23,14 @@ import { ProfileOpinionsComponent } from './router-components/profile/profile-op
 
 const routes: Routes = [
   {path: "home", component: HomeComponent},
-  {path: '', redirectTo: "home", pathMatch: 'full'},
   {path: "login", component: LoginComponent, canActivate:[RouterGuard]},
   {path: "register", component: RegisterComponent, canActivate: [RouterGuard]},
   {path: "regulations", component: RegulationsComponent},
   {path: "profile", component: ProfileComponent, canActivate: [RouterGuard], children:[
     {path: "settings", component: ProfileSettingsComponent},
     {path: "orders", component: ProfileOrdersComponent},
-    {path: "opinions", component: ProfileOpinionsComponent}
+    {path: "opinions", component: ProfileOpinionsComponent},
+    {path: "order/:id", component: ProfileOrderDetailComponent}
   ]},
   {path: "resetPassword/:id", component: ResetPasswordComponent},
   {path: "manageProduct/:id", component: AddProductComponent, canActivate: [RouterGuard]},
@@ -39,6 +41,8 @@ const routes: Routes = [
   {path: "make-order", component: OrderMakerComponent},
   {path: "authors", component: AuthorsComponent, canActivate: [RouterGuard]},
   {path: "types", component: TypesComponent, canActivate: [RouterGuard]},
+  {path: "payOrder/:id", component: PayOrderComponent},
+  {path: '', redirectTo: "home", pathMatch: 'full'},
   {path: "**", component: NotFoundComponent}
 ]
 

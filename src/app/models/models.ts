@@ -1,4 +1,4 @@
-import { ShopProductRequest } from './requests';
+import { ProductsSortType, ShopProductRequest, OrdersSortType } from './requests';
 
 export interface JwtToken {
   authorities: number;
@@ -69,7 +69,7 @@ export const EMPTY_PRODUCT_REQUEST: ShopProductRequest = {
 
 export interface SortOption {
   name: string;
-  code: string;
+  code: ProductsSortType;
 }
 
 export interface Role {
@@ -125,7 +125,7 @@ export const EMPTY_PROFILE_INFO: ProfileInfo = {
   info: EMPTY_USER_INFO
 }
 
-export class ShopOrderStatuses{
+export class OrderStatuses{
   static readonly PAID: number = 1;
   static readonly UNPAID: number = 0;
   static readonly CANCELLED: number = 2;
@@ -135,6 +135,7 @@ export class ShopOrderStatuses{
 export interface ShopOrder {
   id: string,
   ownerUsername: string,
+  email: string;
   info: UserInfo,
   products: {[key: string]: number},
   issuedDate: Date,
@@ -154,6 +155,32 @@ export const SORT_OPTION_DEFAULT: SortOption = {
   name: 'Sortowanie: Trafność',
   code: 'none',
 };
+
+export interface OrdersSortOption{
+  name: string,
+  code: OrdersSortType
+}
+
+export const ORDERS_SORT_OPTIONS: OrdersSortOption[] = [
+  {name: "Od najnowszych", code: 'date_desc'},
+  {name: "Od najstarszych", code: 'date_asc'},
+  {name: "Cena: rosnąco", code: "price_asc"},
+  {name: "Cena: malejąco", code: 'price_desc'}
+] 
+
+export interface OrdersStatusOption{
+  name: string, 
+  code?: number;
+}
+
+export const ORDERS_STATUS_OPTIONS: OrdersStatusOption[] = [
+  {name: "Dowolny", code: undefined},
+  {name: "Zapłacone", code: OrderStatuses.PAID},
+  {name: "Niezapłacone", code: OrderStatuses.UNPAID},
+  {name: "Anulowane", code: OrderStatuses.CANCELLED}
+]
+
+export const DATE_FORMAT: string = "YYYY-MM-DD";
 
 export function deepCopy<T>(source: T): T {
   return Array.isArray(source)

@@ -15,7 +15,8 @@ export class OrdersService {
     return this.http.post<ShopOrder>(`${this.url}newOrder`, request);
   }
 
-  public payOrder(request: PayOrderRequest): Observable<unknown>{
-    return this.http.put<unknown>(`${this.http}payOrder`, request);
+  public payOrder(id: string): Observable<unknown>{
+    let request: PayOrderRequest = {id: id};
+    return this.http.put<unknown>(`${this.url}payOrder`, request);
   }
 }

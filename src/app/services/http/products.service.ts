@@ -1,3 +1,4 @@
+import { shareReplay, tap } from 'rxjs/operators';
 import { GetTypesResponse } from './../../models/responses';
 import { TypeRequest, ShopProductRequestWithId, GetProductsParams, GetTypesParams } from '../../models/requests';
 import { TypeResponse, TypesResponse } from '../../models/responses';
@@ -80,8 +81,19 @@ export class ProductsService {
     return this.http.delete(`${this.url}deleteProductImage/${id}`)
   }
 
+  public currentTypeListObservable?: Observable<TypesResponse>
+
   public getTypes(): Observable<TypesResponse>{
-    return this.http.get<TypesResponse>(`${this.url}getTypes`);
+    return this.currentTypeListObservable ||
+     (this.currentTypeListObservable =
+     this.http.get<TypesResponse>(`${this.url}getTypes`).pipe(
+       shareReplay(),
+       tap(()=>{
+         setTimeout(() => {
+           this.currentTypeListObservable = undefined
+         }, 10000);
+       })
+    ));
   }
 
   public getTypesDetails(params: GetTypesParams): Observable<GetTypesResponse>{

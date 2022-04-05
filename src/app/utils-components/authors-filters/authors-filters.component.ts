@@ -56,6 +56,7 @@ export class AuthorsFiltersComponent implements OnInit, ControlValueAccessor, On
       this.searchControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(value=>{
         this.model.searchPhrase = value;
         this.onModelChange();
+        this.cd.markForCheck();
       })
     )
   }

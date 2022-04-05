@@ -21,6 +21,7 @@ export class ProductDetailsComponent implements OnInit {
   public waitingForResponse: boolean = false;
   public maxToSelect: number = 0;
   public inCartAmount: number = 0;
+  public authorsString: string = ""
 
   constructor(private activatedRoute: ActivatedRoute, private productsService: ProductsService,
      private cd: ChangeDetectorRef, private cartService: ShoppingCartService, private messageService: ToastMessageService,) { }
@@ -76,6 +77,7 @@ export class ProductDetailsComponent implements OnInit {
           if(this.product.inStock <= 0){
             this.selectedCount = 0;
           }
+          this.authorsString = this.product.authors.map(author=>author.name).join(", ");
           this.onCartChange();
           this.cd.markForCheck();
         })
