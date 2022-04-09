@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ShopOrder } from './../../models/models';
+import { serverUrl, ShopOrder } from './../../models/models';
 import { Observable } from 'rxjs';
 import { NewOrderRequest, PayOrderRequest } from './../../models/requests';
 import { Injectable } from '@angular/core';
@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class OrdersService {
-  private readonly url = 'http://localhost:8080/api/orders/';
+  private readonly url = `${serverUrl}api/orders/`;
   constructor(private http: HttpClient) { }
 
   public newOrder(request: NewOrderRequest): Observable<ShopOrder>{

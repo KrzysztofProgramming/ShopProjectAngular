@@ -1,6 +1,6 @@
 import { AuthService } from '../auth/auth.service';
 import { ProductsService } from './products.service';
-import { EMPTY_CART, ShoppingCartWithDetails } from '../../models/models';
+import { EMPTY_CART, serverUrl, ShoppingCartWithDetails } from '../../models/models';
 import { CartProductRequest, SetCartRequest } from '../../models/requests';
 import { ShoppingCart } from '../../models/models';
 import { map, tap, distinctUntilChanged } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 })
 export class ShoppingCartService implements OnDestroy{
 
-  private readonly URL: string = 'http://localhost:8080/api/users/cart/';
+  private readonly URL: string = `${serverUrl}api/users/cart/`;
 
   private currentCartSubject!: BehaviorSubject<ShoppingCart>;
   private subscriptions: Subscription[] = [];

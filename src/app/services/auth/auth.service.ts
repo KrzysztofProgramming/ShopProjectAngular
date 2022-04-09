@@ -1,4 +1,4 @@
-import { JwtToken, Role } from './../../models/models';
+import { JwtToken, Role, serverUrl } from './../../models/models';
 import { LoginRequest, RegisterRequest, RefreshRequest, CheckResetTokenRequest, ForgotPasswordRequest, ResetPasswordRequest } from './../../models/requests';
 import { LoginResponse, ErrorResponse } from './../../models/responses';
 import { Injectable } from '@angular/core';
@@ -39,7 +39,7 @@ export class Permissions{
 })
 export class AuthService{
 
-  private readonly url = "http://localhost:8080/api/auth/";
+  private readonly url = `${serverUrl}api/auth/`;
 
   private jwtToken?: string | null;
   private refreshToken?: string | null;

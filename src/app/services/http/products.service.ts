@@ -1,3 +1,4 @@
+import { serverUrl } from './../../models/models';
 import { shareReplay, tap } from 'rxjs/operators';
 import { GetTypesResponse } from './../../models/responses';
 import { TypeRequest, ShopProductRequestWithId, GetProductsParams, GetTypesParams } from '../../models/requests';
@@ -16,7 +17,7 @@ import { ShopProduct } from 'src/app/models/models';
   providedIn: 'root'
 })
 export class ProductsService {
-  private readonly url: string = 'http://localhost:8080/api/products/';
+  private readonly url: string = `${serverUrl}api/products/`;
 
   constructor(private http: HttpClient) {  }
 

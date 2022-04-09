@@ -1,6 +1,6 @@
 import { GetOrdersResponse } from './../../models/responses';
 import { PageableParams, GetOrdersParams } from './../../models/requests';
-import { ShopOrder, UserInfo } from './../../models/models';
+import { ShopOrder, UserInfo, serverUrl } from './../../models/models';
 import { ProfileInfo } from '../../models/models';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { UpdateEmailRequest, UpdatePasswordRequest } from '../../models/requests
   providedIn: 'root'
 })
 export class ProfileInfoService {
-  private readonly url: string = 'http://localhost:8080/api/users/profile/';
+  private readonly url: string = `${serverUrl}api/users/profile/`;
 
   constructor(private http: HttpClient){}
 

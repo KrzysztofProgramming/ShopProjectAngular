@@ -1,5 +1,5 @@
 import { debounceTime, shareReplay, tap } from 'rxjs/operators';
-import { Author } from '../../models/models';
+import { Author, serverUrl } from '../../models/models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
@@ -12,7 +12,7 @@ import { AuthorRequest } from 'src/app/models/requests';
 })
 export class AuthorsService {
 
-  private readonly url: string = 'http://localhost:8080/api/authors/';
+  private readonly url: string = `${serverUrl}api/authors/`;
   constructor(private http: HttpClient) { }
   currentSimpleListObservable?: Observable<SimpleAuthorsResponse>
 
