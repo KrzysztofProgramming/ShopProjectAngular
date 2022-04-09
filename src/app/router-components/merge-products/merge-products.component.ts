@@ -109,6 +109,15 @@ export class MergeProductsComponent implements OnInit {
     }
   }
 
+  public generateProductUrl(id: string){
+    if(this.isAdminMode()){
+      return "/manageProduct/" + id;
+    }
+    else{
+      return "/product/" + id;
+    }
+  }
+
   public updateRequestParams(){
     const params = Object.assign({}, this.productsParams);
     if(params.pageSize === DEFAULT_PAGEABLE.pageSize) params.pageSize = undefined;
@@ -132,7 +141,6 @@ export class MergeProductsComponent implements OnInit {
   }
 
   public refreshProducts(params: Params = this.activatedRoute.snapshot.queryParams): void{
-    // this.isAdminMode();
     this.cancelPreviousRequest();
     this.waitingForResponse = true;
     this.lastRequest = this.productService.getAllProducts(params).subscribe(response=>{

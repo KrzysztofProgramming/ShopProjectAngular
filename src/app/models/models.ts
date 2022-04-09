@@ -182,6 +182,13 @@ export const ORDERS_STATUS_OPTIONS: OrdersStatusOption[] = [
 
 export const DATE_FORMAT: string = "YYYY-MM-DD";
 
+export function getStatusString(value: number){
+  return value === OrderStatuses.CANCELLED ? "Anulowany" :
+  value === OrderStatuses.PAID ? "Zapłacone" :
+  value === OrderStatuses.UNPAID ? "Niezapłacone" : 
+  "Nieznany"
+}
+
 export function deepCopy<T>(source: T): T {
   return Array.isArray(source)
     ? source.map((item) => deepCopy(item))

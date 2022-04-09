@@ -50,6 +50,11 @@
     &__tile {
       height: 480px;
       width: 25%;
+
+      &-component{
+        height: 100%;
+        width: 100%;
+      }
     }
   }
 }

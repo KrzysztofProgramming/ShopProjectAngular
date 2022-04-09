@@ -6,26 +6,26 @@
             <i class="pi pi-align-justify"></i>
         </div>
         <div class="top-nav__right">
-            <div class="top-nav__icon" shopNavButton routerLink="cart">
+            <a class="top-nav__icon" shopNavButton routerLink="cart">
                 <i class="pi pi-shopping-cart"></i>
                 <div>Koszyk</div>
-            </div>
-            <div class="top-nav__login top-nav__icon" shopNavButton routerLink="login" *ngIf = "!this.isLogin">
+            </a>
+            <a class="top-nav__login top-nav__icon" shopNavButton routerLink="login" *ngIf = "!this.isLogin">
                 <i class="pi pi-user"></i>
                 <div>Logowanie</div>
-            </div>
-            <div class="top-nav__register top-nav__icon" shopNavButton routerLink="register" *ngIf = "!this.isLogin">
+            </a>
+            <a class="top-nav__register top-nav__icon" shopNavButton routerLink="register" *ngIf = "!this.isLogin">
                 <i class="pi pi-user-plus"></i>
                 <div>Rejestracja</div>
-            </div>
-            <div class="top-nav__icon" *ngIf = "this.isLogin" shopNavButton routerLink = "profile/settings">
+            </a>
+            <a class="top-nav__icon" *ngIf = "this.isLogin" shopNavButton routerLink = "profile/settings">
                 <i class="pi pi-user-edit"></i>
                 <div>Profil</div>
-            </div>
-            <div class="top-nav__icon" (click) = "this.logout()" shopNavButton *ngIf = "this.isLogin">
+            </a>
+            <a class="top-nav__icon" (click) = "this.logout()" shopNavButton *ngIf = "this.isLogin">
                 <i class="pi pi-sign-out"></i>
                 <div>Wyloguj</div>
-            </div>
+            </a>
         </div>
     </div>
     <shop-sidebar class="sidebar" [(visible)] = "this.isExpanded" (onHide) = "this.markForCheck()" (onShow) = "this.markForCheck()">

@@ -14,7 +14,6 @@ import { MergeProductsComponent } from './router-components/merge-products/merge
 import { AddProductComponent } from './router-components/add-product/add-product.component';
 import { ProfileComponent } from './router-components/profile/profile.component';
 import { RouterGuard } from './services/auth/router.guard';
-import { RegulationsComponent } from './router-components/regulations/regulations.component';
 import { RegisterComponent } from './router-components/register/register.component';
 import { LoginComponent } from './router-components/login/login.component';
 import { NgModule } from '@angular/core';
@@ -25,7 +24,6 @@ const routes: Routes = [
   {path: "home", component: HomeComponent},
   {path: "login", component: LoginComponent, canActivate:[RouterGuard]},
   {path: "register", component: RegisterComponent, canActivate: [RouterGuard]},
-  {path: "regulations", component: RegulationsComponent},
   {path: "profile", component: ProfileComponent, canActivate: [RouterGuard], children:[
     {path: "settings", component: ProfileSettingsComponent},
     {path: "orders", component: ProfileOrdersComponent},

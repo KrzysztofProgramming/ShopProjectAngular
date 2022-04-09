@@ -24,10 +24,10 @@
     <div class="main-tiles">
       <shop-busy-overlay *ngIf="this.waitingForResponse" class="main-tiles__overlay"></shop-busy-overlay>
       <ng-container *ngIf="this.httpResponse">
-        <ng-container *ngFor="let product of this.httpResponse.result; trackBy: trackByProductId">
-          <shop-product-tile class="main-tiles__tile" [product]="product" (click)="this.navigateToProduct(product.id)">
+        <a class="main-tiles__tile" *ngFor="let product of this.httpResponse.result; trackBy: trackByProductId" [href]="this.generateProductUrl(product.id)">
+          <shop-product-tile class="main-tiles__tile-component" [product]="product">
           </shop-product-tile>
-        </ng-container>
+        </a>
       </ng-container>
     </div>
   </div>

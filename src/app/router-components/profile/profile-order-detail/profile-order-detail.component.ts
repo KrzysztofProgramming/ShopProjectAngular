@@ -1,5 +1,5 @@
 import { ProductsService } from 'src/app/services/http/products.service';
-import { ShopProduct } from 'src/app/models/models';
+import { getStatusString, OrderStatuses, ShopProduct } from 'src/app/models/models';
 import { ProfileInfoService } from 'src/app/services/http/profile-info.service';
 import { switchMap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
@@ -19,6 +19,11 @@ export class ProfileOrderDetailComponent implements OnInit, OnDestroy {
   public waitingForResponse: boolean = true;
   private subscriptions: Subscription[] = [];
   public products: ShopProduct[] = [];
+  public totalPrice: number = 0;
+  public totalAmount: number = 0;
+  public formattedZipCode: string = "";
+  public statusString: string = "";
+  public statusClasses: {[key: string]: boolean} = {};
 
   constructor(private route: ActivatedRoute, private profileService: ProfileInfoService, private router: Router,
      private cd: ChangeDetectorRef, private productsService: ProductsService) { }
@@ -32,6 +37,11 @@ export class ProfileOrderDetailComponent implements OnInit, OnDestroy {
       }),
     ).subscribe(order=>{
       this.order = order;
+      this.totalAmount = Object.values(this.order.products).reduce((val1, val2)=>val1 + val2);
+      const zipCode = this.order.info.address.zipCode.toString();
+      this.statusString = getStatusString(this.order.status);
+      this.statusClasses = this.getStatusClasses(this.order.status);
+      this.formattedZipCode = zipCode.substring(0,2) + "-" + zipCode.substring(2);
       this.readOrderProducts(order);
       this.waitingForResponse = false;
       this.cd.markForCheck();
@@ -40,11 +50,29 @@ export class ProfileOrderDetailComponent implements OnInit, OnDestroy {
     })
   }
 
+  public getStatusClasses(status: number): {[key: string]: boolean}{
+    return {
+      'informations__status--unpaid': status === OrderStatuses.UNPAID,
+      'informations__status--paid': status === OrderStatuses.PAID,
+      'informations__status--cancelled': status === OrderStatuses.CANCELLED,
+      'informations__status--unknown': status === OrderStatuses.UNKNOWN
+    }
+  }
+
   public readOrderProducts(order: ShopOrder){
     this.productsService.getProducts(Object.keys(order.products)).subscribe(products=>{
       this.products = products;
+      this.totalPrice = this.calcTotalPrice();
       this.cd.markForCheck();
     });
+  }
+
+  private calcTotalPrice(): number{
+    let price = 0;
+    this.products.forEach(product=>{
+      price += product.price * this.order!.products[product.id];
+    })
+    return price;
   }
 
   private navigateToNotFound(){
@@ -57,6 +85,10 @@ export class ProfileOrderDetailComponent implements OnInit, OnDestroy {
 
   public trackProductById(index: number, product: ShopProduct): string{
     return product.id;
+  }
+
+  public getItemCount(item: ShopProduct): number{
+    return this.order!.products[item.id];
   }
 
 }

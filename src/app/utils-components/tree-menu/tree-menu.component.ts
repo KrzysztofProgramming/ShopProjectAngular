@@ -1,6 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef, ViewChildren, QueryList, AfterViewInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
 import { Router } from '@angular/router';
 
 export interface TreeItem{
@@ -16,10 +15,10 @@ export interface TreeItem{
   selector: 'shop-tree-menu',
   template: `
     <ng-container *ngFor = "let item of items; let i = index">
-      <div class="label" (click) = "this.toggle(i)" *ngIf="item.visible !== false">
+      <a class="label" (click) = "this.toggle(i)" [routerLink]="this.item.routerLink" *ngIf="item.visible !== false">
         <i *ngIf="item.items" class="pi pi-angle-right" [@rotateIcon] = "this.expandedItems[i] ? 'expanded' : 'collapsed'"></i>
         {{item.label}}
-      </div>
+      </a>
       <div class="child" 
       *ngIf = "item.items && this.expandedItems[i] && item.visible !== false"
       @slowExpansion>
@@ -63,9 +62,10 @@ export class TreeMenuComponent {
 
   public toggle(index: number){
     this.expandedItems[index] = !this.expandedItems[index];
-    if(this.items[index].routerLink){
-      this.router.navigate([this.items[index].routerLink]);
-    }
+  }
+
+  public getRouterLink(){
+
   }
 
   public collapseAll(): void{

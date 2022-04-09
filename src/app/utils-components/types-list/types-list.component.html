@@ -31,7 +31,9 @@
         <p class="item__products-count">{{type.productsCount}}</p>
       </div>
       <div class="item__buttons">
-        <button shopButton class="item__button" [disabled] = "type.productsCount < 1" (click)="this.navigateToType(type)">Zobacz Produkty</button>
+        <a [href]="this.generateProductsUrl(type)">
+          <button shopButton class="item__button" [disabled] = "type.productsCount < 1">Zobacz Produkty</button>
+        </a>
         <button shopButton class="item__button" color="gray" (click)="this.setEditingType(type)">Szczegóły</button>
         <button shopButton class="item__button" color="red" [disabled] = "type.productsCount > 0"
           (click) = "this.deleteClicked(type)">Usuń</button>

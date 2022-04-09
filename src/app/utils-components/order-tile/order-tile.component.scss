@@ -60,7 +60,7 @@
 }
 
 .images{
-  padding: 10px;
+  margin: 10px;
   flex: 1;
   display: flex;
   flex-direction: row;
@@ -79,7 +79,7 @@
   .images{
     display: none;
   }
-
+  
   .info{
     width: 100%;
     min-width: unset;

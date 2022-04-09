@@ -33,7 +33,6 @@ export class ProductImageComponent implements OnInit {
         break;
       default:
         this.imageUrl = this.productsService.getProductIconUrl(this._productId);
-
     }
     this.waitingForImage = true;
     this.cd.markForCheck();

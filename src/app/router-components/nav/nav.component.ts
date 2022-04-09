@@ -31,7 +31,6 @@ export class NavComponent implements OnInit {
     },
     {
       label: "Regulamin",
-      routerLink: "regulations"
     },
     {
       label: "O nas"

@@ -1,10 +1,10 @@
 <div class="content">
     <div class="navigation">
         <div class="link-list">
-            <div class="link-list__element" [class.link-list__element--selected] = "this.selectedChildRoute === 'settings'"
-             routerLink="settings"><p> Ustawienia </p></div>
-            <div class="link-list__element" [class.link-list__element--selected] = "this.selectedChildRoute === 'orders'"
-             routerLink="orders"><p> Zamówienia </p></div>
+            <a class="link-list__element" [class.link-list__element--selected] = "this.selectedChildRoute === 'settings'"
+             routerLink="settings"><p> Ustawienia </p></a>
+            <a class="link-list__element" [class.link-list__element--selected] = "this.selectedChildRoute === 'orders'"
+             routerLink="orders"><p> Zamówienia </p></a>
             <!-- <div class="link-list__element" [class.link-list__element--selected] = "this.selectedChildRoute === 'opinions'"
             routerLink="opinions"><p>Opinie</p></div> -->
         </div>

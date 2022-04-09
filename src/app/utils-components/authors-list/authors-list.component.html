@@ -33,7 +33,9 @@
           <p class="item__written-books">{{author.writtenBooks}}</p>
         </div>
         <div class="item__buttons">
-          <button shopButton class="item__button" [disabled] = "author.writtenBooks < 1" (click)="this.navigateToProducts(author)">Zobacz Produkty</button>
+          <a [href]="this.generateProductsUrl(author)">
+            <button shopButton class="item__button" [disabled] = "author.writtenBooks < 1" >Zobacz Produkty</button>
+          </a>
           <button shopButton class="item__button" color="gray" (click)="this.setEditingAuthor(author)">Szczegóły</button>
           <button shopButton class="item__button" color="red" [disabled] = "author.writtenBooks > 0"
             (click) = "this.deleteClicked(author)">Usuń</button>

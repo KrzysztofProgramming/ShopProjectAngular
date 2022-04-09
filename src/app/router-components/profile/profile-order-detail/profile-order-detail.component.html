@@ -1,28 +1,55 @@
 <ng-container *ngIf="this.order">
   <div class="informations">
-    <h2 class="header">Zamówienie z dnia: {{this.order.issuedDate | date: 'dd.MM.yyyy'}}</h2>
-    <div class="row">
-      <p>Status: {{this.order.status}}</p>
-      <p>Cena: {{this.order.totalPrice}}</p>
+    <h2 class="informations__header">Zamówienie z dnia: {{this.order.issuedDate | date: 'dd.MM.yyyy'}}</h2>
+    <div class="informations__row">
+      <p>Status:<span class="informations__status" [ngClass]="this.statusClasses"> {{this.statusString}} </span></p>
+      <p>Cena: {{this.order.totalPrice | number: "1.2-2"}} zł</p>
     </div>
-    <h3 class="subheader">Dane odbiorcy:</h3>
-    <div  class="row">
-      <p>Email: {{this.order.status}}</p>
+    <h3 class="informations__subheader">Dane odbiorcy:</h3>
+    <div  class="informations__row">
+      <p>Email: {{this.order.email}}</p>
       <p>Numer telefonu: {{this.order.info.phoneNumber}}</p>
     </div>
-    <div  class="row">
+    <div  class="informations__row">
       <p>Imię: {{this.order.info.firstname}}</p>
       <p>Nazwisko: {{this.order.info.lastname}}</p>
     </div>
-    <div class="row">
+    <div class="informations__row informations__row-address">
       <p>Adres: {{this.order.info.address.street}} {{this.order.info.address.houseNumber}}
         {{this.order.info.address.localNumber ? '/' + this.order.info.address.localNumber : ''}} 
-        {{this.order.info.address.city}} {{this.order.info.address.zipCode}}</p>
+        {{this.order.info.address.city}} {{this.formattedZipCode}}</p>
     </div>
   </div>
   <div class="items">
+    <div class="item item-labels">
+      <div class="item__wrapper item__wrapper-first">
+        <div class="item__image"></div>
+        <p class="item__name item__name-label item__data">Nazwa produktu:</p>
+      </div>
+      <div class="item__wrapper item__wrapper-second">
+        <div class="item__amount item__amount-label item__data">Ilość:</div>
+        <div class="item__price item__price-label item__data">Cena:</div>
+      </div>
+    </div>
     <div class="item" *ngFor="let item of this.products; trackBy: this.trackProductById">
-        {{item.id}}
+      <a [href]="'/product/' + item.id" class="item__wrapper item__wrapper-first">
+        <shop-product-image [productId]="item.id" class="item__image" imageResolution="icon"></shop-product-image>
+        <p class="item__name item__data">{{item.name}}</p>
+      </a>
+      <div class="item__wrapper item__wrapper-second">
+        <div class="item__amount item__data">{{this.getItemCount(item)}} <span class="item__amount-unit">szt.</span></div>
+        <div class="item__price item__data">{{item.price * this.getItemCount(item) | number: "1.2-2"}} zł</div>
+      </div>
+    </div>
+    <div class="item item-summary">
+      <div class="item__wrapper item__wrapper-first item__wrapper-first-summary">
+        <div class="item__image item__data"></div>
+        <p class="item__name item__name-label item__data">Łącznie: </p>
+      </div>
+      <div class="item__wrapper item__wrapper-second item__wrapper-second-summary">
+        <div class="item__amount item__amount-label item__data">{{this.totalAmount}} szt.</div>
+        <div class="item__price item__price-label item__data">{{this.totalPrice}} zł</div>
+      </div>
     </div>
   </div>
 </ng-container>

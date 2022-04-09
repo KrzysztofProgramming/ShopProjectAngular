@@ -1,4 +1,4 @@
-import { ShopOrder, OrderStatuses } from './../../models/models';
+import { ShopOrder, OrderStatuses, getStatusString } from './../../models/models';
 import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 
 @Component({
@@ -33,24 +33,9 @@ export class OrderTileComponent implements OnInit {
     this.order = order;
     if(!this.order) return;
     this.productsToRender = Object.keys(this.order.products).slice(0, 4);
-    this.statusString = this.getStatusString(this.order.status);
+    this.statusString = getStatusString(this.order.status);
     this.statusClasses = this.getStatusClasses(this.order.status);
     this.cd.markForCheck();
-  }
-
-  public get orderInput(): ShopOrder | undefined{
-    return this.order;
-  }
-
-  public trackByValue(index: number, value: string): string{
-    return value;
-  }
-
-  public getStatusString(value: number){
-    return value === OrderStatuses.CANCELLED ? "Anulowany" :
-    value === OrderStatuses.PAID ? "Zapłacone" :
-    value === OrderStatuses.UNPAID ? "Niezapłacone" : 
-    "Nieznany"
   }
 
   public getStatusClasses(status: number): {[key: string]: boolean}{
@@ -60,6 +45,14 @@ export class OrderTileComponent implements OnInit {
       'info__status--cancelled': status === OrderStatuses.CANCELLED,
       'info__status--unknown': status === OrderStatuses.UNKNOWN
     }
+  }
+  
+  public get orderInput(): ShopOrder | undefined{
+    return this.order;
+  }
+
+  public trackByValue(index: number, value: string): string{
+    return value;
   }
 
   public getProductCount(products: {[key: string]: any}){

@@ -12,7 +12,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { RegisterComponent } from './router-components/register/register.component';
-import { RegulationsComponent } from './router-components/regulations/regulations.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ProfileComponent } from './router-components/profile/profile.component';
@@ -101,7 +100,6 @@ registerLocaleData(localeFr);
     NavComponent,
     LoginComponent,
     RegisterComponent,
-    RegulationsComponent,
     ProfileComponent,
     AddProductComponent,
     EditableMultiSelectComponent,

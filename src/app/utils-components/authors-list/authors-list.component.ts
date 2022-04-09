@@ -109,9 +109,8 @@ export class AuthorsListComponent implements OnInit {
     this.navigateToParams();
   }
 
-  public navigateToProducts(author: Author){
-    let params: Params = {authorsNames: author.name};
-    this.router.navigate(['products'], {queryParams: params});
+  public generateProductsUrl(author: Author){
+    return `/products?authorsNames=${author.name}`;
   }
 
   public cancelRequest(){
