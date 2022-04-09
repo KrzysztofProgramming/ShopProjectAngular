@@ -1,4 +1,3 @@
-import { AuthService } from './services/auth/auth.service';
 import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
 import { NavButtonDirective } from './directives/nav-button/nav-button.directive';
 import { EditableMultiSelectComponent, MultiSelectItemComponent } from './utils-components/multi-selects/dropdown-multi-select/dropdown-multi-select.component';
@@ -31,7 +30,7 @@ import { RippleModule } from 'primeng/ripple';
 import { AuthInterceptor } from './services/auth/auth.interceptor';
 import { AuthImgPipe } from './pipes/auth-img.pipe';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { MergeProductsComponent } from './router-components/merge-products/merge-products.component';
+import { ProductsComponent } from './router-components/products/products.component';
 import { ProductTileComponent } from './utils-components/products-utils/product-tile/product-tile.component';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ProductsFiltersComponent } from './utils-components/products-utils/products-filters/products-filters.component';
@@ -54,14 +53,14 @@ import { CheckboxComponent } from './utils-components/checkbox/checkbox.componen
 import { CartComponent } from './router-components/cart/cart.component';
 import { CartEditorComponent, CartEditorElementComponent } from './utils-components/cart-editor/cart-editor.component';
 import { HomeComponent } from './router-components/home/home.component';
-import { AuthorsSelectComponent } from './utils-components/authors-select/authors-select.component';
+import { AuthorsSelectComponent } from './utils-components/authors-utils/authors-select/authors-select.component';
 import { TypesSelectComponent } from './utils-components/multi-selects/types-select/types-select.component';
-import { AuthorCreatorComponent } from './utils-components/dialogs/author-creator/author-creator.component';
+import { AuthorCreatorComponent } from './utils-components/authors-utils/author-creator/author-creator.component';
 import { PageSelectComponent } from './utils-components/page-select/page-select.component';
 import { FiltersDialogComponent } from './utils-components/dialogs/filters-dialog/filters-dialog.component';
 import { AccordionMultiSelectComponent } from './utils-components/multi-selects/accordion-multi-select/accordion-multi-select.component';
 import { AbstractMultiSelectComponent } from './utils-components/multi-selects/abstract-multi-select/abstract-multi-select.component';
-import { TypesCreatorComponent } from './utils-components/dialogs/types-creator/types-creator.component';
+import { TypesCreatorComponent } from './utils-components/types-utils/types-creator/types-creator.component';
 import { RadioButtonModule } from "primeng/radiobutton";
 import { SingleSelectComponent } from './utils-components/single-select/single-select.component';
 import { SortSelectComponent } from './utils-components/multi-selects/sort-select/sort-select.component';
@@ -80,15 +79,15 @@ import { OrdersFiltersComponent } from './utils-components/orders-filters/orders
 import {CalendarModule} from 'primeng/calendar';
 import { LinkTileComponent } from './utils-components/link-tile/link-tile.component';
 import { AuthorsComponent } from './router-components/authors/authors.component';
-import { AuthorsListComponent } from './utils-components/authors-list/authors-list.component';
-import { AuthorsFiltersComponent } from './utils-components/authors-filters/authors-filters.component';
+import { AuthorsListComponent } from './utils-components/authors-utils//authors-list/authors-list.component';
+import { AuthorsFiltersComponent } from './utils-components/authors-utils/authors-filters/authors-filters.component';
 import { PageSizeSelectComponent } from './utils-components/page-size-select/page-size-select.component';
-import { AuthorsFiltersDialogComponent } from './utils-components/authors-filters-dialog/authors-filters-dialog.component';
+import { AuthorsFiltersDialogComponent } from './utils-components/authors-utils//authors-filters-dialog/authors-filters-dialog.component';
 import { ScrollerComponent } from './utils-components/scroller/scroller.component';
 import { TypesComponent } from './router-components/types/types.component';
-import { TypesListComponent } from './utils-components/types-list/types-list.component';
-import { TypesFiltersComponent } from './utils-components/types-filters/types-filters.component';
-import { TypesFiltersDialogComponent } from './utils-components/types-filters-dialog/types-filters-dialog.component';
+import { TypesListComponent } from './utils-components/types-utils/types-list/types-list.component';
+import { TypesFiltersComponent } from './utils-components/types-utils/types-filters/types-filters.component';
+import { TypesFiltersDialogComponent } from './utils-components/types-utils/types-filters-dialog/types-filters-dialog.component';
 import { PayOrderComponent } from './router-components/pay-order/pay-order.component';
 import { OrdersFiltersDialogComponent } from './utils-components/orders-filters-dialog/orders-filters-dialog.component';
 import { ProfileOrderDetailComponent } from './router-components/profile/profile-order-detail/profile-order-detail.component';
@@ -108,7 +107,7 @@ registerLocaleData(localeFr);
     InputTextDirective,
     ButtonDirective,
     AuthImgPipe,
-    MergeProductsComponent,
+    ProductsComponent,
     ProductTileComponent,
     ProductsFiltersComponent,
     ProductDetailsComponent,

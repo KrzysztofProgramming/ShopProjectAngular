@@ -1,8 +1,8 @@
-import { ShopProduct } from './../../models/models';
+import { ShopProduct } from '../../models/models';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription, Subject } from 'rxjs';
-import { GetProductsParams, DEFAULT_PRODUCTS_PARAMS, DEFAULT_PAGEABLE, PAGE_SIZES } from './../../models/requests';
+import { GetProductsParams, DEFAULT_PRODUCTS_PARAMS, DEFAULT_PAGEABLE, PAGE_SIZES } from '../../models/requests';
 import { ProductsService } from 'src/app/services/http/products.service';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { GetProductsResponse } from 'src/app/models/responses';
@@ -11,8 +11,8 @@ import { FiltersDialogModel } from 'src/app/utils-components/dialogs/filters-dia
 
 @Component({
   selector: 'app-merge-products',
-  templateUrl: './merge-products.component.html',
-  styleUrls: ['./merge-products.component.scss'],
+  templateUrl: './products.component.html',
+  styleUrls: ['./products.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations:[
     trigger("hideWhileScrolling",[
@@ -22,7 +22,7 @@ import { FiltersDialogModel } from 'src/app/utils-components/dialogs/filters-dia
     ])
   ]
 })
-export class MergeProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit {
 
   public pageOptions: number[] = PAGE_SIZES;
 

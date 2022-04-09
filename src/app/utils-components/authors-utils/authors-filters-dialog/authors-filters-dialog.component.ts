@@ -1,4 +1,4 @@
-import { DEFAULT_AUTHORS_PARAMS } from './../../models/requests';
+import { DEFAULT_AUTHORS_PARAMS } from '../../../models/requests';
 import { GetAuthorsParams } from 'src/app/models/requests';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';

@@ -3,9 +3,9 @@ import { ShopProductRequest } from '../../../models/requests';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator, ValidationErrors } from '@angular/forms';
 import { notBlankValidator, notEmptyListValidator } from 'src/app/models/shop-validators';
-import { AuthorsSelectComponent } from '../../authors-select/authors-select.component';
+import { AuthorsSelectComponent } from '../../authors-utils/authors-select/authors-select.component';
 import { TypesSelectComponent } from '../../multi-selects/types-select/types-select.component';
-import { deepCopy, EMPTY_PRODUCT_REQUEST } from 'src/app/models/models';
+import { EMPTY_PRODUCT_REQUEST } from 'src/app/models/models';
 
 @Component({
   selector: 'shop-product-creator',

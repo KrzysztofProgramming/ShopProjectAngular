@@ -1,10 +1,10 @@
 import { ToastMessageService } from 'src/app/services/utils/toast-message.service';
 import { Subscription } from 'rxjs';
 import { DEFAULT_PAGEABLE, PAGE_SIZES, DEFAULT_AUTHORS_PARAMS } from 'src/app/models/requests';
-import { GetTypesParams } from './../../models/requests';
-import { CommonType } from './../../models/models';
-import { GetTypesResponse } from './../../models/responses';
-import { ProductsService } from './../../services/http/products.service';
+import { GetTypesParams } from '../../../models/requests';
+import { CommonType } from '../../../models/models';
+import { GetTypesResponse } from '../../../models/responses';
+import { ProductsService } from '../../../services/http/products.service';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Params, Router, ActivatedRoute } from '@angular/router';
 

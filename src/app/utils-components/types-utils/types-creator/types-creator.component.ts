@@ -1,4 +1,3 @@
-import { CommonType } from './../../../models/models';
 import { FormControl, Validators } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { ProductsService } from 'src/app/services/http/products.service';

@@ -1,6 +1,6 @@
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
-import { GetAuthorsParams, DEFAULT_AUTHORS_PARAMS } from './../../models/requests';
+import { GetAuthorsParams, DEFAULT_AUTHORS_PARAMS } from '../../../models/requests';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormControl } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, OnInit, Output, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 

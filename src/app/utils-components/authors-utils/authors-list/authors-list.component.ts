@@ -1,7 +1,7 @@
-import { ToastMessageService } from './../../services/utils/toast-message.service';
+import { ToastMessageService } from '../../../services/utils/toast-message.service';
 import { Subscription } from 'rxjs';
-import { GetAuthorsResponse } from './../../models/responses';
-import { AuthorsService } from './../../services/http/authors.service';
+import { GetAuthorsResponse } from '../../../models/responses';
+import { AuthorsService } from '../../../services/http/authors.service';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
 import { DEFAULT_AUTHORS_PARAMS, GetAuthorsParams, PAGE_SIZES, DEFAULT_PAGEABLE } from 'src/app/models/requests';
 import { Router, ActivatedRoute, Params } from '@angular/router';

@@ -10,7 +10,7 @@ import { CartComponent } from './router-components/cart/cart.component';
 import { ProfileOrdersComponent } from './router-components/profile/profile-orders/profile-orders.component';
 import { ProfileSettingsComponent } from './router-components/profile/profile-settings/profile-settings.component';
 import { ProductDetailsComponent } from './router-components/product-details/product-details.component';
-import { MergeProductsComponent } from './router-components/merge-products/merge-products.component';
+import { ProductsComponent } from './router-components/products/products.component';
 import { AddProductComponent } from './router-components/add-product/add-product.component';
 import { ProfileComponent } from './router-components/profile/profile.component';
 import { RouterGuard } from './services/auth/router.guard';
@@ -32,8 +32,8 @@ const routes: Routes = [
   ]},
   {path: "resetPassword/:id", component: ResetPasswordComponent},
   {path: "manageProduct/:id", component: AddProductComponent, canActivate: [RouterGuard]},
-  {path: "products", component: MergeProductsComponent, canActivate: [RouterGuard]},
-  {path: "offert", component: MergeProductsComponent},
+  {path: "products", component: ProductsComponent, canActivate: [RouterGuard]},
+  {path: "offert", component: ProductsComponent},
   {path: "product/:id", component: ProductDetailsComponent},
   {path: "cart", component: CartComponent},
   {path: "make-order", component: OrderMakerComponent},
