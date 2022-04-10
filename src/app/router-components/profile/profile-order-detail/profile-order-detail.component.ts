@@ -59,6 +59,10 @@ export class ProfileOrderDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  public isUnpaid(): boolean{
+    return this.order!.status === OrderStatuses.UNPAID;
+  }
+
   public readOrderProducts(order: ShopOrder){
     this.productsService.getProducts(Object.keys(order.products)).subscribe(products=>{
       this.products = products;

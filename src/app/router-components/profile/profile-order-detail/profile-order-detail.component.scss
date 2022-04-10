@@ -40,6 +40,14 @@
     margin: 15px 0 10px 0;
   }
 
+  &__options{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 15px;
+  }
+
   &__status{
     font-weight: 500;
 

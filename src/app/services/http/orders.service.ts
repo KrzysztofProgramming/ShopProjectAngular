@@ -16,7 +16,10 @@ export class OrdersService {
   }
 
   public payOrder(id: string): Observable<unknown>{
-    let request: PayOrderRequest = {id: id};
-    return this.http.put<unknown>(`${this.url}payOrder`, request);
+    return this.http.put<unknown>(`${this.url}payOrder/${id}`, {});
+  }
+
+  public cancelOrder(id: string): Observable<unknown>{
+    return this.http.put<unknown>(`${this.url}cancelOrder/${id}`, {});
   }
 }

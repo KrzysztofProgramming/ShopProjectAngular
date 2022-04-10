@@ -19,6 +19,9 @@
         {{this.order.info.address.localNumber ? '/' + this.order.info.address.localNumber : ''}} 
         {{this.order.info.address.city}} {{this.formattedZipCode}}</p>
     </div>
+    <div *ngIf="this.isUnpaid()" class="informations__options">
+      <a shopButton padding="small" [href]="'/payOrder/' + this.order.id">Zapłać</a>
+    </div>
   </div>
   <div class="items">
     <div class="item item-labels">

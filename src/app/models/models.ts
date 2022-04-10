@@ -1,6 +1,6 @@
 import { ProductsSortType, ShopProductRequest, OrdersSortType } from './requests';
 
-export const serverUrl="http://localhost:8080/";
+export const serverUrl="";
 
 export interface JwtToken {
   authorities: number;
