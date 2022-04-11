@@ -1,6 +1,7 @@
 # ShopProject
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.3.
+Built .jar application is available here: https://github.com/KrzysztofProgramming/ShopProjectSpring
 
 ## Development server
 
