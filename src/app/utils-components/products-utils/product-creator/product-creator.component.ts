@@ -49,7 +49,7 @@ export class ProductCreatorComponent implements OnInit, ControlValueAccessor, Va
     name: ['', [Validators.required, notBlankValidator]],
     price: [0, [Validators.required, Validators.min(0)]],
     categories: [[], notEmptyListValidator],
-    description: ['', Validators.required, notBlankValidator],
+    description: ['', [Validators.required, notBlankValidator]],
     inStock: [0, [Validators.required, Validators.min(0)]],
     authors: [[], notEmptyListValidator]
   })
