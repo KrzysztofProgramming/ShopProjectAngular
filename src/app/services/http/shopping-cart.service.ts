@@ -101,7 +101,7 @@ export class ShoppingCartService implements OnDestroy{
     )
   }
 
-  public deleteProductFromCart(productId: string): Observable<ShoppingCart>{
+  public deleteProductFromCart(productId: number): Observable<ShoppingCart>{
     console.log("delete product");
     if(!this.authService.isLogin()){
       return this.deleteProductOnClient(productId);
@@ -127,7 +127,7 @@ export class ShoppingCartService implements OnDestroy{
     return of(EMPTY_CART)
   }
 
-  private deleteProductOnClient(productId: string): Observable<ShoppingCart>{
+  private deleteProductOnClient(productId: number): Observable<ShoppingCart>{
     let modyfiedCart = this.currentCartSubject.getValue();
     delete modyfiedCart.items[productId];
     this.currentCartSubject.next(modyfiedCart);
@@ -193,7 +193,7 @@ export class ShoppingCartService implements OnDestroy{
   } 
   
   public getDetails(cart: ShoppingCart): Observable<ShoppingCartWithDetails>{
-    let productsIds = Object.keys(cart.items);
+    let productsIds = Object.keys(cart.items).map(v=>+v);
     if(productsIds.length === 0) return of({items: [], expireDate: cart.expireDate, ownerUsername: cart.ownerUsername});
     return this.productsService.getProducts(productsIds).pipe(
       map(products=>{

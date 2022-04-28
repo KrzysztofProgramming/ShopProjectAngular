@@ -1,4 +1,4 @@
-import { UserInfo, ShoppingCart } from './models';
+import { UserInfo } from './models';
 import { Params } from '@angular/router';
 
 export interface LoginRequest {
@@ -7,12 +7,12 @@ export interface LoginRequest {
 }
 
 export interface CartProductRequest {
-  productId: string;
+  productId: number;
   amount: number;
 }
 
 export interface SetCartRequest {
-  products: { [key: string]: number };
+  products: { [key: number]: number };
 }
 
 export interface UpdatePasswordRequest {
@@ -31,17 +31,17 @@ export interface RefreshRequest {
 }
 
 export interface ShopProductRequest {
-  id?: string;
+  id?: number;
   name: string;
   price: number;
   description: string;
-  types: string[];
-  authorsNames: string[];
+  types: number[];
+  authors: number[];
   inStock: number;
 }
 
 export interface ShopProductRequestWithId extends ShopProductRequest {
-  id: string;
+  id: number;
 }
 
 export interface AuthorRequest {
@@ -82,9 +82,9 @@ export interface GetProductsParams extends PageableParams {
   searchPhrase?: string;
   minPrice?: number;
   maxPrice?: number;
-  types?: string[];
+  types?: number[];
   sort?: ProductsSortType;
-  authorsNames?: string[];
+  authors?: number[];
   minInStock?: number;
   maxInStock?: number;
 }
@@ -93,7 +93,7 @@ export const DEFAULT_PRODUCTS_PARAMS: GetProductsParams = {
   pageSize: DEFAULT_PAGEABLE.pageSize,
   pageNumber: DEFAULT_PAGEABLE.pageNumber,
   sort: 'none',
-  authorsNames: [],
+  authors: [],
 };
 
 export interface TypeRequest {
@@ -116,11 +116,11 @@ export interface ResetPasswordRequest {
 export interface NewOrderRequest {
   email: string;
   info: UserInfo;
-  products: { [key: string]: number };
+  products: { [key: number]: number }; //id: amount
 }
 
 export interface PayOrderRequest {
-  id: string;
+  id: number;
 }
 
 export type OrdersSortType = 

@@ -22,6 +22,7 @@ export class ProductDetailsComponent implements OnInit {
   public maxToSelect: number = 0;
   public inCartAmount: number = 0;
   public authorsString: string = ""
+  public typesString: string = "";
 
   constructor(private activatedRoute: ActivatedRoute, private productsService: ProductsService,
      private cd: ChangeDetectorRef, private cartService: ShoppingCartService, private messageService: ToastMessageService,) { }
@@ -29,8 +30,8 @@ export class ProductDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.subscriptions.push(
       this.activatedRoute.paramMap.subscribe(paramMap =>{
-        const id = paramMap.get("id");
-        if(!id){
+        const id = +(paramMap.get("id") || "elo");
+        if(isNaN(id)){
           return;
         }
         this.refreshProduct(id);
@@ -65,11 +66,11 @@ export class ProductDetailsComponent implements OnInit {
     });
   }
 
-  public refreshProduct(id?: string){
+  public refreshProduct(id?: number){
     this.refreshProductObservable(id).subscribe();
   }
 
-  public refreshProductObservable(id?: string): Observable<ShopProduct | null>{
+  public refreshProductObservable(id?: number): Observable<ShopProduct | null>{
     if(id){
       return this.productsService.getProduct(id).pipe(
         tap(p =>{
@@ -78,6 +79,7 @@ export class ProductDetailsComponent implements OnInit {
             this.selectedCount = 0;
           }
           this.authorsString = this.product.authors.map(author=>author.name).join(", ");
+          this.typesString = this.product.types.map(type=>type.name).join(", ");
           this.onCartChange();
           this.cd.markForCheck();
         })

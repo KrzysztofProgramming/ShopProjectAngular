@@ -104,6 +104,7 @@ export class AuthService{
     if (this.refreshToken == null) return of(null);
     let body: RefreshRequest = { refreshToken: this.refreshToken }
     console.log("starting refreshing");
+    console.log(body);
     this.refreshingProcess = this.http.post<LoginResponse>(this.url + "refresh", body)
     .pipe(
       finalize(()=>{this.refreshingProcess = null;}),

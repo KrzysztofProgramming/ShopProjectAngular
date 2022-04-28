@@ -1,3 +1,5 @@
+import { TypeResponse } from './../../../models/responses';
+import { SimpleAuthor } from './../../../models/models';
 import { Subscription } from 'rxjs';
 import { ShopProductRequest } from '../../../models/requests';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
@@ -79,7 +81,7 @@ export class ProductCreatorComponent implements OnInit, ControlValueAccessor, Va
       description: this.descriptionControl.value.trim(),
       types: this.categoriesControl.value,
       inStock: this.inStockControl.value,
-      authorsNames: this.authorsControl.value
+      authors: this.authorsControl.value
     }
   }
 
@@ -89,7 +91,7 @@ export class ProductCreatorComponent implements OnInit, ControlValueAccessor, Va
     this.model.description = this.descriptionControl.value.trim();
     this.model.types = this.categoriesControl.value;
     this.model.inStock = this.inStockControl.value;
-    this.model.authorsNames = this.authorsControl.value;
+    this.model.authors = this.authorsControl.value;
     this.onChangeFn(this.model);
   }
 
@@ -104,7 +106,7 @@ export class ProductCreatorComponent implements OnInit, ControlValueAccessor, Va
     this.descriptionControl.setValue(this.model.description, {emitEvent: false});
     this.categoriesControl.setValue(this.model.types, {emitEvent: false});
     this.inStockControl.setValue(this.model.inStock, {emitEvent: false})
-    this.authorsControl.setValue(this.model.authorsNames, {emitEvent: false});
+    this.authorsControl.setValue(this.model.authors, {emitEvent: false});
     this.cd.markForCheck();
   }
 

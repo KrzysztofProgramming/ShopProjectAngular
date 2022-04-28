@@ -10,7 +10,7 @@
             <span *ngIf = "this.product.price !== 0">{{this.product.price | number: '1.2-2'}} zł</span>
         </p>
         <p class="informations__types informations__element informations__list" *ngIf="product.types">
-          <span class="informations__label"> Kategorie: </span> {{product.types.join(", ")}}
+          <span class="informations__label"> Kategorie: </span> {{this.typesString}}
         </p>
         <p class="informations__authors informations__element informations__list" #description>
            <span class="informations__label"> Autorzy: </span> {{this.authorsNames}}

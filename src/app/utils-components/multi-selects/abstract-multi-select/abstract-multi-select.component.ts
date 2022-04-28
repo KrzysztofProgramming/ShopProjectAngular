@@ -1,6 +1,7 @@
+import { preserveWhitespacesDefault } from '@angular/compiler';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 
 @Component({
   selector: 'shop-multi-select-item',
@@ -69,6 +70,7 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   @Input() labelOverflowSize: number = 3;
   @Input() invalid: boolean = false;
   @Input() displayProperty: string = "name";
+  @Input() modelProperty?: string;
   @Input() disableProperty: string = "disabled"; 
   @Input() waitingForDataFlag: boolean = false;
   @Output() blur: EventEmitter<void> = new EventEmitter<void>();
@@ -90,7 +92,7 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   protected clickCooldown: number = 100;
   private lastKeyCode: string = "";
   private lastClickedTime: number = 0;
-
+  private preSelectedItems: ItemModel[] = [];
 
   get highlightedItem(): ItemOptions | undefined{
     return this._highlightedItem;
@@ -106,6 +108,7 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
     // items = new Array(1000).fill(0).map(()=>(Math.random() * 10 + 1).toString(36).substring(2));
     let checkedItemsString :Array<string> = this.checkedItems.map(item=>{
       return typeof(item.element) === 'string' ? item.element : item.element[this.displayProperty]});
+      console.log("checked items", checkedItemsString);
     this.allItems = items.map((item, index) =>
      {return {element: item,
        isDisplay: false,
@@ -113,6 +116,11 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
        allItemsIndex: index,
       }});
     if(this.sort) this.sortItems();
+    if(this.preSelectedItems.length > 0){
+      this.writeValue(this.preSelectedItems);
+      this.preSelectedItems = [];
+      return;
+    }
     this.calcDisplayItems();
     this.calcCheckedItems();
     this.refreshDisplayInfo();
@@ -177,12 +185,19 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   }
 
   writeValue(obj: ItemModel[]): void {
-    if(!obj) return;
-    obj = new Array(...obj);
-
+    if(!obj) obj =[];
+    obj = obj.slice();
+    if(this.allItems.length === 0){
+      this.preSelectedItems = obj;
+      return;
+    }
+    console.log("writeValue:", obj, this.allItems);
     this.allItems.forEach(item => {
       if(typeof(item.element)==="string"){
         item.isChecked = obj.includes(item.element);
+      }
+      else if(this.modelProperty){
+        item.isChecked = obj.includes(item.element[this.modelProperty]);
       }
       else{
         item.isChecked = obj.some(selectedItem=>{
@@ -247,7 +262,10 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   }
 
   public callOnChangeFn(){
-    this.onChangeFunction(this.checkedItems.map(item=>item.element));
+    if(this.modelProperty)
+      this.onChangeFunction(this.checkedItems.map(item=>((item.element as {[key:string]: any})[this.modelProperty!])));
+    else
+      this.onChangeFunction(this.checkedItems.map(item=>item.element));
   }
 
   public onExpandedChange(currentValue: boolean) {

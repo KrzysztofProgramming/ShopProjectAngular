@@ -109,7 +109,7 @@ export class ProductsComponent implements OnInit {
     }
   }
 
-  public generateProductUrl(id: string){
+  public generateProductUrl(id: number){
     if(this.isAdminMode()){
       return "/manageProduct/" + id;
     }
@@ -155,9 +155,15 @@ export class ProductsComponent implements OnInit {
          : this.productsParams.pageSize
 
       if(routerParams.types && !Array.isArray(routerParams.types))
-        routerParams.types = [(routerParams.types as unknown) as string];
-      if(routerParams.authorsNames && !Array.isArray(routerParams.authorsNames))
-        routerParams.authorsNames = [(routerParams.authorsNames as unknown) as string];
+        routerParams.types = [(routerParams.types as unknown) as string].map(value=>+value);
+      else if(routerParams.types)
+        routerParams.types = routerParams.types.map(value=>+value);
+        
+      if(routerParams.authors && !Array.isArray(routerParams.authors))
+        routerParams.authors = [(routerParams.authors as unknown) as string].map(value=>+value);
+      else if(routerParams.authors)
+        routerParams.authors = routerParams.authors.map(value=>+value);
+      
         
       console.log(routerParams);
       this.writeParams(routerParams);

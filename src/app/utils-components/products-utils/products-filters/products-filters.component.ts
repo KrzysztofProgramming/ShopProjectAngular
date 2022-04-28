@@ -7,8 +7,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 export interface ProductsFiltersModel{
   minPrice?: number;
   maxPrice?: number;
-  types?: string[];
-  authorsNames?: string[];
+  types?: number[];
+  authors?: number[];
   minInStock?: number;
   maxInStock?: number;
 }
@@ -106,7 +106,7 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
     this.model.types = this.typesControl.value;
     this.model.maxInStock = this.maxInStockControl.value;
     this.model.minInStock = this.minInStockControl.value;
-    this.model.authorsNames = this.authorsControl.value;
+    this.model.authors= this.authorsControl.value;
     return this.model;
   }
 
@@ -121,7 +121,7 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
     this.typesControl.setValue(obj.types, {emitEvent: false});
     this.maxInStockControl.setValue(obj.maxInStock, {emitEvent: false});
     this.minInStockControl.setValue(obj.minInStock, {emitEvent: false});
-    this.authorsControl.setValue(obj.authorsNames, {emitEvent: false});
+    this.authorsControl.setValue(obj.authors, {emitEvent: false});
   }
 
   registerOnChange(fn: any): void {

@@ -33,7 +33,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   public readonly EMPTY_IMAGE: string = "../../../assets/img/empty-image.png";
   public imageUrl: string = this.EMPTY_IMAGE;
   public selectedFile?: Blob;
-  public currentProductId?: string;
+  public currentProductId?: number;
   public notRealod: boolean = false;
   public headerText = "Stwórz nowy produkt";
   public subscriptions: Subscription[] = [];
@@ -72,8 +72,8 @@ export class AddProductComponent implements OnInit, OnDestroy {
       if(this.productCreator)
         this.productCreator.resetControl();
 
-      let id = paramMap.get("id"); 
-      if(id==null || id.length === 0){
+      let id: string | null = paramMap.get("id"); 
+      if(!id){
         this.navigateToNewProductUrl();
          return;
       }
@@ -89,9 +89,13 @@ export class AddProductComponent implements OnInit, OnDestroy {
           this.writeValue(EMPTY_PRODUCT_REQUEST);
           return;
       }
-
+      
+      if(isNaN(+id)) {
+        this.navigateToNewProductUrl();
+        return;
+      }
       this.waitingForImage = true;
-      this.productsService.getProduct(id).subscribe(product=>{
+      this.productsService.getProduct(+id).subscribe(product=>{
         this.headerText = "Edytuj produkt";
         this.writeValue(this.toProductRequest(product));
         this.unchangedAfterSend = true;
@@ -107,11 +111,11 @@ export class AddProductComponent implements OnInit, OnDestroy {
     return {
       name: product.name,
       id: product.id,
-      types: product.types,
+      types: product.types.map(t=>t.id),
       price: product.price,
       inStock: product.inStock,
       description: product.description,
-      authorsNames: product.authors.map(author=>author.name)
+      authors: product.authors.map(a=>a.id)
     }
   }
 
@@ -144,7 +148,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   }
 
   public isCreatingNewProduct(){
-    return this.currentProductId == null || this.currentProductId.length === 0 ;
+    return !this.currentProductId || isNaN(this.currentProductId);
   }
 
   public onSubmit(){
@@ -173,7 +177,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
           return this.productsService.deleteProductImage(product.id!).pipe(
             catchError(deleteFileError=>{
               this.messageService.showMessage({severity: "warn", summary: "Uwaga", detail: "Nie udało się usunąć obrazu"});
-              this.navigateToProduct(product.id!);
+              this.navigateToProduct(product.id!.toString());
               this.loadImage();
               return throwError(deleteFileError);
             }),
@@ -194,7 +198,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
         return this.sendFile(product.id!).pipe(
           catchError(fileError=>{
             this.messageService.showMessage({severity: "warn", summary: "Uwaga", detail: "Nie udało się dodać obrazu"});
-            this.navigateToProduct(product.id!);
+            this.navigateToProduct(product.id!.toString());
             this.loadImage();
             return throwError(fileError);
           }),
@@ -209,7 +213,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
       finalize(()=>this.resetResponseMessage())
     ).subscribe(product=>{
       this.showSuccessMessage();
-      this.navigateToProduct(product.id!);
+      this.navigateToProduct(product.id!.toString());
     }, anyError =>{
     })
   }
@@ -247,7 +251,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(`manageProduct/${id!}`);
   }
 
-  private sendFile(id: string): Observable<Object>{
+  private sendFile(id: number): Observable<Object>{
      return this.productsService.uploadProductImage(id, this.selectedFile!)
   }
 

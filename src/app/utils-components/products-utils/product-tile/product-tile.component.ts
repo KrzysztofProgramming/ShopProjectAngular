@@ -13,6 +13,7 @@ export class ProductTileComponent implements OnInit {
   public readonly EMPTY_IMAGE = "../../../assets/img/empty-image.png";
   public imageUrl = this.EMPTY_IMAGE;
   public authorsNames: string = "";
+  public typesString: string = "";
 
   @ViewChild("description") descriptionContainer!: ElementRef<HTMLParagraphElement>
   // @Input() adminView: boolean = false;
@@ -25,6 +26,7 @@ export class ProductTileComponent implements OnInit {
     this._product = p;
     this.imageUrl = this.productsService.getProductSmallImageUrl(this._product.id);
     this.authorsNames = p.authors.map(a=>a.name).join(", ");
+    this.typesString = p.types.map(t=>t.name).join(", ");
     this.cd.markForCheck();
   }
 

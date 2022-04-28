@@ -9,10 +9,10 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef } 
         <p class="info__date">{{this.order.issuedDate | date: 'dd.MM.yyyy'}}</p>
         <p class="info__status" [ngClass]="this.statusClasses">{{statusString}}</p>
         <p class="info__price">{{this.order.totalPrice | number: "1.2-2"}} zł</p>
-        <p>{{this.getProductCount(this.order.products)}} produkty</p>
+        <p>{{this.getProductCount(this.order.productsIds)}} produkty</p>
       </div>
       <div class="images">
-          <shop-product-image *ngFor="let product of productsToRender; trackBy:this.trackByValue" [productId]="product"
+          <shop-product-image *ngFor="let product of productsToRender; trackBy: this.trackByValue" [productId]="product"
           imageResolution="icon" class="images__image">
           </shop-product-image>
       </div>
@@ -24,7 +24,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef } 
 export class OrderTileComponent implements OnInit {
 
   order?: ShopOrder
-  public productsToRender: string[] = [];
+  public productsToRender: number[] = [];
   public statusClasses: {[key:  string]: boolean} = {};
   public statusString: string = "";
 
@@ -32,7 +32,7 @@ export class OrderTileComponent implements OnInit {
   public set orderInput(order: ShopOrder | undefined){
     this.order = order;
     if(!this.order) return;
-    this.productsToRender = Object.keys(this.order.products).slice(0, 4);
+    this.productsToRender = Object.keys(this.order.productsIds).map(val =>+val).slice(0, 4);
     this.statusString = getStatusString(this.order.status);
     this.statusClasses = this.getStatusClasses(this.order.status);
     this.cd.markForCheck();
@@ -51,7 +51,7 @@ export class OrderTileComponent implements OnInit {
     return this.order;
   }
 
-  public trackByValue(index: number, value: string): string{
+  public trackByValue(index: number, value: number): number{
     return value;
   }
 

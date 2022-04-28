@@ -1,6 +1,7 @@
+import { TypeResponse } from './responses';
 import { ProductsSortType, ShopProductRequest, OrdersSortType } from './requests';
 
-export const serverUrl="";
+export const serverUrl="http://localhost:8080/";
 
 export interface JwtToken {
   authorities: number;
@@ -23,14 +24,14 @@ export interface Author extends SimpleAuthor {
 }
 
 export interface SimpleAuthor {
-  id: string;
+  id: number;
   name: string;
 }
 
 export interface ShoppingCart {
   ownerUsername?: string;
   items: {
-    [key: string]: number;
+    [key: string]: number; //number id as string: amount
   };
   expireDate?: Date;
 }
@@ -50,12 +51,12 @@ export const EMPTY_CART = { items: {} };
 export const EMPTY_DETAILS_CART = { items: [] };
 
 export interface ShopProduct {
-  id: string;
+  id: number;
   name: string;
   price: number;
   description: string;
-  types: string[];
-  authors: Author[];
+  types: TypeResponse[];
+  authors: SimpleAuthor[];
   inStock: number;
 }
 
@@ -65,7 +66,7 @@ export const EMPTY_PRODUCT_REQUEST: ShopProductRequest = {
   price: 0,
   description: '',
   types: [],
-  authorsNames: [],
+  authors: [],
   inStock: 0,
 };
 
@@ -116,8 +117,7 @@ export interface ProfileInfo {
   info?: UserInfo;
 }
 
-export interface CommonType{
-  name: string;
+export interface CommonType extends TypeResponse{
   productsCount: number;
 }
 
@@ -135,11 +135,11 @@ export class OrderStatuses{
 }
 
 export interface ShopOrder {
-  id: string,
+  id: number,
   ownerUsername: string,
   email: string;
   info: UserInfo,
-  products: {[key: string]: number},
+  productsIds: {[key: string]: number},
   issuedDate: Date,
   totalPrice: number;
   status: number;
@@ -168,7 +168,7 @@ export const ORDERS_SORT_OPTIONS: OrdersSortOption[] = [
   {name: "Od najstarszych", code: 'date_asc'},
   {name: "Cena: rosnąco", code: "price_asc"},
   {name: "Cena: malejąco", code: 'price_desc'}
-] 
+]
 
 export interface OrdersStatusOption{
   name: string, 

@@ -1,3 +1,4 @@
+import { TypeResponse } from './../../../models/responses';
 import { ToastMessageService } from 'src/app/services/utils/toast-message.service';
 import { Subscription } from 'rxjs';
 import { DEFAULT_PAGEABLE, PAGE_SIZES, DEFAULT_AUTHORS_PARAMS } from 'src/app/models/requests';
@@ -106,7 +107,7 @@ export class TypesListComponent implements OnInit, OnDestroy {
     if(!this.editingType) return;
     this.waitingForResponse = true;
     this.deleteDialogVisibility = false;
-    this.productsService.deleteType(this.editingType.name).subscribe(()=>{
+    this.productsService.deleteType(this.editingType.id).subscribe(()=>{
       this.messageService.showMessage({severity: "success", summary:"Sukces", detail: "Autor usunięty"});
       this.requestFinished();
       this.reloadTypes(this.params);
@@ -137,7 +138,7 @@ export class TypesListComponent implements OnInit, OnDestroy {
     if(!type) return;
     this.waitingForResponse = true;
     this.deleteDialogVisibility = false;
-    this.productsService.deleteType(type.name).subscribe(()=>{
+    this.productsService.deleteType(type.id).subscribe(()=>{
       this.messageService.showMessage({severity: "success", summary:"Sukces", detail: "Typ usunięty"});
       this.requestFinished();
       this.reloadTypes();
@@ -154,11 +155,11 @@ export class TypesListComponent implements OnInit, OnDestroy {
     this.cd.markForCheck();
   }
 
-  public onTypeChange(typeName: string){
+  public onTypeChange(type: TypeResponse){
     if(!this.response) return;
-    let index = this.response.result.findIndex(value=>value.name===typeName);
+    let index = this.response.result.findIndex(value=>value.name===type.name);
     if(index < 0) return;
-    this.response.result[index] = {name: typeName, productsCount: this.response.result[index].productsCount};
+    this.response.result[index] = {id: type.id, name: type.name, productsCount: this.response.result[index].productsCount};
     this.cd.markForCheck();
   }
 }

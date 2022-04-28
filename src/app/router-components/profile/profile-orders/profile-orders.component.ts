@@ -84,7 +84,7 @@ export class ProfileOrdersComponent implements OnInit, OnDestroy {
     }
   }
 
-  public trackByOrderId(index: number, order: ShopOrder): string{
+  public trackByOrderId(index: number, order: ShopOrder): number{
     return order.id;
   }
 

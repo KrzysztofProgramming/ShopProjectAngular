@@ -19,10 +19,11 @@ export interface GetByParamsResponse<T> {
 }
 
 export interface TypesResponse {
-  types: string[];
+  types: TypeResponse[];
 }
 
 export interface TypeResponse {
+  id: number;
   name: string;
 }
 

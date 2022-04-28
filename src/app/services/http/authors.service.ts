@@ -30,11 +30,11 @@ export class AuthorsService {
     return this.http.get<GetAuthorsResponse>(`${this.url}getAll`, {params: authorsParams});
   }
 
-  public getAuthorById(id: string): Observable<Author>{
+  public getAuthorById(id: number): Observable<Author>{
     return this.http.get<Author>(`${this.url}byId/${id}`);
   }
 
-  public deleteAuthorById(id: string){
+  public deleteAuthorById(id: number){
     return this.http.delete(`${this.url}deleteAuthor/${id}`);
   }
 
@@ -42,7 +42,7 @@ export class AuthorsService {
     return this.http.post<Author>(`${this.url}newAuthor`, request);
   }
 
-  public updateAuthor(id: string, request: AuthorRequest): Observable<Author>{
+  public updateAuthor(id: number, request: AuthorRequest): Observable<Author>{
     return this.http.put<Author>(`${this.url}updateAuthor/${id}`, request);
   }
 

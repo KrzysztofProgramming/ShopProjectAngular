@@ -50,7 +50,7 @@
 <shop-types-filters-dialog [(visibility)]="this.filtersVisibility" [(ngModel)]="this.params"
  (ngModelChange)="this.onModelChange()"></shop-types-filters-dialog>
 <shop-busy-overlay *ngIf="this.waitingForResponse"></shop-busy-overlay>
-<shop-types-creator [type]="this.editingType ? this.editingType.name : undefined" [(visibility)]="this.editorVisibility" (typeAdded)="this.onTypeChange($event)"></shop-types-creator>
+<shop-types-creator [type]="this.editingType" [(visibility)]="this.editorVisibility" (typeAdded)="this.onTypeChange($event)"></shop-types-creator>
 <shop-types-creator [(visibility)]="this.creatorVisibility" (typeAdded)="this.reloadTypes()"></shop-types-creator>
 <shop-dialog [exitButton]="false" cancelPhrase="Anuluj" acceptPhrase="Tak" dialogTitle="Potwierdź"
  [(visibility)]="this.deleteDialogVisibility" (accept)="this.deleteSelectedType()">

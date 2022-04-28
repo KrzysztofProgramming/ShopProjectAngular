@@ -1,3 +1,4 @@
+import { TypeResponse } from './../../../models/responses';
 import { FormControl, Validators } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { ProductsService } from 'src/app/services/http/products.service';
@@ -21,13 +22,13 @@ export class TypesCreatorComponent implements OnInit {
   
   @Input("visibility") _visibility: boolean = false;
   @Output() visibilityChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() typeAdded: EventEmitter<string> = new EventEmitter<string>();
+  @Output() typeAdded: EventEmitter<TypeResponse> = new EventEmitter<TypeResponse>();
   public waitingForResponse: boolean = false;
 
-  public type?: string;
+  public type?: TypeResponse;
 
   @Input("type")
-  public set authorInput(value: string | undefined){
+  public set typeInput(value: TypeResponse | undefined){
     if(value==undefined){
       this.typeControl.reset();
       this.cd.markForCheck();
@@ -37,7 +38,8 @@ export class TypesCreatorComponent implements OnInit {
     this.typeControl.setValue(value);
     this.cd.markForCheck();
   }
-  public get authorInput(): string | undefined{
+
+  public get typeInput(): TypeResponse | undefined{
     return this.type;
   }
 
@@ -64,7 +66,7 @@ export class TypesCreatorComponent implements OnInit {
   private sendRequest(){
     this.waitingForResponse = true;
     if(this.type){
-      this.productsService.updateType(this.type, this.typeControl.value.trim()).pipe(
+      this.productsService.updateType(this.type.id, this.typeControl.value.trim()).pipe(
         finalize(this.requestFinished.bind(this))
       ).subscribe(this.requestSuccess.bind(this), this.requestFailed.bind(this));
     }
@@ -76,10 +78,10 @@ export class TypesCreatorComponent implements OnInit {
     this.cd.markForCheck();
   }
 
-  private requestSuccess(typeName: string){
+  private requestSuccess(type: TypeResponse){
     let details = this.type ? "Type został zmieniony" : "Typ został dodany"
     this.messageService.showMessage({severity: "success", summary:"Sukces", detail: details});
-    this.typeAdded.emit(typeName);
+    this.typeAdded.emit(type);
     this.visibility = false;
     this.typeControl.reset();
   }

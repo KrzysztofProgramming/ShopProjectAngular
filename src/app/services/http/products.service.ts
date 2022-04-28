@@ -4,13 +4,12 @@ import { GetTypesResponse } from './../../models/responses';
 import { TypeRequest, ShopProductRequestWithId, GetProductsParams, GetTypesParams } from '../../models/requests';
 import { TypeResponse, TypesResponse } from '../../models/responses';
 import { ShopProductRequest } from '../../models/requests';
-import { catchError, switchMap, map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { mapTo } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ErrorResponse, GetProductsResponse } from '../../models/responses';
-import { Params } from '@angular/router';
 import { ShopProduct } from 'src/app/models/models';
 
 @Injectable({
@@ -26,11 +25,11 @@ export class ProductsService {
     return this.http.get<GetProductsResponse>(`${this.url}getAll`, {params: queryParams});
   }
 
-  public getProduct(id: string): Observable<ShopProduct>{
+  public getProduct(id: number): Observable<ShopProduct>{
     return this.http.get<ShopProduct>(`${this.url}byId/${id}`);
   }
 
-  public getProducts(ids: string[]): Observable<ShopProduct[]>{
+  public getProducts(ids: number[]): Observable<ShopProduct[]>{
     if(ids.length === 0) return of([]);
     return this.http.get<ShopProduct[]>(`${this.url}byIds`, {params: {"ids": ids}});
   }
@@ -44,41 +43,41 @@ export class ProductsService {
     return this.http.put<ShopProduct>(`${this.url}updateProduct/${product.id}`, product, {headers: {}});
   }
 
-  public deleteProduct(id: string){
+  public deleteProduct(id: number){
     return this.http.delete(`${this.url}deleteProduct/${id}`);
   }
 
-  public uploadProductImage(id: string, image: Blob){
+  public uploadProductImage(id: number, image: Blob){
     const formData = new FormData();
-    formData.append("file", image, id);
+    formData.append("file", image, id.toString());
     return this.http.put(`${this.url}uploadProductImage/${id}`, formData);
   }
 
-  public downloadProductOriginalImage(id: string): Observable<Blob>{
+  public downloadProductOriginalImage(id: number): Observable<Blob>{
     return this.http.get(this.getProductOriginalImageUrl(id), {responseType: 'blob'});
   }
 
-  public getProductOriginalImageUrl(id: string): string{
+  public getProductOriginalImageUrl(id: number): string{
       return `${this.url}downloadProductOriginalImage/${id}`;
   }
 
-  public downloadProductSmallImage(id: string): Observable<Blob>{
+  public downloadProductSmallImage(id: number): Observable<Blob>{
     return this.http.get(this.getProductSmallImageUrl(id), {responseType: 'blob'});
   }
 
-  public getProductSmallImageUrl(id: string): string{
+  public getProductSmallImageUrl(id: number): string{
       return `${this.url}downloadProductSmallImage/${id}`;
   }
 
-  public downloadProductIcon(id: string): Observable<Blob>{
+  public downloadProductIcon(id: number): Observable<Blob>{
     return this.http.get(this.getProductIconUrl(id), {responseType: 'blob'});
   }
 
-  public getProductIconUrl(id: string): string{
+  public getProductIconUrl(id: number): string{
     return `${this.url}downloadProductIcon/${id}`;
   }
 
-  public deleteProductImage(id: string){
+  public deleteProductImage(id: number){
     return this.http.delete(`${this.url}deleteProductImage/${id}`)
   }
 
@@ -101,20 +100,18 @@ export class ProductsService {
     return this.http.get<GetTypesResponse>(`${this.url}getTypesDetails`, {params: params});
   }
 
-  public updateType(name: string, newName: string): Observable<any>{
+  public updateType(id: number, newName: string): Observable<any>{
     const request: TypeRequest = {name: newName};
-    return this.http.put<any>(`${this.url}updateType/${name}`, request);
+    return this.http.put<any>(`${this.url}updateType/${id}`, request);
   }
 
-  public deleteType(name: string): Observable<any>{
-    return this.http.delete<any>(`${this.url}deleteType/${name}`);
+  public deleteType(id: number): Observable<any>{
+    return this.http.delete<any>(`${this.url}deleteType/${id}`);
   }
 
-  public addType(name: string): Observable<string>{
+  public addType(name: string): Observable<TypeResponse>{
     const request: TypeRequest = {name: name};
-    return this.http.post<TypeResponse>(`${this.url}newType`, request).pipe(
-      map(value => value.name)
-    );
+    return this.http.post<TypeResponse>(`${this.url}newType`, request).pipe();
   }
 
   public testApi(): Observable<boolean>{

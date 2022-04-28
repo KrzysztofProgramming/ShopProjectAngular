@@ -37,7 +37,7 @@ export class ProfileOrderDetailComponent implements OnInit, OnDestroy {
       }),
     ).subscribe(order=>{
       this.order = order;
-      this.totalAmount = Object.values(this.order.products).reduce((val1, val2)=>val1 + val2);
+      this.totalAmount = Object.values(this.order.productsIds).reduce((val1, val2)=>val1 + val2);
       const zipCode = this.order.info.address.zipCode.toString();
       this.statusString = getStatusString(this.order.status);
       this.statusClasses = this.getStatusClasses(this.order.status);
@@ -64,7 +64,7 @@ export class ProfileOrderDetailComponent implements OnInit, OnDestroy {
   }
 
   public readOrderProducts(order: ShopOrder){
-    this.productsService.getProducts(Object.keys(order.products)).subscribe(products=>{
+    this.productsService.getProducts(Object.keys(order.productsIds).map(v=>+v)).subscribe(products=>{
       this.products = products;
       this.totalPrice = this.calcTotalPrice();
       this.cd.markForCheck();
@@ -74,7 +74,7 @@ export class ProfileOrderDetailComponent implements OnInit, OnDestroy {
   private calcTotalPrice(): number{
     let price = 0;
     this.products.forEach(product=>{
-      price += product.price * this.order!.products[product.id];
+      price += product.price * this.order!.productsIds[product.id];
     })
     return price;
   }
@@ -87,12 +87,12 @@ export class ProfileOrderDetailComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub=>sub.unsubscribe());
   }
 
-  public trackProductById(index: number, product: ShopProduct): string{
+  public trackProductById(index: number, product: ShopProduct): number{
     return product.id;
   }
 
   public getItemCount(item: ShopProduct): number{
-    return this.order!.products[item.id];
+    return this.order!.productsIds[item.id];
   }
 
 }

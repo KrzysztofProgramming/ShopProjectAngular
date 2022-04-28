@@ -1,3 +1,4 @@
+import { TypeResponse } from './../../../models/responses';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ProductsService } from '../../../services/http/products.service';
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, Input, EventEmitter, Output } from '@angular/core';
@@ -9,12 +10,12 @@ import { finalize } from 'rxjs/operators';
     <shop-dropdown-multi-select *ngIf="this.type === 'dropdown'" [(ngModel)] = "model" [items]="this.allTypes"
      [invalid] = "this.invalid"(blur)="this.onTouchedFn()" (ngModelChange)="this.onChangeFn($event)"
      [waitingForDataFlag]="this.waitingForResponse" [(expanded)] = "this.expanded"
-    (expandedChange)="this.expandedChange.emit($event)"></shop-dropdown-multi-select>
+    (expandedChange)="this.expandedChange.emit($event)" displayProperty="name" modelProperty="id"></shop-dropdown-multi-select>
 
     <shop-accordion-multi-select *ngIf="this.type === 'accordion'" [(ngModel)] = "model" [items]="this.allTypes"
      [invalid] = "this.invalid"(blur)="this.onTouchedFn()" (ngModelChange)="this.onChangeFn($event)"
      [waitingForDataFlag]="this.waitingForResponse" [(expanded)] = "this.expanded"
-    (expandedChange)="this.expandedChange.emit($event)"></shop-accordion-multi-select>
+    (expandedChange)="this.expandedChange.emit($event)" disableProperty="name" modelProperty="id"></shop-accordion-multi-select>
   `,
   providers: [{
     provide: NG_VALUE_ACCESSOR,
@@ -30,15 +31,15 @@ export class TypesSelectComponent implements OnInit, ControlValueAccessor {
   @Input() type: 'dropdown' | 'accordion' = 'dropdown';
   @Input() expanded: boolean = false;
   @Output() expandedChange: EventEmitter<boolean> = new EventEmitter();
-  model: string[] = [];
+  model: number[] = [];
   onChangeFn: any = ()=>{};
   onTouchedFn: any = ()=>{};
-  allTypes: string[] = [];
+  allTypes: TypeResponse[] = [];
   waitingForResponse: boolean = false;
 
   constructor(private productsService: ProductsService, private cd: ChangeDetectorRef) { }
 
-  writeValue(obj: string[]): void {
+  writeValue(obj: number[]): void {
     this.model = obj
     this.cd.markForCheck();
   }

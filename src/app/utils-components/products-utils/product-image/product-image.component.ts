@@ -14,14 +14,14 @@ export class ProductImageComponent implements OnInit {
 
   public readonly EMPTY_IMAGE = "../../../assets/img/empty-image.png";
   public waitingForImage: boolean = false;
-  public _productId = "";
+  public _productId: number = 0;
   public imageUrl = this.EMPTY_IMAGE;
   @Input() imageResolution: "small" | "original" | "icon" = "original";
   @Output() imageLoaded: EventEmitter<void> = new EventEmitter<void>();
 
 
   @Input()
-  set productId(value: string){
+  set productId(value: number){
     if(value === this._productId) return;
     this._productId = value;
     switch(this.imageResolution){
@@ -37,7 +37,7 @@ export class ProductImageComponent implements OnInit {
     this.waitingForImage = true;
     this.cd.markForCheck();
   }
-  get productId(): string{
+  get productId(): number{
     return this._productId;
   }
 

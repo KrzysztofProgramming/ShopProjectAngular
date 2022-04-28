@@ -44,7 +44,7 @@ export class AuthorsListComponent implements OnInit {
     if(!value) this.editingAuthor = undefined;
   }
 
-  public trackAuthorById(index: number, value: Author): string{
+  public trackAuthorById(index: number, value: Author): number{
     return value.id;
   }
 
