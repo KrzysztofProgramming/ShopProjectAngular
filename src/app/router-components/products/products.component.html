@@ -24,7 +24,7 @@
     <div class="main-tiles">
       <shop-busy-overlay *ngIf="this.waitingForResponse" class="main-tiles__overlay"></shop-busy-overlay>
       <ng-container *ngIf="this.httpResponse">
-        <a class="main-tiles__tile" *ngFor="let product of this.httpResponse.result; trackBy: trackByProductId" [href]="this.generateProductUrl(product.id)">
+        <a class="main-tiles__tile" *ngFor="let product of this.httpResponse.result; trackBy: trackByProductId" [routerLink]="this.generateProductUrl(product.id)">
           <shop-product-tile class="main-tiles__tile-component" [product]="product">
           </shop-product-tile>
         </a>

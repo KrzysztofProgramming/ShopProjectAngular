@@ -18,7 +18,7 @@
      <button (click)="this.openFiltersDialog()" shopButton padding="medium" class="orders__filters-button">Filtry</button>
   </div>
   <div class="orders__content">
-    <a class="orders__link" *ngFor="let order of this.response.result; trackBy: this.trackByOrderId" [href]="'/profile/order/' + order.id">
+    <a class="orders__link" *ngFor="let order of this.response.result; trackBy: this.trackByOrderId" [routerLink]="'/profile/order/' + order.id">
     <shop-order-tile class="orders__element" 
      [order]="order"></shop-order-tile>
     </a>

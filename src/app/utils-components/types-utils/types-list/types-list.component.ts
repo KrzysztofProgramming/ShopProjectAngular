@@ -129,10 +129,6 @@ export class TypesListComponent implements OnInit, OnDestroy {
     this.router.navigate(['products'], {queryParams: params});
   }
 
-  public generateProductsUrl(type: CommonType): string{
-    return `/products?types=${type.name}`;
-  }
-
   public deleteClicked(type: CommonType){
     if(!type) return;
     this.waitingForResponse = true;
