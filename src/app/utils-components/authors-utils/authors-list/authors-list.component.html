@@ -33,7 +33,7 @@
           <p class="item__written-books">{{author.writtenBooks}}</p>
         </div>
         <div class="item__buttons">
-          <a [href]="this.generateProductsUrl(author)">
+          <a routerLink="/products" [queryParams]="{'authors': author.id}">
             <button shopButton class="item__button" [disabled] = "author.writtenBooks < 1" >Zobacz Produkty</button>
           </a>
           <button shopButton class="item__button" color="gray" (click)="this.setEditingAuthor(author)">Szczegóły</button>

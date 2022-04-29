@@ -31,7 +31,7 @@
         <p class="item__products-count">{{type.productsCount}}</p>
       </div>
       <div class="item__buttons">
-        <a [href]="this.generateProductsUrl(type)">
+        <a routerLink="/products" [queryParams]="{'types': type.id}">
           <button shopButton class="item__button" [disabled] = "type.productsCount < 1">Zobacz Produkty</button>
         </a>
         <button shopButton class="item__button" color="gray" (click)="this.setEditingType(type)">Szczegóły</button>

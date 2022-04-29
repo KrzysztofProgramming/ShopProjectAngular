@@ -109,10 +109,6 @@ export class AuthorsListComponent implements OnInit {
     this.navigateToParams();
   }
 
-  public generateProductsUrl(author: Author){
-    return `/products?authorsNames=${author.name}`;
-  }
-
   public cancelRequest(){
     this.currentRequest?.unsubscribe();
   }
