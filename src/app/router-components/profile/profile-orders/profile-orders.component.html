@@ -4,7 +4,7 @@
   <ng-container *ngIf="this.response">
   <div class="orders__top-bar">
     <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
-     (ngModelChange)="this.navigateToParams()"></shop-page-select>
+     (ngModelChange)="this.navigateToParams()" (modelStartChanging)="this.cancelRequest()"></shop-page-select>
      <!-- <div class="orders__page-sizes">
       <p>Na stronie:</p>
       <p-dropdown [options] = "this.pageSizes" [(ngModel)]="this.params.pageSize"

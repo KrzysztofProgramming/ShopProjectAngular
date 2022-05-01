@@ -182,6 +182,20 @@ export const ORDERS_STATUS_OPTIONS: OrdersStatusOption[] = [
   {name: "Anulowane", code: OrderStatuses.CANCELLED}
 ]
 
+export type AuthorsSortType = 'alph_asc' | 'alph_desc' | 'books_asc' | 'books_desc'
+
+export interface AuthorsSortOption{
+  name: string;
+  code: AuthorsSortType;
+}
+
+export const AUTHORS_SORT_OPTIONS: AuthorsSortOption[] = [
+  {name: "Alfabetycznie: A-Z", code: 'alph_asc'},
+  {name: "Alfabetycznie: Z-A", code: 'alph_desc'},
+  {name: "Książki: rosnąco", code: "books_asc"},
+  {name: "Książki: malejąco", code: "books_desc"}
+]
+
 export const DATE_FORMAT: string = "YYYY-MM-DD";
 
 export function getStatusString(value: number){

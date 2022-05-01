@@ -10,7 +10,8 @@
       <shop-sort-select class="top-bar__sorting" placeholder="Sortowanie" optionLabel="name"
        [(ngModel)]="this.productsParams.sort" (ngModelChange)="this.onParamsModelChange()"></shop-sort-select>
       <shop-page-select class="top-bar__page-select" [totalPages]="this.httpResponse.totalPages"
-       [(ngModel)]="this.productsParams.pageNumber" (ngModelChange)="this.onParamsModelChange()"></shop-page-select>
+       [(ngModel)]="this.productsParams.pageNumber" (ngModelChange)="this.onParamsModelChange()"
+       (modelStartChanging)="this.cancelRequest()"></shop-page-select>
       <div class="top-bar__filters-icon" (click) = "this.openFiltersDialog()">
         <p>Filtry</p>
         <i class="pi pi-filter"></i>
@@ -20,7 +21,7 @@
 
   <div class="main">
     <shop-products-filters (ngModelChange)="this.onParamsModelChange()" class="main-filters"
-      [(ngModel)]="this.productsParams" (startChanging)="this.cancelPreviousRequest()"></shop-products-filters>
+      [(ngModel)]="this.productsParams" (startChanging)="this.cancelRequest()"></shop-products-filters>
     <div class="main-tiles">
       <!-- <shop-busy-overlay *ngIf="this.waitingForResponse" class="main-tiles__overlay"></shop-busy-overlay> -->
       <ng-container *ngIf="this.httpResponse">

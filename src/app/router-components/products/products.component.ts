@@ -134,14 +134,14 @@ export class ProductsComponent implements OnInit {
     return this.router.url.startsWith("/products");
   }
 
-  public cancelPreviousRequest(){
+  public cancelRequest(){
     if(this.lastRequest){
       this.lastRequest.unsubscribe();
     };
   }
 
   public refreshProducts(params: Params = this.activatedRoute.snapshot.queryParams): void{
-    this.cancelPreviousRequest();
+    this.cancelRequest();
     this.waitingForResponse = true;
     this.lastRequest = this.productService.getAllProducts(params).subscribe(response=>{
       this.httpResponse = Object.assign({}, response);

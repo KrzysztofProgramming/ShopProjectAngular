@@ -1,5 +1,7 @@
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormControl } from '@angular/forms';
+import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'shop-page-select',
@@ -16,8 +18,7 @@ import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } 
       decrementButtonClass="p-button-primary"
       incrementButtonIcon="pi pi-chevron-right"
       decrementButtonIcon="pi pi-chevron-left"
-      [(ngModel)]="this.model"
-      (ngModelChange)="this.onChangeFn($event)"
+      [formControl] = "this.modelControl"
       (onBlur) = "this.onTouchedFn()"
     >
     </p-inputNumber>
@@ -36,17 +37,25 @@ import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } 
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./page-select.component.scss'],
 })
-export class PageSelectComponent implements OnInit, ControlValueAccessor {
+export class PageSelectComponent implements OnInit, ControlValueAccessor, OnDestroy {
   @Input() totalPages: number = 1;
-  model: number = 1;
+  @Output() modelStartChanging: EventEmitter<number> = new EventEmitter();
+  modelControl: FormControl = new FormControl(1);
   onChangeFn: any = ()=>{};
   onTouchedFn: any = ()=>{};
-
+  private subscriptions: Subscription[] = [];
 
   constructor(private cd: ChangeDetectorRef) {}
 
+  ngOnInit(): void {
+    this.subscriptions.push(
+      this.modelControl.valueChanges.subscribe(value=>this.modelStartChanging.emit(value)),
+      this.modelControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged()).subscribe(value=>this.onChangeFn(value))
+    )
+  }
+
   writeValue(obj: any): void {
-    this.model = obj;
+    this.modelControl.setValue(obj, {emitEvent: false});
     this.cd.markForCheck();
   }
 
@@ -58,5 +67,7 @@ export class PageSelectComponent implements OnInit, ControlValueAccessor {
     this.onTouchedFn = fn;
   }
 
-  ngOnInit(): void {}
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub=>sub.unsubscribe());
+  }
 }

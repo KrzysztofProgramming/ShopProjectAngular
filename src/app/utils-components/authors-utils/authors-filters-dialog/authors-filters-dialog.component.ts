@@ -2,6 +2,7 @@ import { DEFAULT_AUTHORS_PARAMS } from '../../../models/requests';
 import { GetAuthorsParams } from 'src/app/models/requests';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef, Input } from '@angular/core';
+import { AUTHORS_SORT_OPTIONS } from 'src/app/models/models';
 
 @Component({
   selector: 'shop-authors-filters-dialog',
@@ -45,6 +46,7 @@ export class AuthorsFiltersDialogComponent implements OnInit, ControlValueAccess
   private onToucheFn: any = ()=>{};
   public model: GetAuthorsParams = DEFAULT_AUTHORS_PARAMS;
   public unchangedModel: GetAuthorsParams = DEFAULT_AUTHORS_PARAMS;
+  readonly sortOptions = AUTHORS_SORT_OPTIONS;
 
   constructor(private cd: ChangeDetectorRef) { }
 

@@ -1,3 +1,4 @@
+import { AUTHORS_SORT_OPTIONS } from './../../../models/models';
 import { ToastMessageService } from '../../../services/utils/toast-message.service';
 import { Subscription } from 'rxjs';
 import { GetAuthorsResponse } from '../../../models/responses';
@@ -24,6 +25,7 @@ export class AuthorsListComponent implements OnInit {
   editingAuthor?: Author;
   creatorVisibility: boolean = false;
   filtersVisibility: boolean = false;
+  readonly sortOptions = AUTHORS_SORT_OPTIONS;
 
   readonly pageSizes: number[] = PAGE_SIZES;
   constructor(private authorsService: AuthorsService, private cd: ChangeDetectorRef, private router: Router,
@@ -31,7 +33,7 @@ export class AuthorsListComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.onQueryParamsChange(this.route.snapshot.queryParams);
+    // this.onQueryParamsChange(this.route.snapshot.queryParams);
     this.route.queryParams.subscribe(params=>{
       this.onQueryParamsChange(params);
     })
@@ -117,6 +119,7 @@ export class AuthorsListComponent implements OnInit {
     const params = Object.assign({}, this.params);
     if(params.pageSize === DEFAULT_PAGEABLE.pageSize) params.pageSize = undefined;
     if(params.pageNumber === DEFAULT_PAGEABLE.pageNumber) params.pageNumber = undefined;
+    if(params.sort === DEFAULT_AUTHORS_PARAMS.sort) params.sort = undefined;
     if(params.searchPhrase?.length === 0) params.searchPhrase = undefined;
     this.router.navigate([], {queryParams: params, relativeTo: this.route, skipLocationChange: skipLocationChange});
   }

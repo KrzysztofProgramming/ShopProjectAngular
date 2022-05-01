@@ -11,7 +11,7 @@
     <div class="top-bar__dropdown">
       <p>Na stronie:</p>
       <p-dropdown [(ngModel)] = "this.params.pageSize" [options] = "this.pageSizes"
-       (ngModelChange)="this.navigateToParams()"></p-dropdown>
+       (ngModelChange)="this.onModelChange()"></p-dropdown>
     </div>
     <button class="top-bar__filters-button" shopButton padding="medium" (click)="this.showFilters()">Filtry</button>
   </div>
@@ -42,7 +42,7 @@
   </div>
   <div class="bottom-bar">
     <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
-    (ngModelChange)="this.onModelChange()"></shop-page-select>
+    (ngModelChange)="this.onModelChange()" (modelStartChanging)="this.cancelRequest()"></shop-page-select>
   </div>
 </div>
 

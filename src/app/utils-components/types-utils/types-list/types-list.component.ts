@@ -1,3 +1,4 @@
+import { GetAuthorsParams } from './../../../models/requests';
 import { TypeResponse } from './../../../models/responses';
 import { ToastMessageService } from 'src/app/services/utils/toast-message.service';
 import { Subscription } from 'rxjs';
@@ -43,13 +44,20 @@ export class TypesListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.reloadTypes();
     this.subscriptions.push(
       this.route.queryParams.subscribe(params=>{
-        this.params = Object.assign({}, params);
-        this.reloadTypes();
+        this.onQueryParamsChange(params);
+        // this.reloadTypes();
       })
     )
+  }
+
+  onQueryParamsChange(params: Params | GetAuthorsParams){
+    this.params = Object.assign({}, DEFAULT_PAGEABLE);
+    this.params = Object.assign(this.params, params);
+    if(!this.pageSizes.includes(+params.pageSize))
+      this.params.pageSize = DEFAULT_PAGEABLE.pageSize;
+    this.reloadTypes(this.params);
   }
 
   trackByName(index: number, type: CommonType){

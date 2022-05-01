@@ -1,4 +1,4 @@
-import { UserInfo } from './models';
+import { UserInfo, AuthorsSortOption, AuthorsSortType } from './models';
 import { Params } from '@angular/router';
 
 export interface LoginRequest {
@@ -67,9 +67,14 @@ export interface GetAuthorsParams extends PageableParams {
   searchPhrase?: string;
   minBooks?: number;
   maxBooks?: number;
+  sort?: AuthorsSortType;
 }
 
-export const DEFAULT_AUTHORS_PARAMS = DEFAULT_PAGEABLE;
+export const DEFAULT_AUTHORS_PARAMS: GetAuthorsParams = {
+  pageSize: DEFAULT_PAGEABLE.pageSize,
+  pageNumber: DEFAULT_PAGEABLE.pageNumber,
+  sort: 'alph_asc'
+};
 
 export type ProductsSortType =
   | 'none'

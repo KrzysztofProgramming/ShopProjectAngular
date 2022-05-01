@@ -65,7 +65,7 @@ export class ProfileOrdersComponent implements OnInit, OnDestroy {
     }, error=>{
       this.waitingForResponse = false;
       this.isError = true;
-      this.params = Object.assign({}, DEFAULT_AUTHORS_PARAMS);
+      this.params = Object.assign({}, DEFAULT_PAGEABLE);
       this.navigateToParams(true);
       this.cd.markForCheck();
     })

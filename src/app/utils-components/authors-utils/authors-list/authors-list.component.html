@@ -9,12 +9,10 @@
       </div>
       <div class="top-bar__authors">Autorzy: <span class="top-bar__authors-count">{{this.response.totalElements}}</span></div>
       <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
-      (ngModelChange)="this.onModelChange()" class="top-bar__page-select"></shop-page-select>
-      <div class="top-bar__dropdown">
-        <p>Na stronie:</p>
-        <p-dropdown [(ngModel)] = "this.params.pageSize" [options] = "this.pageSizes"
-        (ngModelChange)="this.navigateToParams()"></p-dropdown>
-      </div>
+      (ngModelChange)="this.onModelChange()" (modelStartChanging)="this.cancelRequest()"
+       class="top-bar__page-select"></shop-page-select>
+      <p-dropdown class="top-bar__sort-select" [options]="this.sortOptions" optionLabel="name" optionValue="code"
+       [(ngModel)]="this.params.sort" (ngModelChange)="this.onModelChange()"></p-dropdown>
       <button class="top-bar__filters-button" shopButton padding="medium" (click)="this.showFilters()">Filtry</button>
     </div>
     <div class="table">
@@ -45,6 +43,11 @@
     <div class="bottom-bar">
       <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
       (ngModelChange)="this.onModelChange()"></shop-page-select>
+      <div class="top-bar__dropdown">
+        <p>Na stronie:</p>
+        <p-dropdown [(ngModel)] = "this.params.pageSize" [options] = "this.pageSizes"
+        (ngModelChange)="this.navigateToParams()"></p-dropdown>
+      </div>
     </div>
   </ng-container>
 </div>
