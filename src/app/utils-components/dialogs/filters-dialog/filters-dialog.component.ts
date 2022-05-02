@@ -1,3 +1,4 @@
+import { SORT_OPTIONS_ADMIN } from './../../../models/models';
 import { PAGE_SIZES } from './../../../models/requests';
 import { ProductsFiltersComponent } from '../../products-utils/products-filters/products-filters.component';
 import { DEFAULT_PAGEABLE } from '../../../models/requests';
@@ -37,9 +38,6 @@ export class FiltersDialogComponent implements OnInit, ControlValueAccessor {
     this._visibility = value;
     this.cd.markForCheck();
   }
-  get visibilityInput(): boolean{
-    return this._visibility;
-  }
 
   set visibility(value: boolean){
     this._visibility = value;
@@ -48,6 +46,15 @@ export class FiltersDialogComponent implements OnInit, ControlValueAccessor {
   }
   get visibility(): boolean{
     return this._visibility;
+  }
+
+  @Input("adminMode")
+  set adminModeInput(value: boolean){
+    if(value)
+      this.sortOptions = SORT_OPTIONS_ADMIN;
+    else
+      this.sortOptions = SORT_OPTIONS;
+    this.cd.markForCheck();
   }
 
   sortOptions: SortOption[] = SORT_OPTIONS;  

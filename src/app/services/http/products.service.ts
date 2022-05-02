@@ -1,4 +1,5 @@
-import { serverUrl } from './../../models/models';
+import { ArchiveRequest } from './../../models/requests';
+import { serverUrl, ShopProductWithDetails } from './../../models/models';
 import { shareReplay, tap } from 'rxjs/operators';
 import { GetTypesResponse } from './../../models/responses';
 import { TypeRequest, ShopProductRequestWithId, GetProductsParams, GetTypesParams } from '../../models/requests';
@@ -25,8 +26,13 @@ export class ProductsService {
     return this.http.get<GetProductsResponse>(`${this.url}getAll`, {params: queryParams});
   }
 
-  public getProduct(id: number): Observable<ShopProduct>{
-    return this.http.get<ShopProduct>(`${this.url}byId/${id}`);
+  public archiveProduct(id: number, archive: boolean): Observable<unknown>{
+    let body: ArchiveRequest = {archive: archive};
+    return this.http.put<unknown>(`${this.url}archiveProduct/${id}`, body);
+  }
+
+  public getProduct(id: number): Observable<ShopProductWithDetails>{
+    return this.http.get<ShopProductWithDetails>(`${this.url}byId/${id}`);
   }
 
   public getProducts(ids: number[]): Observable<ShopProduct[]>{

@@ -159,6 +159,11 @@
     flex-direction: column;
     justify-content: center;
 
+    &__warning{
+      color: $invalid-color;
+      margin-top: 10px;
+    }
+
     &__input{
         max-width: unset;
         min-width: 0;

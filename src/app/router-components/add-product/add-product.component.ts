@@ -25,7 +25,7 @@ import { Location } from '@angular/common';
 export class AddProductComponent implements OnInit, OnDestroy {
   
   constructor(private cd: ChangeDetectorRef, private fb: FormBuilder, private messageService: ToastMessageService,
-    private activatedRoute: ActivatedRoute, private router: Router, private productsService: ProductsService,
+    private activatedRoute: ActivatedRoute, public router: Router, private productsService: ProductsService,
     private sanitizer: DomSanitizer, private confirmationService: ConfirmationService,
     public location: Location) { }
 
@@ -41,6 +41,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   public waitingForImage = false;
   public waitingForResponseMessage: string = "";
   public requestControl: FormControl = new FormControl(EMPTY_PRODUCT_REQUEST);
+  public isUnDeletable?: boolean;
 
   @ViewChild("productCreator")
   public productCreator?: ProductCreatorComponent;
@@ -82,6 +83,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
           this.imageUrl = this.EMPTY_IMAGE;
           this.selectedFile = undefined;
           this.currentProductId = undefined;
+          this.waitingForImage = false;
           this.requestControl.reset();
           this.headerText = "Stwórz nowy produkt";
           this.unchangedAfterSend = false;
@@ -99,6 +101,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
         this.headerText = "Edytuj produkt";
         this.writeValue(this.toProductRequest(product));
         this.unchangedAfterSend = true;
+        this.isUnDeletable = !product.isDeletable;
         this.loadImage();
         this.cd.markForCheck();
       }, _error =>{
@@ -236,6 +239,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   private resetFile(){
     this.setImageUrlEmpty();
     this.selectedFile = undefined;
+    this.waitingForImage = false;
     this.cd.markForCheck();
   }
 
@@ -245,6 +249,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
 
   public onImageLoaded(){
     this.waitingForImage = false;
+    this.cd.markForCheck();
   }
 
   private navigateToProduct(id: string){
@@ -275,12 +280,16 @@ export class AddProductComponent implements OnInit, OnDestroy {
       accept: ()=>{
         if(this.currentProductId == null) return;
         this.productsService.deleteProduct(this.currentProductId).subscribe(val =>{
-            // this.router.navigateByUrl("/");
-            this.location.back();
+            this.router.navigate(['/products']);
+            // this.location.back();
           }
         );
       }
     })
+  }
+
+  public archiveClicked(): void{
+
   }
 
 }

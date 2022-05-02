@@ -37,6 +37,7 @@ export class ProductImageComponent implements OnInit {
     this.waitingForImage = true;
     this.cd.markForCheck();
   }
+  
   get productId(): number{
     return this._productId;
   }

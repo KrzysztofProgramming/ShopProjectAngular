@@ -81,7 +81,9 @@ export type ProductsSortType =
   | 'price_asc'
   | 'price_desc'
   | 'alphabetic_asc'
-  | 'alphabetic_desc';
+  | 'alphabetic_desc'
+  | 'id_asc'
+  | 'id_desc'
 
 export interface GetProductsParams extends PageableParams {
   searchPhrase?: string;
@@ -155,4 +157,8 @@ export interface GetTypesParams extends PageableParams {
   minProducts?: number;
   maxProducts?: number;
   searchPhrase?: string;
+}
+
+export interface ArchiveRequest{
+  archive: boolean;
 }

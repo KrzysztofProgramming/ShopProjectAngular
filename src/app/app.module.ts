@@ -63,7 +63,6 @@ import { AbstractMultiSelectComponent } from './utils-components/multi-selects/a
 import { TypesCreatorComponent } from './utils-components/types-utils/types-creator/types-creator.component';
 import { RadioButtonModule } from "primeng/radiobutton";
 import { SingleSelectComponent } from './utils-components/single-select/single-select.component';
-import { SortSelectComponent } from './utils-components/multi-selects/sort-select/sort-select.component';
 import { ProductCreatorComponent } from './utils-components/products-utils/product-creator/product-creator.component';
 import localeFr from '@angular/common/locales/fr';
 import { registerLocaleData } from '@angular/common';
@@ -137,7 +136,6 @@ registerLocaleData(localeFr);
     AbstractMultiSelectComponent,
     TypesCreatorComponent,
     SingleSelectComponent,
-    SortSelectComponent,
     ProductCreatorComponent,
     ForgotPasswordDialogComponent,
     ResetPasswordComponent,

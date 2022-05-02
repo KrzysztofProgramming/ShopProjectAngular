@@ -44,6 +44,11 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
     authors: [],
   })
 
+  @Input("adminMode")
+  set adminModeInput(value: boolean){
+    
+  }
+
   private subscriptions: Subscription[] = [];
   private onTouchedFn: any = () =>{}
   private onChangeFn: any = () =>{}

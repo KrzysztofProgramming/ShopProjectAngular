@@ -1,5 +1,5 @@
 <div class="header">
-    <i class="pi pi-arrow-left" title="wróć" (click)="this.location.back()"></i>
+    <i class="pi pi-arrow-left" title="wróć" (click)="this.router.navigate(['/products'])"></i>
     <h1 class="header__text">
         {{this.headerText}}
     </h1>
@@ -26,7 +26,13 @@
         <div class="buttons">
           <button class="buttons__button" [disabled] = "this.requestControl.invalid || this.waitingForResponseMessage
            || this.unchangedAfterSend" shopButton (click)="this.onSubmit()">Prześlij <i class="pi-check-circle pi"></i></button>
-          <button class="buttons__button" type="button" [disabled] = "!this.currentProductId" shopButton color = "red" (click)="this.onProductRemove()">Usuń produkt <i class="pi pi-times"></i></button>
+          <button class="buttons__button" shopButton color="gray" *ngIf="this.currentProductId" (click) = "this.archiveClicked()">
+            Archiwizuj <i class="pi pi-book"></i>  </button>
+          <button class="buttons__button" type="button" *ngIf="this.currentProductId" [disabled] = "this.isUnDeletable" shopButton color = "red"
+           (click)="this.onProductRemove()">Usuń produkt <i class="pi pi-times"></i></button>
+      </div>
+      <div class="informations__warning" *ngIf="this.isUnDeletable && this.currentProductId">
+          Nie można usunąć tego produktu poniewać zostały już złożone z nim zamówienia, można go jedynie zarchiwizować.
       </div>
     </div>
 </div>

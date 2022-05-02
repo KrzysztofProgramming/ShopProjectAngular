@@ -1,3 +1,4 @@
+import { SortOption, SORT_OPTIONS, SORT_OPTIONS_ADMIN } from './../../models/models';
 import { ShopProduct } from '../../models/models';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -6,7 +7,7 @@ import { GetProductsParams, DEFAULT_PRODUCTS_PARAMS, DEFAULT_PAGEABLE, PAGE_SIZE
 import { ProductsService } from 'src/app/services/http/products.service';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { GetProductsResponse } from 'src/app/models/responses';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router';
 import { FiltersDialogModel } from 'src/app/utils-components/dialogs/filters-dialog/filters-dialog.component';
 
 @Component({
@@ -25,6 +26,7 @@ import { FiltersDialogModel } from 'src/app/utils-components/dialogs/filters-dia
 export class ProductsComponent implements OnInit {
 
   public pageOptions: number[] = PAGE_SIZES;
+  public sortOptions: SortOption[] = SORT_OPTIONS;
 
   private lastRequest?: Subscription;
   public filtersExpanded: boolean = false;
@@ -41,6 +43,7 @@ export class ProductsComponent implements OnInit {
   private topBarElement!: ElementRef<HTMLDivElement>;
   private searchPhraseSubject: Subject<string> = new Subject();
   private subscriptions: Subscription[] = [];
+  private adminMode: boolean = false;
 
 
   @HostListener("window:scroll", ["$event"])
@@ -82,10 +85,30 @@ export class ProductsComponent implements OnInit {
       this.refreshProducts(params);
       // this.writeParams(params);
     })
-    this.subscriptions.push(this.searchPhraseSubject.pipe(
-      debounceTime(500),
-      distinctUntilChanged()
-    ).subscribe(this.onParamsModelChange.bind(this)));
+    this.setAdminMode(this.router.url.startsWith("/products"));
+    this.subscriptions.push(
+        this.searchPhraseSubject.pipe(
+        debounceTime(500),
+        distinctUntilChanged()
+      ).subscribe(this.onParamsModelChange.bind(this)),
+      this.router.events.subscribe(event=>{
+        if(event instanceof NavigationEnd){
+          this.setAdminMode(event.url.startsWith("/products"));
+          console.log(this.sortOptions);
+        }
+      })
+    );
+  }
+
+  private setAdminMode(value: boolean){
+    this.adminMode = value;
+    if(value){
+      this.sortOptions = SORT_OPTIONS_ADMIN
+    }
+    else{
+      this.sortOptions = SORT_OPTIONS;
+    }  
+    this.cd.markForCheck();
   }
 
   trackByProductId(index: number, product: ShopProduct){
@@ -131,7 +154,7 @@ export class ProductsComponent implements OnInit {
   }
 
   public isAdminMode(){
-    return this.router.url.startsWith("/products");
+    return this.adminMode;
   }
 
   public cancelRequest(){

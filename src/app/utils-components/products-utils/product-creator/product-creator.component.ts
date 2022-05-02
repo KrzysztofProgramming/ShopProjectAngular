@@ -86,9 +86,9 @@ export class ProductCreatorComponent implements OnInit, ControlValueAccessor, Va
   }
 
   public callOnChange(){
-    this.model.name = this.nameControl.value.trim();
+    this.model.name = this.nameControl.value?.trim();
     this.model.price = this.priceControl.value;
-    this.model.description = this.descriptionControl.value.trim();
+    this.model.description = this.descriptionControl.value?.trim();
     this.model.types = this.categoriesControl.value;
     this.model.inStock = this.inStockControl.value;
     this.model.authors = this.authorsControl.value;

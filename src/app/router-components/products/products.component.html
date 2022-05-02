@@ -7,8 +7,8 @@
          [(ngModel)]="this.productsParams.searchPhrase" (ngModelChange)="this.onSearchPhraseChanged($event)">
         <i class="pi pi-search"></i>
       </div>
-      <shop-sort-select class="top-bar__sorting" placeholder="Sortowanie" optionLabel="name"
-       [(ngModel)]="this.productsParams.sort" (ngModelChange)="this.onParamsModelChange()"></shop-sort-select>
+      <p-dropdown class="top-bar__sorting" placeholder="Sortowanie" optionLabel="name" optionValue="code"
+       [(ngModel)]="this.productsParams.sort" (ngModelChange)="this.onParamsModelChange()" [options]="this.sortOptions"></p-dropdown>
       <shop-page-select class="top-bar__page-select" [totalPages]="this.httpResponse.totalPages"
        [(ngModel)]="this.productsParams.pageNumber" (ngModelChange)="this.onParamsModelChange()"
        (modelStartChanging)="this.cancelRequest()"></shop-page-select>
@@ -21,7 +21,7 @@
 
   <div class="main">
     <shop-products-filters (ngModelChange)="this.onParamsModelChange()" class="main-filters"
-      [(ngModel)]="this.productsParams" (startChanging)="this.cancelRequest()"></shop-products-filters>
+      [(ngModel)]="this.productsParams" (startChanging)="this.cancelRequest()" [adminMode]="this.isAdminMode()"></shop-products-filters>
     <div class="main-tiles">
       <!-- <shop-busy-overlay *ngIf="this.waitingForResponse" class="main-tiles__overlay"></shop-busy-overlay> -->
       <ng-container *ngIf="this.httpResponse">
@@ -44,7 +44,7 @@
   </div>
 
   <shop-filters-dialog [(visibility)]="this.filtersExpanded" [(ngModel)] = "this.productsParams"
-   (ngModelChange)="this.onParamsModelChange()"></shop-filters-dialog>
+   (ngModelChange)="this.onParamsModelChange()" [adminMode]="this.isAdminMode()"></shop-filters-dialog>
   
   <shop-scroller></shop-scroller>
 </div>

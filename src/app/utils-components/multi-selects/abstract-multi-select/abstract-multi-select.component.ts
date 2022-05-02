@@ -108,7 +108,6 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
     // items = new Array(1000).fill(0).map(()=>(Math.random() * 10 + 1).toString(36).substring(2));
     let checkedItemsString :Array<string> = this.checkedItems.map(item=>{
       return typeof(item.element) === 'string' ? item.element : item.element[this.displayProperty]});
-      console.log("checked items", checkedItemsString);
     this.allItems = items.map((item, index) =>
      {return {element: item,
        isDisplay: false,
@@ -191,7 +190,6 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
       this.preSelectedItems = obj;
       return;
     }
-    console.log("writeValue:", obj, this.allItems);
     this.allItems.forEach(item => {
       if(typeof(item.element)==="string"){
         item.isChecked = obj.includes(item.element);

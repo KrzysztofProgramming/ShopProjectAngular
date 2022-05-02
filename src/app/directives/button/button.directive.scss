@@ -34,7 +34,8 @@
         }
 
         &:disabled{
-            background-color: $theme-color-light-2;
+          color: #4d4d4d;
+          background-color: $theme-color-light-2;
         }
     }
 
@@ -48,6 +49,7 @@
 
         &:disabled{
             background-color: $theme-color2;
+            color:#4d4d4d;
         }
     }
 
@@ -60,6 +62,7 @@
         }
 
         &:disabled{
+          color: rgb(178, 178, 178);
             background-color: $theme-color3;
         }
     }

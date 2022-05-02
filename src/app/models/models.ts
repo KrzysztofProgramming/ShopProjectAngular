@@ -58,8 +58,12 @@ export interface ShopProduct {
   types: TypeResponse[];
   authors: SimpleAuthor[];
   inStock: number;
+  isArchived: boolean;
 }
 
+export interface ShopProductWithDetails extends ShopProduct{
+  isDeletable?: boolean;
+}
 
 export const EMPTY_PRODUCT_REQUEST: ShopProductRequest = {
   name: '',
@@ -152,6 +156,12 @@ export const SORT_OPTIONS: SortOption[] = [
   { name: 'Alfabetycznie: A-Z', code: 'alphabetic_asc' },
   { name: 'Alfabatycznie: Z-A', code: 'alphabetic_desc' },
 ];
+
+export const SORT_OPTIONS_ADMIN: SortOption[] = [
+  ...SORT_OPTIONS,
+  {name: "Id: rosnąco", code: 'id_asc'},
+  {name: "Id: malejąco", code: 'id_desc'}
+]
 
 export const SORT_OPTION_DEFAULT: SortOption = {
   name: 'Sortowanie: Trafność',
