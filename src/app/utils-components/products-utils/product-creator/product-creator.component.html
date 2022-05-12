@@ -1,4 +1,7 @@
 <h2 class="header">Informacje: </h2>
+<!-- <div class="archivization-message" *ngIf="this.isArchived">
+  Ten produkt jest zarchiwizowany, nie będzie wyświetlany jako dostępny.
+</div> -->
 <form [formGroup] = "this.formGroup" class="form" (ngSubmit) = "this.onSubmit.emit()" (blur)="this.callOnToche()">
 
     <p>Nazwa:</p> <input class="input" type="text" shopInputText formControlName="name" [invalid] = "this.nameControl.invalid && this.nameControl.touched"> 

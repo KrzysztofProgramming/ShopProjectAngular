@@ -54,12 +54,15 @@
     background-color: $theme-white;
 
     &-top {
-      margin-bottom: min(30px, 50%);
 
       p {
         margin-bottom: 8px;
       }
     }
+  }
+
+  &__archived-info{
+    color: red;
   }
 
   &__price {
@@ -69,6 +72,7 @@
 
   &__price-calc {
     margin-bottom: 8px;
+    margin-top: min(30px, 50%);
   }
 
   &__buy {

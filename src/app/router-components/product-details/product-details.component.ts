@@ -1,3 +1,4 @@
+import { AuthService } from './../../services/auth/auth.service';
 import { ShoppingCartService } from '../../services/http/shopping-cart.service';
 import { ProductsService } from '../../services/http/products.service';
 import { ShopProduct } from './../../models/models';
@@ -5,7 +6,7 @@ import { Observable, of, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ToastMessageService } from 'src/app/services/utils/toast-message.service';
-import { finalize, mergeMap, tap } from 'rxjs/operators';
+import { finalize, mergeMap, tap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'shop-product-details',
@@ -25,7 +26,8 @@ export class ProductDetailsComponent implements OnInit {
   public typesString: string = "";
 
   constructor(private activatedRoute: ActivatedRoute, private productsService: ProductsService,
-     private cd: ChangeDetectorRef, private cartService: ShoppingCartService, private messageService: ToastMessageService,) { }
+     private cd: ChangeDetectorRef, private cartService: ShoppingCartService, private messageService: ToastMessageService,
+     private authService: AuthService) { }
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -67,7 +69,9 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   public refreshProduct(id?: number){
-    this.refreshProductObservable(id).subscribe();
+    this.refreshProductObservable(id).subscribe({
+      error: ()=> this.authService.redirectToNotFound()
+    });
   }
 
   public refreshProductObservable(id?: number): Observable<ShopProduct | null>{
@@ -82,7 +86,7 @@ export class ProductDetailsComponent implements OnInit {
           this.typesString = this.product.types.map(type=>type.name).join(", ");
           this.onCartChange();
           this.cd.markForCheck();
-        })
+        }),
       );
     }
 

@@ -42,6 +42,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   public waitingForResponseMessage: string = "";
   public requestControl: FormControl = new FormControl(EMPTY_PRODUCT_REQUEST);
   public isUnDeletable?: boolean;
+  public isArchived?: boolean;
 
   @ViewChild("productCreator")
   public productCreator?: ProductCreatorComponent;
@@ -102,6 +103,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
         this.writeValue(this.toProductRequest(product));
         this.unchangedAfterSend = true;
         this.isUnDeletable = !product.isDeletable;
+        this.isArchived = product.isArchived;
         this.loadImage();
         this.cd.markForCheck();
       }, _error =>{
@@ -289,7 +291,23 @@ export class AddProductComponent implements OnInit, OnDestroy {
   }
 
   public archiveClicked(): void{
-
+    if(!this.currentProductId || this.isArchived === undefined) return;
+    this.waitingForResponseMessage = "Archiwizowanie w toku";
+    this.productsService.archiveProduct(this.currentProductId, !this.isArchived).pipe(
+      finalize(()=>{
+        this.waitingForResponseMessage = "";
+        this.cd.markForCheck();
+      })
+    ).subscribe(
+      _success=>{
+        this.isArchived = !this.isArchived;
+        this.messageService.showMessage({severity: "success", summary: "Sukces",
+         detail: this.isArchived ? "Zarchiwizowano" : "Zdearchiwizowano"});
+      },
+      _error=>{
+        this.messageService.showMessage({severity: "success", summary: "Sukces", detail: "Zarchiwizowano"});
+      }
+    )
   }
 
 }

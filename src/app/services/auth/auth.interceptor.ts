@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment.prod';
 import { catchError, filter, switchMap, first } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
@@ -39,7 +40,7 @@ export class AuthInterceptor implements HttpInterceptor {
     if(!this.isTokenRefreshing){
         this.isTokenRefreshing = true;
         this.jwtTokenSubject.next(null);
-        console.log("interceptor refresh");
+        if(!environment.production) console.log("interceptor refresh");
         return this.authService.doTokenRefreshing().pipe(
           switchMap((token: string | null) =>{
             this.isTokenRefreshing = false;

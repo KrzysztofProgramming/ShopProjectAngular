@@ -1,4 +1,4 @@
-import { UserInfo, AuthorsSortOption, AuthorsSortType } from './models';
+import { UserInfo, AuthorsSortOption, AuthorsSortType, ARCHIVED_AVAILABLE } from './models';
 import { Params } from '@angular/router';
 
 export interface LoginRequest {
@@ -94,6 +94,7 @@ export interface GetProductsParams extends PageableParams {
   authors?: number[];
   minInStock?: number;
   maxInStock?: number;
+  isArchived?: number;
 }
 
 export const DEFAULT_PRODUCTS_PARAMS: GetProductsParams = {
@@ -101,6 +102,7 @@ export const DEFAULT_PRODUCTS_PARAMS: GetProductsParams = {
   pageNumber: DEFAULT_PAGEABLE.pageNumber,
   sort: 'none',
   authors: [],
+  isArchived: ARCHIVED_AVAILABLE
 };
 
 export interface TypeRequest {

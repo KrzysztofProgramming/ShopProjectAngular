@@ -1,7 +1,7 @@
 import { TypeResponse } from './responses';
 import { ProductsSortType, ShopProductRequest, OrdersSortType } from './requests';
 
-export const serverUrl="http://localhost:8080/";
+export const serverUrl = "";
 
 export interface JwtToken {
   authorities: number;
@@ -47,7 +47,7 @@ export interface ShoppingCartWithDetails {
   expireDate?: Date;
 }
 
-export const EMPTY_CART = { items: {} };
+export const EMPTY_CART = { items: {}};
 export const EMPTY_DETAILS_CART = { items: [] };
 
 export interface ShopProduct {
@@ -211,9 +211,24 @@ export const DATE_FORMAT: string = "YYYY-MM-DD";
 export function getStatusString(value: number){
   return value === OrderStatuses.CANCELLED ? "Anulowany" :
   value === OrderStatuses.PAID ? "Zapłacone" :
-  value === OrderStatuses.UNPAID ? "Niezapłacone" : 
+  value === OrderStatuses.UNPAID ? "Niezapłacone" :
   "Nieznany"
 }
+
+export interface ArchivedOption{
+  name: string,
+  code: number;
+}
+
+export const ARCHIVED_ALL: number = -1;
+export const ARCHIVED_ARCHIVED: number = 1;
+export const ARCHIVED_AVAILABLE: number = 0; 
+
+export const ARCHIVED_OPTIONS: ArchivedOption[] = [
+  {name: "Wszystkie", code: ARCHIVED_ALL},
+  {name: "Dostępne", code: ARCHIVED_AVAILABLE},
+  {name: "Zarchiwizowane", code: ARCHIVED_ARCHIVED}
+]
 
 export function deepCopy<T>(source: T): T {
   return Array.isArray(source)

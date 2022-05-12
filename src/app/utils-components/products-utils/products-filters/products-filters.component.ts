@@ -1,3 +1,4 @@
+import { ARCHIVED_ALL, ARCHIVED_AVAILABLE, ARCHIVED_OPTIONS } from './../../../models/models';
 import { Subscription } from 'rxjs';
 import { ControlValueAccessor, FormGroup, FormBuilder, AbstractControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Output, EventEmitter, Input, ChangeDetectorRef } from '@angular/core';
@@ -11,6 +12,7 @@ export interface ProductsFiltersModel{
   authors?: number[];
   minInStock?: number;
   maxInStock?: number;
+  isArchived?: number;
 }
 
 
@@ -33,6 +35,8 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
   @Input() selectsType: 'dropdown' | 'accordion' = 'dropdown';
   @Input() debounceTime: boolean = true;
   
+  public archivedOptions = ARCHIVED_OPTIONS;
+  public adminMode: boolean = false;
   private model: ProductsFiltersModel = {};
   //public filterOptions = productsTypes.map(item =>{return {label: item}});
   public formGroup: FormGroup = this.fb.group({
@@ -42,11 +46,13 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
     maxInStock: 0,
     types: [],
     authors: [],
+    isArchived: ARCHIVED_AVAILABLE
   })
 
   @Input("adminMode")
   set adminModeInput(value: boolean){
-    
+    this.adminMode = value;
+    this.cd.markForCheck();
   }
 
   private subscriptions: Subscription[] = [];
@@ -105,6 +111,10 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
     return this.formGroup.get("authors")!;
   }
 
+  public get archivedControl(): AbstractControl{
+    return this.formGroup.get("isArchived")!;
+  }
+
   public getProductsFilters(): ProductsFiltersModel{
     this.model.maxPrice = this.maxPriceControl.value;
     this.model.minPrice = this.minPriceControl.value;
@@ -112,6 +122,7 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
     this.model.maxInStock = this.maxInStockControl.value;
     this.model.minInStock = this.minInStockControl.value;
     this.model.authors= this.authorsControl.value;
+    this.model.isArchived = this.archivedControl.value;
     return this.model;
   }
 
@@ -127,6 +138,7 @@ export class ProductsFiltersComponent implements OnInit, OnDestroy, ControlValue
     this.maxInStockControl.setValue(obj.maxInStock, {emitEvent: false});
     this.minInStockControl.setValue(obj.minInStock, {emitEvent: false});
     this.authorsControl.setValue(obj.authors, {emitEvent: false});
+    this.archivedControl.setValue(obj.isArchived, {emitEvent: false});
   }
 
   registerOnChange(fn: any): void {

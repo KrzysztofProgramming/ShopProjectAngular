@@ -1,9 +1,11 @@
+import { ShopProduct } from './../../models/models';
+import { environment } from './../../../environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { ProductsService } from './products.service';
 import { EMPTY_CART, serverUrl, ShoppingCartWithDetails } from '../../models/models';
 import { CartProductRequest, SetCartRequest } from '../../models/requests';
 import { ShoppingCart } from '../../models/models';
-import { map, tap, distinctUntilChanged } from 'rxjs/operators';
+import { map, tap, distinctUntilChanged, skip } from 'rxjs/operators';
 import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
@@ -15,7 +17,7 @@ export class ShoppingCartService implements OnDestroy{
 
   private readonly URL: string = `${serverUrl}api/users/cart/`;
 
-  private currentCartSubject!: BehaviorSubject<ShoppingCart>;
+  private currentCartSubject: BehaviorSubject<ShoppingCart> = new BehaviorSubject(EMPTY_CART);
   private subscriptions: Subscription[] = [];
 
   get cartChanges(): Observable<ShoppingCart>{
@@ -36,9 +38,9 @@ export class ShoppingCartService implements OnDestroy{
   }
 
   constructor(private http: HttpClient, private authService: AuthService, private productsService: ProductsService) {
-    this.readCartFromStorage();
+    this.readCartFromStorage().subscribe();
     this.subscriptions.push(
-      this.cartChanges.subscribe(this.writeCartToStorage.bind(this)),
+      this.cartChanges.pipe(skip(1)).subscribe(this.writeCartToStorage.bind(this)),
       this.authService.loginStatus.subscribe(this.onLoginStatusChange.bind(this))
     );
     if(!this.authService.isLogin()) this.refreshCart().subscribe();
@@ -49,9 +51,9 @@ export class ShoppingCartService implements OnDestroy{
   }
 
   public refreshCart(): Observable<ShoppingCart>{
-    console.log("refreshing cart");
+    if(!environment.production) console.log("refreshing cart");
     if(!this.authService.isLogin()){
-      return of(this.readCartFromStorage());
+      return this.readCartFromStorage();
     }
     return this.http.get<ShoppingCart>(`${this.URL}getCart`).pipe(
       tap(this.tapToRefresh()),
@@ -69,7 +71,6 @@ export class ShoppingCartService implements OnDestroy{
   }
 
   public setProductInCart(request: CartProductRequest): Observable<ShoppingCart>{
-    console.log("setting product in cart");
     if(!this.authService.isLogin()){
       return this.setProductOnClient(request);
     }
@@ -80,18 +81,16 @@ export class ShoppingCartService implements OnDestroy{
   }
 
   public setCart(request: SetCartRequest): Observable<ShoppingCart>{
-    console.log("setting cart");
     if(!this.authService.isLogin()){
       return this.setCartOnClient(request);
     }
     return this.http.put<ShoppingCart>(`${this.URL}setCart`, request).pipe(
-      tap(this.tapToRefresh(), error=>console.log("tap error")),
+      tap(this.tapToRefresh()),
       // catchError(this.setCartOnClient(request))
     )
   }
 
   public addProductToCart(request: CartProductRequest): Observable<ShoppingCart>{
-    console.log("adding product to cart");
     if(!this.authService.isLogin()){
       return this.addProductOnClient(request);
     }
@@ -102,7 +101,6 @@ export class ShoppingCartService implements OnDestroy{
   }
 
   public deleteProductFromCart(productId: number): Observable<ShoppingCart>{
-    console.log("delete product");
     if(!this.authService.isLogin()){
       return this.deleteProductOnClient(productId);
     }
@@ -112,7 +110,6 @@ export class ShoppingCartService implements OnDestroy{
   }
 
   public deleteCart(): Observable<ShoppingCart>{
-    console.log("delete cart");
     if(!this.authService.isLogin()){
       return this.deleteCartOnClient();
     }
@@ -159,39 +156,51 @@ export class ShoppingCartService implements OnDestroy{
 
   private tapToRefresh(){
      return (cart: ShoppingCart) =>{
-       console.log("tap: ", cart);
        if(JSON.stringify(cart.items) === JSON.stringify(this.currentCart.items)) return;
        this.currentCartSubject.next(cart);
     };
   }
 
-  private handleGetErrors() {
-    return () =>{
-      return of(this.readCartFromStorage());
-    }
-  }
-
   private writeCartToStorage(cart: ShoppingCart){
     // if(!this.authService.isLogin()) return;
-    console.log("writing to storage");
     localStorage.setItem("shoppingCart", JSON.stringify(cart));
   }
 
-  private readCartFromStorage(): ShoppingCart{
-    console.log("reading cart from storage");
+  private readCartFromStorage(): Observable<ShoppingCart>{
     const jsonCart = localStorage.getItem("shoppingCart");
     let cart: ShoppingCart = EMPTY_CART;
     if(jsonCart){
       try{cart = JSON.parse(jsonCart);}
       catch(e){}
     }
-    if(!this.currentCartSubject)
-      this.currentCartSubject = new BehaviorSubject(cart);
-    else
-      this.currentCartSubject.next(cart);
-    return cart;
+    return this.productsService.getProducts(Object.keys(cart.items).map(value=>+value)).pipe(
+      map(products=>{
+          cart = this.deleteNonexistingProductsFromCart(cart, products);
+          cart = this.deleteArchivedProductsFromCart(cart, products);
+          this.currentCartSubject.next(cart);
+          return cart;
+      })
+    );
   } 
   
+  private deleteArchivedProductsFromCart(cart: ShoppingCart, products: ShopProduct[]): ShoppingCart{
+    let archivedIds: string[] = products.filter(product=>product.isArchived).map(product=>product.id.toString());
+    Object.keys(cart.items).forEach(key=>{
+      if(archivedIds.includes(key))
+        delete cart.items[key];
+    })
+    return cart;
+  }
+
+  private deleteNonexistingProductsFromCart(cart: ShoppingCart, products: ShopProduct[]): ShoppingCart{
+    let productsIds: string[] = products.map(product=>product.id.toString());
+    Object.keys(cart.items).forEach(key=>{
+      if(!productsIds.includes(key))
+        delete cart.items[key];
+    })
+    return cart;
+  }
+
   public getDetails(cart: ShoppingCart): Observable<ShoppingCartWithDetails>{
     let productsIds = Object.keys(cart.items).map(v=>+v);
     if(productsIds.length === 0) return of({items: [], expireDate: cart.expireDate, ownerUsername: cart.ownerUsername});

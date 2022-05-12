@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment.prod';
 import { JwtToken, Role, serverUrl } from './../../models/models';
 import { LoginRequest, RegisterRequest, RefreshRequest, CheckResetTokenRequest, ForgotPasswordRequest, ResetPasswordRequest } from './../../models/requests';
 import { LoginResponse, ErrorResponse } from './../../models/responses';
@@ -81,7 +82,6 @@ export class AuthService{
       }
     }
     setTimeout(() => {
-      console.log("authService refrehs");
       this.doTokenRefreshing().subscribe();
     }, 0);
   }
@@ -103,8 +103,7 @@ export class AuthService{
     if(this.refreshingProcess!=null) return this.refreshingProcess;
     if (this.refreshToken == null) return of(null);
     let body: RefreshRequest = { refreshToken: this.refreshToken }
-    console.log("starting refreshing");
-    console.log(body);
+    if(!environment.production) console.log("starting refreshing");
     this.refreshingProcess = this.http.post<LoginResponse>(this.url + "refresh", body)
     .pipe(
       finalize(()=>{this.refreshingProcess = null;}),
@@ -135,7 +134,7 @@ export class AuthService{
 
   private tapToLogin() {
     return (response: LoginResponse): void => {
-      console.log("tap to login");
+      if(!environment.production) console.log("tap to login");
       this.jwtToken = response.jwtToken;
       this.refreshToken = response.refreshToken;
       if(response.roles) this.rolesSubject.next(response.roles)
@@ -186,7 +185,6 @@ export class AuthService{
   }
 
   public redirectToNotFound(){
-    console.log("redirect to notFound");
     this.router.navigate(['/notFound'], {skipLocationChange: true});
   }
 

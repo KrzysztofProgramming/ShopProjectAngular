@@ -78,7 +78,8 @@
               "browserTarget": "ShopProject:build:production"
             },
             "development": {
-              "browserTarget": "ShopProject:build:development"
+              "browserTarget": "ShopProject:build:development",
+              "proxyConfig": "./proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

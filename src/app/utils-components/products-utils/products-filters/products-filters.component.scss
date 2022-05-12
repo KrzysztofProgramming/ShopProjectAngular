@@ -42,6 +42,11 @@ p{
     margin-top: 12px;
 }
 
+.dropdown{
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 12px;
+}
 
 .search{
     padding: 2px;
@@ -73,5 +78,9 @@ p{
     
     & .p-inputnumber{
         width: 100% !important;
+    }
+
+    & .p-dropdown{
+      width: 100%;
     }
 }

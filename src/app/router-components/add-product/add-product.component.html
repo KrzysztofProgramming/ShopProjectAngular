@@ -1,5 +1,5 @@
 <div class="header">
-    <i class="pi pi-arrow-left" title="wróć" (click)="this.router.navigate(['/products'])"></i>
+    <a class="pi pi-arrow-left" title="wróć" routerLink='/products'></a>
     <h1 class="header__text">
         {{this.headerText}}
     </h1>
@@ -22,14 +22,18 @@
         </div>
     </div>
     <div class="informations">
-        <shop-product-creator #productCreator [formControl]="this.requestControl" (onSubmit)="this.onSubmit()"></shop-product-creator>
+        <shop-product-creator #productCreator [formControl]="this.requestControl" (onSubmit)="this.onSubmit()"
+        [isArchived]="this.isArchived"></shop-product-creator>
         <div class="buttons">
           <button class="buttons__button" [disabled] = "this.requestControl.invalid || this.waitingForResponseMessage
            || this.unchangedAfterSend" shopButton (click)="this.onSubmit()">Prześlij <i class="pi-check-circle pi"></i></button>
           <button class="buttons__button" shopButton color="gray" *ngIf="this.currentProductId" (click) = "this.archiveClicked()">
-            Archiwizuj <i class="pi pi-book"></i>  </button>
+             {{this.isArchived ? 'Dearchiwizuj' : "Archiwizuj"}} <i class="pi pi-book"></i>  </button>
           <button class="buttons__button" type="button" *ngIf="this.currentProductId" [disabled] = "this.isUnDeletable" shopButton color = "red"
            (click)="this.onProductRemove()">Usuń produkt <i class="pi pi-times"></i></button>
+      </div>
+      <div class="informations__info" *ngIf="this.isArchived && this.currentProductId">
+        Ten produkt jest zarchiwizowany nie będzie się wyświetlał w ofercie.
       </div>
       <div class="informations__warning" *ngIf="this.isUnDeletable && this.currentProductId">
           Nie można usunąć tego produktu poniewać zostały już złożone z nim zamówienia, można go jedynie zarchiwizować.

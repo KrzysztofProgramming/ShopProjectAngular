@@ -143,10 +143,9 @@ export class ProductsComponent implements OnInit {
 
   public updateRequestParams(){
     const params = Object.assign({}, this.productsParams);
-    if(params.pageSize === DEFAULT_PAGEABLE.pageSize) params.pageSize = undefined;
-    if(params.pageNumber === DEFAULT_PAGEABLE.pageNumber) params.pageNumber = undefined;
-    if(params.sort === "none") params.sort = undefined;
-    if(params.searchPhrase === "") params.searchPhrase = undefined;
+    Object.keys(DEFAULT_PRODUCTS_PARAMS).forEach(key=>{
+      if(params[key] === DEFAULT_PRODUCTS_PARAMS[key]) params[key] = undefined;
+    }) 
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: params,
@@ -187,8 +186,9 @@ export class ProductsComponent implements OnInit {
       else if(routerParams.authors)
         routerParams.authors = routerParams.authors.map(value=>+value);
       
-        
-      console.log(routerParams);
+      if(routerParams.isArchived)
+        routerParams.isArchived = +routerParams.isArchived;  
+    
       this.writeParams(routerParams);
       this.updateRequestParams();
       this.waitingForResponse = false;

@@ -6,26 +6,34 @@
         <div class="content__info">
             <div class="content__info-top">
                 <p class="content__price">Cena: {{this.product.price | number: '1.2-2'}} zł</p>
-                <p class="content__available content__available--true" *ngIf="this.product.inStock > 0 && this.maxToSelect !==0">
-                    Dostępna ilość: {{this.product.inStock}}
-                </p>
-                <p  class="content__available--false" *ngIf="this.product.inStock <=0">
-                    Tymczasowo niedostępny
-                </p>
-                <p  class="content__available--false" *ngIf="this.product.inStock > 0 && this.maxToSelect ===0">
-                    Maksymalna ilość tego produktu jest już w koszyku
-                </p>
-                <p class="content__in-cart-amount" *ngIf="this.inCartAmount !== 0">Aktualnie w koszyku: {{this.inCartAmount}}</p>
-                <p class="content__deliver-time">Sugerowany czas dostawy: 2 dni robocze</p>
+                <ng-container *ngIf="!this.product.isArchived">
+                  <p class="content__available content__available--true" *ngIf="this.product.inStock > 0 && this.maxToSelect !==0">
+                      Dostępna ilość: {{this.product.inStock}}
+                  </p>
+                  <p  class="content__available--false" *ngIf="this.product.inStock <=0">
+                      Tymczasowo niedostępny
+                  </p>
+                  <p class="content__available--false" *ngIf="this.product.inStock > 0
+                    && this.maxToSelect ===0">
+                      Maksymalna ilość tego produktu jest już w koszyku
+                  </p>
+                  <p class="content__in-cart-amount" *ngIf="this.inCartAmount !== 0">Aktualnie w koszyku: {{this.inCartAmount}}</p>
+                  <p class="content__deliver-time">Sugerowany czas dostawy: 2 dni robocze</p>
+              </ng-container>
+              <p class="content__archived-info" *ngIf="this.product.isArchived">
+                Przykro nam, ale ten produkt został wycofany.
+              </p>
             </div>
-            <p class="content__price-calc">Łącznie: +{{(this.selectedCount * this.product.price) | number: '1.2-2'}} zł</p>
-            <div class="content__buy">
-                <p-inputNumber [(ngModel)]="this.selectedCount" class="content__buy-count" [min]="0" [showButtons]="true"
-                [max]="this.maxToSelect"></p-inputNumber>
-                <button shopButton class="content__buy-button" [disabled]="this.product.inStock <=0 || this.waitingForResponse
-                 || this.maxToSelect === 0" padding="medium"
-                (click)="this.addToCart()"><i class="pi pi-shopping-cart"></i> Dodaj do koszyka</button>
-            </div>
+            <ng-container *ngIf="!this.product.isArchived">
+              <p class="content__price-calc">Łącznie: +{{(this.selectedCount * this.product.price) | number: '1.2-2'}} zł</p>
+              <div class="content__buy">
+                  <p-inputNumber [(ngModel)]="this.selectedCount" class="content__buy-count" [min]="0" [showButtons]="true"
+                  [max]="this.maxToSelect"></p-inputNumber>
+                  <button shopButton class="content__buy-button" [disabled]="this.product.inStock <=0 || this.waitingForResponse
+                  || this.maxToSelect === 0" padding="medium" 
+                  (click)="this.addToCart()"><i class="pi pi-shopping-cart"></i> Dodaj do koszyka</button>
+              </div>
+            </ng-container>
         </div>
     </div>
     <div class="informations">

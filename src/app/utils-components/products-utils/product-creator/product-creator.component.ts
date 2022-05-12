@@ -2,7 +2,7 @@ import { TypeResponse } from './../../../models/responses';
 import { SimpleAuthor } from './../../../models/models';
 import { Subscription } from 'rxjs';
 import { ShopProductRequest } from '../../../models/requests';
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, Output, EventEmitter, OnDestroy, Input } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR, NG_VALIDATORS, Validator, ValidationErrors } from '@angular/forms';
 import { notBlankValidator, notEmptyListValidator } from 'src/app/models/shop-validators';
 import { AuthorsSelectComponent } from '../../authors-utils/authors-select/authors-select.component';
@@ -35,6 +35,7 @@ export class ProductCreatorComponent implements OnInit, ControlValueAccessor, Va
   public model: ShopProductRequest = EMPTY_PRODUCT_REQUEST;
   public onChangeFn: (request: ShopProductRequest)=>void = ()=>{}
   public onToucheFn: ()=> void = ()=>{};
+  @Input() isArchived?: boolean;
   
   @Output()
   public onSubmit: EventEmitter<void> = new EventEmitter();
