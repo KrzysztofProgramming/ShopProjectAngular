@@ -206,8 +206,6 @@ export const AUTHORS_SORT_OPTIONS: AuthorsSortOption[] = [
   {name: "Książki: malejąco", code: "books_desc"}
 ]
 
-export const DATE_FORMAT: string = "YYYY-MM-DD";
-
 export function getStatusString(value: number){
   return value === OrderStatuses.CANCELLED ? "Anulowany" :
   value === OrderStatuses.PAID ? "Zapłacone" :

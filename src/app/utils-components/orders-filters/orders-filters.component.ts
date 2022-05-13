@@ -1,13 +1,10 @@
-import { DATE_FORMAT, OrdersStatusOption, ORDERS_STATUS_OPTIONS } from './../../models/models';
+import { OrdersStatusOption, ORDERS_STATUS_OPTIONS } from './../../models/models';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { DEFAULT_PAGEABLE } from 'src/app/models/requests';
 import { GetOrdersParams } from './../../models/requests';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormBuilder, AbstractControl } from '@angular/forms';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { OrderStatuses } from 'src/app/models/models';
-import { DatePipe, formatDate } from '@angular/common';
-import { format, parse } from 'date-format-parse';
 
 
 @Component({
@@ -42,7 +39,7 @@ import { format, parse } from 'date-format-parse';
     provide: NG_VALUE_ACCESSOR,
     useExisting: OrdersFiltersComponent,
     multi: true
-  }, DatePipe]
+  }]
 })
 export class OrdersFiltersComponent implements OnInit, ControlValueAccessor, OnDestroy {
 
@@ -63,7 +60,7 @@ export class OrdersFiltersComponent implements OnInit, ControlValueAccessor, OnD
   modelStartChanging: EventEmitter<void> = new EventEmitter();
 
 
-  constructor(private cd: ChangeDetectorRef, private fb: FormBuilder, private datePipe: DatePipe) {
+  constructor(private cd: ChangeDetectorRef, private fb: FormBuilder) {
     
   }
 
@@ -107,9 +104,9 @@ export class OrdersFiltersComponent implements OnInit, ControlValueAccessor, OnD
       this.formGroup.reset({}, {emitEvent: false});
       return;
     }
-    let parsedMaxDate = obj.maxDate ? parse(obj.maxDate, DATE_FORMAT) : undefined;
+    let parsedMaxDate = obj.maxDate ? new Date(Date.parse(obj.maxDate)) : undefined;
     if(!this.isValidDate(parsedMaxDate)) parsedMaxDate = undefined;
-    let parsedMinDate = obj.minDate ? parse(obj.minDate, DATE_FORMAT) : undefined;
+    let parsedMinDate = obj.minDate ? new Date(Date.parse(obj.minDate)) : undefined;
     if(!this.isValidDate(parsedMinDate)) parsedMinDate = undefined;
 
     this.minDateControl.setValue(parsedMinDate, {emitEvent: false});
@@ -127,8 +124,8 @@ export class OrdersFiltersComponent implements OnInit, ControlValueAccessor, OnD
   public getModifiedModel(){
     let changedModel = Object.assign({}, this.model);
     changedModel = Object.assign(changedModel, this.formGroup.value);
-    if(this.minDateControl.value) changedModel.minDate = format(this.minDateControl.value, DATE_FORMAT);
-    if(this.maxDateControl.value) changedModel.maxDate = format(this.maxDateControl.value, DATE_FORMAT);
+    if(this.minDateControl.value) changedModel.minDate = (this.minDateControl.value as Date).toISOString();
+    if(this.maxDateControl.value) changedModel.maxDate = (this.maxDateControl.value as Date).toISOString();
     return changedModel;
   }
 

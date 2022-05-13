@@ -1,8 +1,7 @@
-import { DATE_FORMAT, OrdersStatusOption, OrderStatuses, ORDERS_STATUS_OPTIONS } from './../../models/models';
+import { OrdersStatusOption, OrderStatuses, ORDERS_STATUS_OPTIONS } from './../../models/models';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { GetOrdersParams, DEFAULT_ORDERS_PARAMS } from './../../models/requests';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { format, parse } from 'date-format-parse';
 
 @Component({
   selector: 'shop-orders-filters-dialog',
@@ -57,8 +56,8 @@ export class OrdersFiltersDialogComponent implements OnInit, ControlValueAccesso
     this.model = Object.assign(this.model, obj);
     this.unchangedModel = Object.assign({}, this.model);
 
-    let maxDate = this.model.maxDate ? parse(this.model.maxDate, DATE_FORMAT) : undefined;
-    let minDate = this.model.minDate ? parse(this.model.minDate, DATE_FORMAT) : undefined;
+    let maxDate = this.model.maxDate ? new Date(Date.parse(this.model.maxDate)) : undefined;
+    let minDate = this.model.minDate ? new Date(Date.parse(this.model.minDate)) : undefined;
     if(this.isValidDate(minDate)) this.minDate = minDate!;
     else this.minDate = undefined;
     if(this.isValidDate(maxDate)) this.maxDate = maxDate!;
@@ -89,9 +88,9 @@ export class OrdersFiltersDialogComponent implements OnInit, ControlValueAccesso
 
   public onAccept(){
     if(this.maxDate)
-      this.model.maxDate = format(this.maxDate, DATE_FORMAT);
+      this.model.maxDate = this.maxDate.toISOString();
     if(this.minDate)
-      this.model.minDate = format(this.minDate, DATE_FORMAT);
+      this.model.minDate = this.minDate.toISOString();
     this.onChangeFn(this.model);
     this.visibility = false;
     this.cd.markForCheck();
