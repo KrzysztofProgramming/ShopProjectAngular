@@ -14,7 +14,7 @@ import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, ChangeDetectorRe
     <div class="success" *ngIf="!this.waitingForResponse">
       <i class="pi pi-check-circle"></i>
       <p class="success__text">Sukces, produkt został opłacony! Zobacz nasze inne wspaniałe ksiażki</p>
-      <a href="offert" shopButton padding="medium">Oferta</a>
+      <a routerLink="/offert" shopButton padding="medium">Oferta</a>
     </div>
   `,
   styleUrls: ['./pay-order.component.scss'],
