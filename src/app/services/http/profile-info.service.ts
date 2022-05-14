@@ -1,9 +1,10 @@
+import { AuthService } from './../auth/auth.service';
 import { GetOrdersResponse } from './../../models/responses';
 import { PageableParams, GetOrdersParams } from './../../models/requests';
 import { ShopOrder, UserInfo, serverUrl } from './../../models/models';
 import { ProfileInfo } from '../../models/models';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { UpdateEmailRequest, UpdatePasswordRequest } from '../../models/requests';
 
@@ -13,10 +14,11 @@ import { UpdateEmailRequest, UpdatePasswordRequest } from '../../models/requests
 export class ProfileInfoService {
   private readonly url: string = `${serverUrl}api/users/profile/`;
 
-  constructor(private http: HttpClient){}
+  constructor(private http: HttpClient, private authService : AuthService){}
 
 
   public getProfileInfo():Observable<ProfileInfo>{
+    if(!this.authService.isLogin()) return throwError("user not logged in");
     return this.http.get<ProfileInfo>(`${this.url}info`);
   }
 

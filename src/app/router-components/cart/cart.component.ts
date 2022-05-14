@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
             <p class="summary__header">Podsumowanie:</p>
             <p class="summary__element">Łączna liczba produktów: <span class="summary__value">{{this.totalAmount}}</span></p>
             <p class="summary__element">Do zapłaty: <span class="summary__value"> {{ this.totalPrice | number: "1.2-2"}} zł</span></p>
-            <button shopButton class="summary__button" (click) = "this.navigateToOrder()">Zapłać</button>
+            <a shopButton class="summary__button" routerLink="/make-order">Zapłać</a>
           </div>
         </div>
         <div class="editor-wrapper">
@@ -26,7 +26,7 @@ import { Subscription } from 'rxjs';
           <p class="empty__header">Twój koszyk jest pusty</p>
           <i class="pi pi-shopping-cart"></i>
           <p class="empty__subheader">Sprawdź naszą ofertę</p>
-          <button shopButton class="empty__button" routerLink="../offert">Oferta</button>
+          <a shopButton class="empty__button" routerLink="/offert">Oferta</a>
         </div>
       </div>
     </div>
@@ -56,10 +56,6 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
         this.cd.markForCheck();
       })
     );
-  }
-
-  public navigateToOrder(){
-    this.router.navigate(["/make-order"])
   }
 
   ngAfterViewInit(): void {
