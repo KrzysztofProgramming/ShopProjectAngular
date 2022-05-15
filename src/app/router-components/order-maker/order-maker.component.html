@@ -13,7 +13,7 @@
   <div class="buttons">
     <button shopButton padding="medium" class="buttons__button" [disabled]="this.formGroup.invalid"
     (click)="this.onConfirm()">Potwierdź zamówienie</button>
-    <button shopButton padding="medium" class="buttons__button" color="red">Anuluj zamówienie</button>
+    <a shopButton padding="medium" class="buttons__button" routerLink="/cart" color="red">Anuluj zamówienie</a>
   </div>
   <shop-busy-overlay *ngIf="this.waitingForResponse"></shop-busy-overlay>
 </div>

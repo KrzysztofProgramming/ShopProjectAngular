@@ -29,10 +29,10 @@
              && (this.repeatPassword.invalid || (this.form.errors?.notTheSameError && this.password.touched))"
              (blur)="this.updatePasswordsTooltips()"></shop-password-input>
         </div>
-        <div class="register__sector register__regulations">
+        <label class="register__sector register__regulations">
             <p-checkbox formControlName = "regulations" [binary]="true"></p-checkbox>
-            <span>Akceptuję <a href="../regulations">regulamin</a></span>
-        </div>
+            <span>Akceptuję regulamin</span>
+        </label>
         <input value="Register" type="submit" [disabled]="this.form.invalid || this.unchangedAfterError || this.waitingForRegister" shopButton class ="register__button">
         <p-toast [breakpoints]="{'600px': {width: '100%', right: '0', left: '0'}}"></p-toast>
     </form>
