@@ -6,7 +6,7 @@ acceptPhrase="OK" cancelPhrase="Anuluj" (accept)="this.onAccept()" (cancel)="thi
     <shop-page-size-select [(ngModel)]="this.model.pageSize" name="page-size"></shop-page-size-select>
     <p class="subheader">Sortowanie:</p>
     <shop-single-select modelProperty="code" displayedProperty="name" [items]="this.sortOptions"
-     [(ngModel)]="this.model.sort" name="sort-select"></shop-single-select>
+     [(ngModel)]="this.model.sort" [(expanded)]="this.sortSelectExpansion" name="sort-select"></shop-single-select>
     <p class="subheader">Ilość książek:</p>
     <div class="written-books">
       <p-inputNumber class="written-books__min written-books__input" placeholder="min" [(ngModel)]="this.model.minBooks"

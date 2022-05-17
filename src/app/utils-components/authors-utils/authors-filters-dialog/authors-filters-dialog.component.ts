@@ -40,12 +40,14 @@ export class AuthorsFiltersDialogComponent implements OnInit, ControlValueAccess
   
   public set visibilityInput(value: boolean){
     this._visibility = value;
+    if(!value) this.collapseExpansions();
   }
 
   private onChangeFn: any = ()=>{};
   private onToucheFn: any = ()=>{};
   public model: GetAuthorsParams = DEFAULT_AUTHORS_PARAMS;
   public unchangedModel: GetAuthorsParams = DEFAULT_AUTHORS_PARAMS;
+  public sortSelectExpansion: boolean = false;
   readonly sortOptions = AUTHORS_SORT_OPTIONS;
 
   constructor(private cd: ChangeDetectorRef) { }
@@ -71,6 +73,7 @@ export class AuthorsFiltersDialogComponent implements OnInit, ControlValueAccess
   public onVisibilityChange(newValue: boolean){
     // if(newValue === this._visibility) return;
     this.visibilityChange.emit(newValue);
+    if(!newValue) this.collapseExpansions();
   }
 
   public onAccept(){
@@ -82,6 +85,11 @@ export class AuthorsFiltersDialogComponent implements OnInit, ControlValueAccess
   public onCancel(){
     this.model = Object.assign({}, this.unchangedModel);
     this.onChangeFn(this.model);
+    this.cd.markForCheck();
+  }
+
+  public collapseExpansions(){
+    this.sortSelectExpansion = false;
     this.cd.markForCheck();
   }
 
