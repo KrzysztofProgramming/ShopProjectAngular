@@ -1,10 +1,10 @@
-import { GetAuthorsParams } from './../../../models/requests';
+import { DEFAULT_TYPES_PARAMS, GetAuthorsParams } from './../../../models/requests';
 import { TypeResponse } from './../../../models/responses';
 import { ToastMessageService } from 'src/app/services/utils/toast-message.service';
 import { Subscription } from 'rxjs';
 import { DEFAULT_PAGEABLE, PAGE_SIZES, DEFAULT_AUTHORS_PARAMS } from 'src/app/models/requests';
 import { GetTypesParams } from '../../../models/requests';
-import { CommonType } from '../../../models/models';
+import { clearDefaultParamsValues, CommonType, TYPES_SORT_OPTIONS } from '../../../models/models';
 import { GetTypesResponse } from '../../../models/responses';
 import { ProductsService } from '../../../services/http/products.service';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
@@ -19,7 +19,7 @@ import { Params, Router, ActivatedRoute } from '@angular/router';
 export class TypesListComponent implements OnInit, OnDestroy {
 
   public response?: GetTypesResponse;
-  public params: GetTypesParams = Object.assign({}, DEFAULT_PAGEABLE);
+  public params: GetTypesParams = Object.assign({}, DEFAULT_TYPES_PARAMS);
   public pageSizes: number[] = PAGE_SIZES;
   public currentRequest?: Subscription;
   public editingType?: CommonType;
@@ -28,6 +28,7 @@ export class TypesListComponent implements OnInit, OnDestroy {
   public deleteDialogVisibility: boolean = false;
   public filtersVisibility: boolean = false;
   public subscriptions: Subscription[] = [];
+  public readonly SORT_OPTIONS = TYPES_SORT_OPTIONS;
 
   public get editorVisibility(): boolean{
     return this.editingType != undefined
@@ -105,8 +106,7 @@ export class TypesListComponent implements OnInit, OnDestroy {
 
   public navigateToParams(skipLocationChange: boolean = false){
     const params = Object.assign({}, this.params);
-    if(params.pageSize === DEFAULT_PAGEABLE.pageSize) params.pageSize = undefined;
-    if(params.pageNumber === DEFAULT_PAGEABLE.pageNumber) params.pageNumber = undefined;
+    clearDefaultParamsValues(params, DEFAULT_TYPES_PARAMS);
     if(params.searchPhrase?.length === 0) params.searchPhrase = undefined;
     this.router.navigate([], {queryParams: params, relativeTo: this.route, skipLocationChange: skipLocationChange});
   }

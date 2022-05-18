@@ -19,14 +19,13 @@ import { Location } from '@angular/common';
   selector: 'shop-add-product',
   templateUrl: './add-product.component.html',
   styleUrls: ['./add-product.component.scss'],
-  providers: [ConfirmationService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddProductComponent implements OnInit, OnDestroy {
   
   constructor(private cd: ChangeDetectorRef, private fb: FormBuilder, private messageService: ToastMessageService,
     private activatedRoute: ActivatedRoute, public router: Router, private productsService: ProductsService,
-    private sanitizer: DomSanitizer, private confirmationService: ConfirmationService,
+    private sanitizer: DomSanitizer,
     public location: Location) { }
 
 
@@ -43,6 +42,7 @@ export class AddProductComponent implements OnInit, OnDestroy {
   public requestControl: FormControl = new FormControl(EMPTY_PRODUCT_REQUEST);
   public isUnDeletable?: boolean;
   public isArchived?: boolean;
+  public deleteDialogVisibility: boolean = false;
 
   @ViewChild("productCreator")
   public productCreator?: ProductCreatorComponent;
@@ -193,10 +193,11 @@ export class AddProductComponent implements OnInit, OnDestroy {
             mapTo(product)
           )
         }
+        this.unchangedAfterSend = true;
+        this.cd.markForCheck();
         if(this.selectedFile == null){
           return of(product);
         }
-        this.unchangedAfterSend = true;
         this.waitingForResponseMessage = "Dodawanie obrazu";
         this.cd.markForCheck();
 
@@ -275,19 +276,19 @@ export class AddProductComponent implements OnInit, OnDestroy {
     this.unchangedAfterSend = false;
   }
 
-  public onProductRemove(): void{
-    this.confirmationService.confirm({
-      header: "Potwierdź",
-      message: "Czy na pewno chcesz usunąć ten produkt? Ta operacja jest nieodwracalna",
-      accept: ()=>{
-        if(this.currentProductId == null) return;
-        this.productsService.deleteProduct(this.currentProductId).subscribe(val =>{
-            this.router.navigate(['/products']);
-            // this.location.back();
-          }
-        );
-      }
-    })
+  public onProductRemoveClicked(): void{
+    this.deleteDialogVisibility = true;
+    this.cd.markForCheck();
+  }
+
+  public removeProduct(): void{
+    if(!this.currentProductId) return;
+    this.productsService.deleteProduct(this.currentProductId).subscribe(() =>{
+      this.messageService.showMessage({severity: "success", summary: "Sukces", detail: "Produkt został usunięty"});
+      this.router.navigate(['/products']);
+    }, ()=>{
+      this.messageService.showMessage({severity: 'error', summary: "Niepowodzenie", detail: "Nie udało się usunąć produktu"});
+    });
   }
 
   public archiveClicked(): void{

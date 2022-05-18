@@ -8,11 +8,8 @@
     <div class="top-bar__types">Typy: <span class="top-bar__types-count">{{this.response.totalElements}}</span></div>
     <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
     (ngModelChange)="this.onModelChange()" class="top-bar__page-select"></shop-page-select>
-    <div class="top-bar__dropdown">
-      <p>Na stronie:</p>
-      <p-dropdown [(ngModel)] = "this.params.pageSize" [options] = "this.pageSizes"
-       (ngModelChange)="this.onModelChange()"></p-dropdown>
-    </div>
+    <p-dropdown class="top-bar__sort-select" [options]="this.SORT_OPTIONS" optionLabel="name" optionValue="code"
+    [(ngModel)]="this.params.sort" (ngModelChange)="this.onModelChange()"></p-dropdown>
     <button class="top-bar__filters-button" shopButton padding="medium" (click)="this.showFilters()">Filtry</button>
   </div>
   <div class="table">
@@ -35,14 +32,18 @@
           <button shopButton class="item__button" [disabled] = "type.productsCount < 1">Zobacz Produkty</button>
         </a>
         <button shopButton class="item__button" color="gray" (click)="this.setEditingType(type)">Szczegóły</button>
-        <button shopButton class="item__button" color="red" [disabled] = "type.productsCount > 0"
-          (click) = "this.deleteClicked(type)">Usuń</button>
+        <button shopButton class="item__button" color="red" (click) = "this.deleteClicked(type)">Usuń</button>
       </div>
     </div>
   </div>
   <div class="bottom-bar">
     <shop-page-select [totalPages]="this.response.totalPages" [(ngModel)]="this.params.pageNumber"
     (ngModelChange)="this.onModelChange()" (modelStartChanging)="this.cancelRequest()"></shop-page-select>
+    <div class="bottom-bar__dropdown">
+      <p>Na stronie:</p>
+      <p-dropdown [(ngModel)] = "this.params.pageSize" [options] = "this.pageSizes"
+       (ngModelChange)="this.onModelChange()"></p-dropdown>
+    </div>
   </div>
 </div>
 

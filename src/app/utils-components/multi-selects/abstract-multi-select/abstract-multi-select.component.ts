@@ -177,7 +177,7 @@ export class AbstractMultiSelectComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscriptions.push(
       this.filterChange.pipe(
-        debounceTime(300),
+        debounceTime(200),
         distinctUntilChanged()
       ).subscribe(this.calcFilterChange.bind(this))
     )

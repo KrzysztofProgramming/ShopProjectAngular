@@ -30,7 +30,7 @@
           <button class="buttons__button" shopButton color="gray" *ngIf="this.currentProductId" (click) = "this.archiveClicked()">
              {{this.isArchived ? 'Dearchiwizuj' : "Archiwizuj"}} <i class="pi pi-book"></i>  </button>
           <button class="buttons__button" type="button" *ngIf="this.currentProductId" [disabled] = "this.isUnDeletable" shopButton color = "red"
-           (click)="this.onProductRemove()">Usuń produkt <i class="pi pi-times"></i></button>
+           (click)="this.onProductRemoveClicked()">Usuń produkt <i class="pi pi-times"></i></button>
       </div>
       <div class="informations__info" *ngIf="this.isArchived && this.currentProductId">
         Ten produkt jest zarchiwizowany nie będzie się wyświetlał w ofercie.
@@ -45,4 +45,7 @@
     <i class="pi pi-spinner pi-spin"></i>
 </div>
 
-<p-confirmDialog [breakpoints]="{'600px': {width: '100%', right: '0', left: '0'}}"></p-confirmDialog>
+<shop-dialog [exitButton]="false" acceptPhrase="Tak" cancelPhrase="Anuluj" (accept)="this.removeProduct()"
+[(visibility)]="this.deleteDialogVisibility" dialogTitle="Potwierdź">
+<p class="delete-confirmation">Czy na pewno chcesz usunąć ten produkt? Ta operacja jest nieodwracalna.</p>
+</shop-dialog>

@@ -1,6 +1,7 @@
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GetAuthorsParams, DEFAULT_AUTHORS_PARAMS } from 'src/app/models/requests';
+import { TYPES_SORT_OPTIONS } from 'src/app/models/models';
 
 @Component({
   selector: 'shop-types-filters-dialog',
@@ -19,6 +20,8 @@ export class TypesFiltersDialogComponent implements OnInit, ControlValueAccessor
 
   @Output()
   visibilityChange: EventEmitter<boolean> = new EventEmitter();
+  public sortSelectExpansion: boolean = false;
+  public SORT_OPTIONS = TYPES_SORT_OPTIONS;
 
   public get visibility(): boolean{
     return this._visibility;
@@ -32,6 +35,7 @@ export class TypesFiltersDialogComponent implements OnInit, ControlValueAccessor
   @Input("visibility")
   public set visibilityInput(value: boolean){
     this._visibility = value;
+    if(!value) this.collapseSort();
   }
   public get visibilityInput():boolean{
     return this._visibility;
@@ -65,6 +69,7 @@ export class TypesFiltersDialogComponent implements OnInit, ControlValueAccessor
   public onVisibilityChange(newValue: boolean){
     // if(newValue === this._visibility) return;
     this.visibilityChange.emit(newValue);
+    if(!newValue) this.collapseSort();
   }
 
   public onAccept(){
@@ -76,6 +81,11 @@ export class TypesFiltersDialogComponent implements OnInit, ControlValueAccessor
   public onCancel(){
     this.model = Object.assign({}, this.unchangedModel);
     this.onChangeFn(this.model);
+    this.cd.markForCheck();
+  }
+
+  private collapseSort(){
+    this.sortSelectExpansion = false;
     this.cd.markForCheck();
   }
 

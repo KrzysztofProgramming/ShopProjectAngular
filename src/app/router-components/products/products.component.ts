@@ -1,9 +1,9 @@
-import { SortOption, SORT_OPTIONS, SORT_OPTIONS_ADMIN } from './../../models/models';
+import { clearDefaultParamsValues, SortOption, SORT_OPTIONS, SORT_OPTIONS_ADMIN } from './../../models/models';
 import { ShopProduct } from '../../models/models';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Subscription, Subject } from 'rxjs';
-import { GetProductsParams, DEFAULT_PRODUCTS_PARAMS, DEFAULT_PAGEABLE, PAGE_SIZES } from '../../models/requests';
+import { GetProductsParams, DEFAULT_PRODUCTS_PARAMS, PAGE_SIZES } from '../../models/requests';
 import { ProductsService } from 'src/app/services/http/products.service';
 import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { GetProductsResponse } from 'src/app/models/responses';
@@ -143,9 +143,8 @@ export class ProductsComponent implements OnInit {
 
   public updateRequestParams(){
     const params = Object.assign({}, this.productsParams);
-    Object.keys(DEFAULT_PRODUCTS_PARAMS).forEach(key=>{
-      if(params[key] === DEFAULT_PRODUCTS_PARAMS[key]) params[key] = undefined;
-    }) 
+    clearDefaultParamsValues(params, DEFAULT_PRODUCTS_PARAMS);
+    if(!params.searchPhrase) params.searchPhrase = undefined;
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: params,

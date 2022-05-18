@@ -29,7 +29,6 @@ import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
 import { AuthInterceptor } from './services/auth/auth.interceptor';
 import { AuthImgPipe } from './pipes/auth-img.pipe';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ProductsComponent } from './router-components/products/products.component';
 import { ProductTileComponent } from './utils-components/products-utils/product-tile/product-tile.component';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -178,7 +177,6 @@ registerLocaleData(localeFr);
     TooltipModule,
     ToastModule,
     RippleModule,
-    ConfirmDialogModule,
     MultiSelectModule,
     ButtonModule,
     AccordionModule,

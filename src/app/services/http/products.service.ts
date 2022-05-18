@@ -88,18 +88,23 @@ export class ProductsService {
   }
 
   public currentTypeListObservable?: Observable<TypesResponse>
+  private lastTimeout?: any;
 
-  public getTypes(): Observable<TypesResponse>{
-    return this.currentTypeListObservable ||
-     (this.currentTypeListObservable =
-     this.http.get<TypesResponse>(`${this.url}getTypes`).pipe(
-       shareReplay(),
-       tap(()=>{
-         setTimeout(() => {
-           this.currentTypeListObservable = undefined
-         }, 10000);
-       })
-    ));
+  public getTypes(force: boolean = false): Observable<TypesResponse>{
+    return force && this.currentTypeListObservable ? this.currentTypeListObservable
+     : (this.currentTypeListObservable = this.downloadTypes())
+  }
+
+  private downloadTypes(): Observable<TypesResponse>{
+    return this.http.get<TypesResponse>(`${this.url}getTypes`).pipe(
+      shareReplay(),
+      tap(()=>{
+        if(this.lastTimeout) clearTimeout(this.lastTimeout);
+        this.lastTimeout = setTimeout(() => {
+          this.currentTypeListObservable = undefined
+        }, 10000);
+      })
+   )
   }
 
   public getTypesDetails(params: GetTypesParams): Observable<GetTypesResponse>{

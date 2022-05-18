@@ -1,4 +1,4 @@
-import { AUTHORS_SORT_OPTIONS } from './../../../models/models';
+import { AUTHORS_SORT_OPTIONS, clearDefaultParamsValues } from './../../../models/models';
 import { ToastMessageService } from '../../../services/utils/toast-message.service';
 import { Subscription } from 'rxjs';
 import { GetAuthorsResponse } from '../../../models/responses';
@@ -117,9 +117,7 @@ export class AuthorsListComponent implements OnInit {
 
   public navigateToParams(skipLocationChange: boolean = false){
     const params = Object.assign({}, this.params);
-    if(params.pageSize === DEFAULT_PAGEABLE.pageSize) params.pageSize = undefined;
-    if(params.pageNumber === DEFAULT_PAGEABLE.pageNumber) params.pageNumber = undefined;
-    if(params.sort === DEFAULT_AUTHORS_PARAMS.sort) params.sort = undefined;
+    clearDefaultParamsValues(params, DEFAULT_AUTHORS_PARAMS)
     if(params.searchPhrase?.length === 0) params.searchPhrase = undefined;
     this.router.navigate([], {queryParams: params, relativeTo: this.route, skipLocationChange: skipLocationChange});
   }

@@ -39,16 +39,6 @@
     }
   }
 
-  &__dropdown{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    & p{
-      margin-right: 5px;
-    }
-  }
-
   &__new{
     padding: 10px;
     background-color: $theme-color;
@@ -143,8 +133,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   padding-top: 10px;
+
+  &__dropdown{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & p{
+      margin-right: 5px;
+    }
+  }
 }
 
 .delete-confirm{

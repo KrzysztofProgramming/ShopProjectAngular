@@ -35,8 +35,7 @@
             <button shopButton class="item__button" [disabled] = "author.writtenBooks < 1" >Zobacz Produkty</button>
           </a>
           <button shopButton class="item__button" color="gray" (click)="this.setEditingAuthor(author)">Szczegóły</button>
-          <button shopButton class="item__button" color="red" [disabled] = "author.writtenBooks > 0"
-            (click) = "this.deleteClicked(author)">Usuń</button>
+          <button shopButton class="item__button" color="red" (click) = "this.deleteClicked(author)">Usuń</button>
         </div>
       </div>
     </div>

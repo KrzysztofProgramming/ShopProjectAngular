@@ -1,5 +1,6 @@
 import { TypeResponse } from './responses';
 import { ProductsSortType, ShopProductRequest, OrdersSortType } from './requests';
+import { Params } from '@angular/router';
 
 export const serverUrl = "";
 
@@ -159,6 +160,8 @@ export const SORT_OPTIONS: SortOption[] = [
 
 export const SORT_OPTIONS_ADMIN: SortOption[] = [
   ...SORT_OPTIONS,
+  {name: "Dostępność: rosnąco", code: 'in_stock_asc'},
+  {name: "Dostępność: malejąco", code: 'in_stock_desc'},
   {name: "Id: rosnąco", code: 'id_asc'},
   {name: "Id: malejąco", code: 'id_desc'}
 ]
@@ -206,6 +209,15 @@ export const AUTHORS_SORT_OPTIONS: AuthorsSortOption[] = [
   {name: "Książki: malejąco", code: "books_desc"}
 ]
 
+export type TypesSortType = AuthorsSortType;
+
+export interface TypesSortOption{
+  name: string;
+  code: TypesSortType
+}
+
+export const TYPES_SORT_OPTIONS = AUTHORS_SORT_OPTIONS;
+
 export function getStatusString(value: number){
   return value === OrderStatuses.CANCELLED ? "Anulowany" :
   value === OrderStatuses.PAID ? "Zapłacone" :
@@ -227,6 +239,12 @@ export const ARCHIVED_OPTIONS: ArchivedOption[] = [
   {name: "Dostępne", code: ARCHIVED_AVAILABLE},
   {name: "Zarchiwizowane", code: ARCHIVED_ARCHIVED}
 ]
+
+export function clearDefaultParamsValues(params: Params, defaultParams: Params): void{
+  Object.keys(defaultParams).forEach(key=>{
+    if(params[key] === defaultParams[key]) params[key] = undefined;
+  });
+}
 
 export function deepCopy<T>(source: T): T {
   return Array.isArray(source)

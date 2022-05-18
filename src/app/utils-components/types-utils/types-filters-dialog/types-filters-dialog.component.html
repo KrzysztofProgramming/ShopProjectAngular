@@ -4,6 +4,9 @@ acceptPhrase="OK" cancelPhrase="Anuluj" (accept)="this.onAccept()" (cancel)="thi
     <input shopInputText placeholder="wyszukiwanie" class="searcher" [(ngModel)]="this.model.searchPhrase" name="search">
     <p class="subheader">Typy na stronie:</p>
     <shop-page-size-select [(ngModel)]="this.model.pageSize" name="page-size"></shop-page-size-select>
+    <p class="subheader">Sortowanie:</p>
+    <shop-single-select modelProperty="code" displayedProperty="name" [items]="this.SORT_OPTIONS"
+    [(ngModel)]="this.model.sort" [(expanded)]="this.sortSelectExpansion" name="sort-select"></shop-single-select>
     <p class="subheader">Ilość produktów:</p>
     <div class="products-count">
       <p-inputNumber class="written-books__min products-count__input" placeholder="min" [(ngModel)]="this.model.minBooks"

@@ -14,16 +14,24 @@ export class AuthorsService {
 
   private readonly url: string = `${serverUrl}api/authors/`;
   constructor(private http: HttpClient) { }
-  currentSimpleListObservable?: Observable<SimpleAuthorsResponse>
 
-  public getSimpleAuthors(): Observable<SimpleAuthorsResponse>{
-    return this.currentSimpleListObservable ||
-      (this.currentSimpleListObservable = this.http.get<SimpleAuthorsResponse>(`${this.url}getSimpleList`).pipe(
-        shareReplay(),
-        tap(()=>{setTimeout(() => {
+  currentSimpleListObservable?: Observable<SimpleAuthorsResponse>
+  private lastTimeout?: any;
+
+  public getSimpleAuthors(force: boolean = false): Observable<SimpleAuthorsResponse>{
+    return force && this.currentSimpleListObservable ? this.currentSimpleListObservable
+     : (this.currentSimpleListObservable = this.downloadAuthors());
+  }
+
+  private downloadAuthors(): Observable<SimpleAuthorsResponse>{
+    return this.currentSimpleListObservable = this.http.get<SimpleAuthorsResponse>(`${this.url}getSimpleList`).pipe(
+      shareReplay(),
+      tap(()=>{
+        if(this.lastTimeout) clearTimeout(this.lastTimeout)
+        this.lastTimeout = setTimeout(() => {
           this.currentSimpleListObservable = undefined
-        }, 10000);})
-    ))
+      }, 10000);})
+  )
   }
 
   public getAuthors(authorsParams: Params): Observable<GetAuthorsResponse>{

@@ -82,6 +82,8 @@ export type ProductsSortType =
   | 'price_desc'
   | 'alphabetic_asc'
   | 'alphabetic_desc'
+  | 'in_stock_asc'
+  | 'in_stock_desc'
   | 'id_asc'
   | 'id_desc'
 
@@ -159,7 +161,14 @@ export interface GetTypesParams extends PageableParams {
   minProducts?: number;
   maxProducts?: number;
   searchPhrase?: string;
+  sort?: string;
 }
+
+export const DEFAULT_TYPES_PARAMS: GetTypesParams = {
+  pageSize: DEFAULT_PAGEABLE.pageSize,
+  pageNumber: DEFAULT_PAGEABLE.pageNumber,
+  sort: 'alph_asc'
+};
 
 export interface ArchiveRequest{
   archive: boolean;
