@@ -56,6 +56,7 @@ export class CartComponent implements OnInit, OnDestroy, AfterViewInit {
         this.cd.markForCheck();
       })
     );
+    this.cartService.refreshCart().subscribe();
   }
 
   ngAfterViewInit(): void {

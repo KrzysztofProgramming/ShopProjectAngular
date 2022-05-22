@@ -38,11 +38,11 @@ export class ShoppingCartService implements OnDestroy{
   }
 
   constructor(private http: HttpClient, private authService: AuthService, private productsService: ProductsService) {
-    this.readCartFromStorage().subscribe();
     this.subscriptions.push(
       this.cartChanges.pipe(skip(1)).subscribe(this.writeCartToStorage.bind(this)),
       this.authService.loginStatus.subscribe(this.onLoginStatusChange.bind(this))
     );
+    this.readCartFromStorage().subscribe();
     if(!this.authService.isLogin()) this.refreshCart().subscribe();
   }
 
