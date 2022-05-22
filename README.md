@@ -3,6 +3,9 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.3.  
 Backend is available here: https://github.com/KrzysztofProgramming/ShopProjectSpring
 
+## Youtube showcase:
+https://youtu.be/Z7p6BJtAbe4
+
 # Example features:
 
 ### Products filtering:
